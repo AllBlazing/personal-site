@@ -3,98 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mark Trewren | Indie Hacker</title>
+    <meta name="description" content="Mark Trewren - Developer & Fitness Enthusiast. Building innovative solutions and pushing physical limits through HYROX training and software development.">
+    <meta name="keywords" content="developer, fitness, HYROX, software engineer, web development, running, training">
+    <meta name="author" content="Mark Trewren">
+    <meta name="robots" content="index, follow">
+    <meta property="og:title" content="Mark Trewren | Developer & Fitness Enthusiast">
+    <meta property="og:description" content="Building innovative solutions and pushing physical limits through HYROX training and software development.">
+    <meta property="og:image" content="mark - me.jpeg">
+    <meta property="og:url" content="https://marktrewren.com">
+    <meta property="og:type" content="website">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Mark Trewren | Developer & Fitness Enthusiast">
+    <meta name="twitter:description" content="Building innovative solutions and pushing physical limits through HYROX training and software development.">
+    <meta name="twitter:image" content="mark - me.jpeg">
+    <link rel="canonical" href="https://marktrewren.com">
+    <title>Mark Trewren | Developer & Fitness Enthusiast</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Person",
+        "name": "Mark Trewren",
+        "jobTitle": "Developer & Fitness Enthusiast",
+        "url": "https://marktrewren.com",
+        "sameAs": [
+            "https://github.com/AllBlazing",
+            "https://www.strava.com/athletes/AllBlazing"
+        ],
+        "description": "Building innovative solutions and pushing physical limits through HYROX training and software development."
+    }
+    </script>
 </head>
 <body>
-    <header class="header">
-        <div class="container">
-            <nav class="nav">
-                <div class="brand">$ mark_trewren</div>
-                <div class="nav-links">
-                    <a href="#projects">/projects</a>
-                    <a href="#about">/about</a>
-                    <a href="#merch">/merch</a>
-                </div>
-            </nav>
-        </div>
+    <header class="header" role="banner">
+        <nav class="nav container" role="navigation" aria-label="Main navigation">
+            <div class="brand" itemscope itemtype="https://schema.org/Person">
+                <span itemprop="name">Mark Trewren</span>
+            </div>
+            <div class="nav-links">
+                <a href="#projects" aria-label="View projects">Projects</a>
+                <a href="#about" aria-label="Learn about me">About</a>
+                <a href="#merch" aria-label="View merchandise">Merch</a>
+            </div>
+        </nav>
     </header>
 
-    <main>
-        <section class="hero">
+    <main role="main">
+        <section class="hero" aria-label="Welcome section">
             <div class="container">
-                <h1 class="welcome-text">Welcome to my digital space</h1>
-                <div class="visitor-counter">Loading visitor count...</div>
+                <h1 class="welcome-text">Welcome to My World</h1>
+                <p class="visitor-counter">You are visitor number: <span id="visitorCount">0</span></p>
             </div>
         </section>
 
-        <section id="about" class="about-section">
-            <div class="container">
-                <div class="about-content">
-                    <img src="mark%20-%20me.jpeg" alt="Mark Trewren" class="profile-pic">
-                    <div class="about-text">
-                        <h2>About Me</h2>
-                        <p>Hey there! I'm Mark, an indie hacker and fitness enthusiast. I build things that matter and push my limits both in code and in the gym.</p>
-                        <p>When I'm not coding, you'll find me training for HYROX, running, or lifting weights. I believe in the power of combining technology and fitness to create meaningful experiences.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section id="projects" class="projects-section">
+        <section id="projects" class="section" aria-label="Projects section">
             <div class="container">
                 <h2>Projects</h2>
                 <div class="projects-grid">
-                    <div class="project-card">
-                        <h3>Stellar</h3>
-                        <p>An AI-powered health companion that helps you track and optimize your fitness journey.</p>
+                    <article class="project-card" itemscope itemtype="https://schema.org/SoftwareApplication">
+                        <h3 itemprop="name">Stellar</h3>
+                        <p itemprop="description">An AI health companion that helps you track your fitness goals and provides personalized recommendations.</p>
                         <div class="project-links">
-                            <a href="#" target="_blank">Live Demo</a>
-                            <a href="#" target="_blank">Source Code</a>
+                            <a href="https://github.com/AllBlazing/stellar" target="_blank" rel="noopener noreferrer" aria-label="View Stellar on GitHub">
+                                <i class="fab fa-github"></i> GitHub
+                            </a>
+                            <a href="https://stellar-demo.com" target="_blank" rel="noopener noreferrer" aria-label="View Stellar live demo">
+                                <i class="fas fa-external-link-alt"></i> Live Demo
+                            </a>
+                        </div>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="section" aria-label="About section">
+            <div class="container">
+                <h2>About Me</h2>
+                <div class="about-content">
+                    <img src="mark - me.jpeg" alt="Mark Trewren" class="profile-pic" itemprop="image">
+                    <div class="about-text">
+                        <h3>Developer & Fitness Enthusiast</h3>
+                        <p itemprop="description">I'm passionate about creating innovative solutions and pushing my physical limits. When I'm not coding, you can find me training for my next HYROX competition or exploring new technologies.</p>
+                        <div class="social-links">
+                            <a href="https://github.com/AllBlazing" target="_blank" rel="noopener noreferrer" aria-label="Visit my GitHub profile">
+                                <i class="fab fa-github"></i>
+                            </a>
+                            <a href="https://www.strava.com/athletes/AllBlazing" target="_blank" rel="noopener noreferrer" aria-label="View my Strava profile">
+                                <i class="fab fa-strava"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <section id="merch" class="merch-section">
+        <section id="merch" class="section" aria-label="Merchandise section">
             <div class="container">
                 <h2>Merchandise</h2>
                 <div class="merch-grid">
-                    <div class="merch-item">
-                        <div class="merch-image-placeholder"></div>
-                        <h3>HYROX Training Tee</h3>
-                        <p>Comfortable and stylish training shirt</p>
+                    <article class="merch-item" itemscope itemtype="https://schema.org/Product">
+                        <div class="merch-image-placeholder" itemprop="image"></div>
+                        <h3 itemprop="name">HYROX Training Tee</h3>
+                        <p itemprop="description">High-performance training shirt</p>
+                    </article>
+                    <article class="merch-item" itemscope itemtype="https://schema.org/Product">
+                        <div class="merch-image-placeholder" itemprop="image"></div>
+                        <h3 itemprop="name">Running Cap</h3>
+                        <p itemprop="description">Lightweight running cap</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="section" aria-label="Fitness statistics">
+            <div class="container">
+                <h2>Fitness Stats</h2>
+                <div class="stats-grid">
+                    <div class="stats-card">
+                        <h3>Strava Activities</h3>
+                        <iframe height='160' width='300' frameborder='0' allowtransparency='true' scrolling='no' src='https://www.strava.com/athletes/AllBlazing/latest-rides/0000000000000000000000000000000000000000' title="Strava activities widget"></iframe>
                     </div>
-                    <div class="merch-item">
-                        <div class="merch-image-placeholder"></div>
-                        <h3>Code & Lift Hoodie</h3>
-                        <p>Perfect for coding sessions and gym sessions</p>
-                    </div>
-                    <div class="merch-item">
-                        <div class="merch-image-placeholder"></div>
-                        <h3>Runner's Cap</h3>
-                        <p>Lightweight and breathable running cap</p>
-                    </div>
-                    <div class="merch-item">
-                        <div class="merch-image-placeholder"></div>
-                        <h3>Gym Bag</h3>
-                        <p>Spacious bag for all your training gear</p>
+                    <div class="stats-card">
+                        <h3>GitHub Contributions</h3>
+                        <img src="https://ghchart.rshah.org/AllBlazing" alt="GitHub Contributions" class="github-chart" loading="lazy">
                     </div>
                 </div>
             </div>
         </section>
     </main>
 
-    <footer class="footer">
+    <footer class="footer" role="contentinfo">
         <div class="container">
             <div class="footer-content">
-                <p class="copyright">© 2024 Mark Trewren. All rights reserved.</p>
-                <p class="quote">"Code hard, train harder"</p>
+                <p class="copyright">&copy; 2024 Mark Trewren. All rights reserved.</p>
+                <p class="quote">"The only way to do great work is to love what you do." - Steve Jobs</p>
                 <div class="social-links">
-                    <a href="https://instagram.com/marktrewren" target="_blank">Instagram</a>
-                    <a href="https://x.com/marktrewren" target="_blank">X (Twitter)</a>
-                    <a href="https://strava.com/athletes/marktrewren" target="_blank">Strava</a>
+                    <a href="https://github.com/AllBlazing" target="_blank" rel="noopener noreferrer" aria-label="Visit my GitHub profile">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="https://www.strava.com/athletes/AllBlazing" target="_blank" rel="noopener noreferrer" aria-label="View my Strava profile">
+                        <i class="fab fa-strava"></i>
+                    </a>
                 </div>
             </div>
         </div>

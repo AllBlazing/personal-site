@@ -1,4 +1,5 @@
 :root {
+    /* Colors */
     --hyrox-blue: #00a3e0;
     --runner-orange: #ff6b00;
     --lifter-red: #ff0000;
@@ -6,13 +7,29 @@
     --text-color: #ffffff;
     --text-color-muted: rgba(255, 255, 255, 0.7);
     --text-color-dimmed: rgba(255, 255, 255, 0.5);
+    
+    /* Gradients */
     --gradient-start: rgba(0, 163, 224, 0.1);
     --gradient-end: rgba(255, 107, 0, 0.1);
+    
+    /* Cards */
     --card-background: rgba(255, 255, 255, 0.05);
     --card-hover: rgba(255, 255, 255, 0.1);
+    
+    /* Spacing */
+    --spacing-xs: 10px;
+    --spacing-sm: 15px;
+    --spacing-md: 20px;
+    --spacing-lg: 30px;
+    --spacing-xl: 40px;
+    --spacing-xxl: 60px;
+    
+    /* Transitions */
+    --transition-fast: 0.3s ease;
 }
 
-* {
+/* Reset and Base Styles */
+*, *::before, *::after {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -26,17 +43,35 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    -webkit-background-clip: padding-box;
+    background-clip: padding-box;
 }
 
+/* Utility Classes */
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 var(--spacing-md);
+}
+
+.text-muted {
+    color: var(--text-color-muted);
+}
+
+/* Layout Components */
+.section {
+    padding: var(--spacing-xxl) 0;
+}
+
+.grid {
+    display: grid;
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-lg);
 }
 
 /* Header */
 .header {
-    padding: 20px 0;
+    padding: var(--spacing-md) 0;
     border-bottom: 1px solid var(--card-background);
 }
 
@@ -54,14 +89,14 @@ body {
 
 .nav-links {
     display: flex;
-    gap: 20px;
+    gap: var(--spacing-md);
 }
 
 .nav-links a {
     color: var(--text-color);
     text-decoration: none;
     font-family: monospace;
-    transition: color 0.3s ease;
+    transition: color var(--transition-fast);
 }
 
 .nav-links a:hover {
@@ -71,13 +106,13 @@ body {
 /* Hero Section */
 .hero {
     text-align: center;
-    padding: 60px 0;
+    padding: var(--spacing-xxl) 0;
     background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
 }
 
 .welcome-text {
     font-size: 2.5rem;
-    margin-bottom: 20px;
+    margin-bottom: var(--spacing-md);
 }
 
 .visitor-counter {
@@ -93,8 +128,8 @@ body {
 .about-content {
     display: flex;
     align-items: center;
-    gap: 40px;
-    padding: 40px;
+    gap: var(--spacing-xl);
+    padding: var(--spacing-xl);
     background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
     border-radius: 10px;
 }
@@ -111,13 +146,13 @@ body {
 }
 
 .about-text h2 {
-    margin-bottom: 20px;
+    margin-bottom: var(--spacing-md);
     color: var(--text-color);
 }
 
 .about-text p {
     color: var(--text-color-muted);
-    margin-bottom: 20px;
+    margin-bottom: var(--spacing-md);
 }
 
 /* Projects Section */
@@ -199,7 +234,7 @@ body {
     padding-bottom: 100%;
     background: var(--card-hover);
     border-radius: 5px;
-    margin-bottom: 15px;
+    margin-bottom: var(--spacing-sm);
 }
 
 .merch-item h3 {
@@ -214,7 +249,7 @@ body {
 /* Footer */
 .footer {
     margin-top: auto;
-    padding: 40px 0;
+    padding: var(--spacing-xl) 0;
     background: var(--card-background);
 }
 
@@ -231,19 +266,19 @@ body {
     color: var(--text-color-muted);
     font-size: 0.9rem;
     font-style: italic;
-    margin-bottom: 20px;
+    margin-bottom: var(--spacing-md);
 }
 
 .social-links {
     display: flex;
     justify-content: center;
-    gap: 20px;
+    gap: var(--spacing-md);
 }
 
 .social-links a {
     color: var(--text-color-muted);
     text-decoration: none;
-    transition: color 0.3s ease;
+    transition: color var(--transition-fast);
 }
 
 .social-links a:hover {
@@ -252,6 +287,10 @@ body {
 
 /* Responsive Design */
 @media (max-width: 768px) {
+    :root {
+        --spacing-xxl: 40px;
+    }
+
     .about-content {
         flex-direction: column;
         text-align: center;
@@ -270,6 +309,6 @@ body {
 @media (max-width: 480px) {
     .nav {
         flex-direction: column;
-        gap: 15px;
+        gap: var(--spacing-sm);
     }
 } 
