@@ -311,4 +311,15 @@ body {
         flex-direction: column;
         gap: var(--spacing-sm);
     }
+}
+
+/* Newsletter Section */
+.newsletter-content h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    background: linear-gradient(45deg, var(--accent-color), #fff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
 } 
