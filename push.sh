@@ -16,4 +16,4 @@ git commit -m "$1"
 # Push to the remote repository
 git push
 
-echo "✅ Changes pushed successfully!" 
+echo "✅ Changes pushed successfully!"
