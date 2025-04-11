@@ -1,18 +1,19 @@
 #!/bin/bash
 
-# Change to the project directory
-cd "$(dirname "$0")"
+# Check if a commit message was provided
+if [ -z "$1" ]; then
+    echo "Please provide a commit message"
+    echo "Usage: ./push.sh \"Your commit message\""
+    exit 1
+fi
 
 # Add all changes
 git add .
 
-# Get the current date and time for the commit message
-timestamp=$(date "+%Y-%m-%d %H:%M:%S")
+# Commit with the provided message
+git commit -m "$1"
 
-# Commit with timestamp
-git commit -m "Auto commit at $timestamp"
-
-# Push to GitHub
+# Push to the remote repository
 git push
 
-echo "Changes pushed to GitHub successfully!" 
+echo "✅ Changes pushed successfully!" 
