@@ -53,7 +53,7 @@
             <div class="nav-links">
                 <a href="#projects" aria-label="View projects">Projects</a>
                 <a href="#about" aria-label="Learn about me">About</a>
-                <a href="#merch" aria-label="View merchandise">Merch</a>
+                <a href="#training" aria-label="View training">Training</a>
             </div>
         </nav>
     </header>
@@ -107,19 +107,53 @@
             </div>
         </section>
 
-        <section id="merch" class="section" aria-label="Merchandise section">
+        <section id="training" class="section" aria-label="Training and Nutrition section">
             <div class="container">
-                <h2>Merchandise</h2>
-                <div class="merch-grid">
-                    <article class="merch-item" itemscope itemtype="https://schema.org/Product">
-                        <div class="merch-image-placeholder" itemprop="image"></div>
-                        <h3 itemprop="name">HYROX Training Tee</h3>
-                        <p itemprop="description">High-performance training shirt</p>
+                <h2>Training & Nutrition</h2>
+                <div class="training-grid">
+                    <article class="training-card" itemscope itemtype="https://schema.org/HowTo">
+                        <h3>Weekly Training Schedule</h3>
+                        <div class="schedule-container">
+                            <div class="schedule-tabs">
+                                <button class="tab-button active" data-day="monday">Mon</button>
+                                <button class="tab-button" data-day="tuesday">Tue</button>
+                                <button class="tab-button" data-day="wednesday">Wed</button>
+                                <button class="tab-button" data-day="thursday">Thu</button>
+                                <button class="tab-button" data-day="friday">Fri</button>
+                                <button class="tab-button" data-day="saturday">Sat</button>
+                                <button class="tab-button" data-day="sunday">Sun</button>
+                            </div>
+                            <div class="schedule-content">
+                                <!-- Content will be populated by JavaScript -->
+                            </div>
+                        </div>
                     </article>
-                    <article class="merch-item" itemscope itemtype="https://schema.org/Product">
-                        <div class="merch-image-placeholder" itemprop="image"></div>
-                        <h3 itemprop="name">Running Cap</h3>
-                        <p itemprop="description">Lightweight running cap</p>
+
+                    <article class="training-card" itemscope itemtype="https://schema.org/Recipe">
+                        <h3>Recovery Smoothies</h3>
+                        <div class="smoothie-container">
+                            <div class="smoothie-tabs">
+                                <button class="tab-button active" data-smoothie="electrolyte">Electrolyte Boost</button>
+                                <button class="tab-button" data-smoothie="recovery">Recovery Plus</button>
+                            </div>
+                            <div class="smoothie-content">
+                                <!-- Content will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </article>
+
+                    <article class="training-card" itemscope itemtype="https://schema.org/Guide">
+                        <h3>Supplement Stack</h3>
+                        <div class="supplement-container">
+                            <div class="supplement-tabs">
+                                <button class="tab-button active" data-stack="sleep">Sleep</button>
+                                <button class="tab-button" data-stack="recovery">Recovery</button>
+                                <button class="tab-button" data-stack="performance">Performance</button>
+                            </div>
+                            <div class="supplement-content">
+                                <!-- Content will be populated by JavaScript -->
+                            </div>
+                        </div>
                     </article>
                 </div>
             </div>

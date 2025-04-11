@@ -1,13 +1,24 @@
 :root {
     /* Colors */
-    --hyrox-blue: #00a3e0;
+    --bg-color: #000000;
+    --text-color: #ffffff;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --card-bg: #0a0a0a;
+    --accent-color: #BBF34C;
+    --hyrox-blue: #00ffff;
     --runner-orange: #ff6b00;
     --lifter-red: #ff0000;
-    --background-color: #000000;
-    --text-color: #ffffff;
-    --text-color-muted: rgba(255, 255, 255, 0.7);
-    --text-color-dimmed: rgba(255, 255, 255, 0.5);
-    
+    --font-mono: 'Fira Code', 'IBM Plex Mono', monospace;
+    --transition-speed: 0.3s;
+
+    /* Spacing System */
+    --spacing-xs: 0.5rem;    /* 8px */
+    --spacing-sm: 1rem;      /* 16px */
+    --spacing-md: 1.5rem;    /* 24px */
+    --spacing-lg: 2rem;      /* 32px */
+    --spacing-xl: 3rem;      /* 48px */
+    --spacing-xxl: 4rem;     /* 64px */
+
     /* Gradients */
     --gradient-start: rgba(0, 163, 224, 0.1);
     --gradient-end: rgba(255, 107, 0, 0.1);
@@ -16,13 +27,9 @@
     --card-background: rgba(255, 255, 255, 0.05);
     --card-hover: rgba(255, 255, 255, 0.1);
     
-    /* Spacing */
-    --spacing-xs: 10px;
-    --spacing-sm: 15px;
-    --spacing-md: 20px;
-    --spacing-lg: 30px;
-    --spacing-xl: 40px;
-    --spacing-xxl: 60px;
+    /* Text Colors */
+    --text-color-muted: rgba(255, 255, 255, 0.7);
+    --text-color-dimmed: rgba(255, 255, 255, 0.5);
     
     /* Transitions */
     --transition-fast: 0.3s ease;
@@ -37,7 +44,7 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background-color: var(--background-color);
+    background-color: var(--bg-color);
     color: var(--text-color);
     line-height: 1.6;
     min-height: 100vh;
@@ -60,7 +67,8 @@ body {
 
 /* Layout Components */
 .section {
-    padding: var(--spacing-xxl) 0;
+    margin: var(--spacing-xl) 0;
+    padding: var(--spacing-lg) 0;
 }
 
 .grid {
@@ -204,48 +212,6 @@ body {
     color: var(--runner-orange);
 }
 
-/* Merch Section */
-.merch-section {
-    padding: 60px 0;
-}
-
-.merch-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 30px;
-    margin-top: 30px;
-}
-
-.merch-item {
-    background: var(--card-background);
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    transition: transform 0.3s ease, background-color 0.3s ease;
-}
-
-.merch-item:hover {
-    transform: translateY(-5px);
-    background: var(--card-hover);
-}
-
-.merch-image-placeholder {
-    width: 100%;
-    padding-bottom: 100%;
-    background: var(--card-hover);
-    border-radius: 5px;
-    margin-bottom: var(--spacing-sm);
-}
-
-.merch-item h3 {
-    margin-bottom: 10px;
-    color: var(--text-color);
-}
-
-.merch-item p {
-    color: var(--text-color-muted);
-}
-
 /* Footer */
 .footer {
     margin-top: auto;
@@ -287,8 +253,9 @@ body {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    :root {
-        --spacing-xxl: 40px;
+    .section {
+        margin: var(--spacing-lg) 0;
+        padding: var(--spacing-md) 0;
     }
 
     .about-content {
@@ -311,6 +278,11 @@ body {
         flex-direction: column;
         gap: var(--spacing-sm);
     }
+
+    .section {
+        margin: var(--spacing-md) 0;
+        padding: var(--spacing-sm) 0;
+    }
 }
 
 /* Newsletter Section */
@@ -322,4 +294,83 @@ body {
     background-clip: text;
     -webkit-text-fill-color: transparent;
     color: transparent;
+}
+
+/* Training & Nutrition Section */
+.training-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-lg);
+}
+
+.training-card {
+    background: var(--card-bg);
+    border-radius: 10px;
+    padding: var(--spacing-lg);
+    transition: transform var(--transition-speed);
+}
+
+.training-card:hover {
+    transform: translateY(-5px);
+}
+
+.schedule-container,
+.smoothie-container,
+.supplement-container {
+    margin-top: var(--spacing-md);
+}
+
+.schedule-tabs,
+.smoothie-tabs,
+.supplement-tabs {
+    display: flex;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-md);
+    overflow-x: auto;
+    padding-bottom: var(--spacing-xs);
+}
+
+.tab-button {
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all var(--transition-speed);
+    white-space: nowrap;
+}
+
+.tab-button:hover {
+    border-color: var(--hyrox-blue);
+    color: var(--hyrox-blue);
+}
+
+.tab-button.active {
+    background: var(--hyrox-blue);
+    border-color: var(--hyrox-blue);
+    color: var(--bg-color);
+}
+
+.schedule-content,
+.smoothie-content,
+.supplement-content {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: var(--spacing-md);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .training-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .schedule-tabs,
+    .smoothie-tabs,
+    .supplement-tabs {
+        flex-wrap: nowrap;
+        -webkit-overflow-scrolling: touch;
+    }
 } 
