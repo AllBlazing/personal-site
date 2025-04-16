@@ -87,7 +87,7 @@ body {
 
 /* Section Styles */
 section {
-    margin: 6rem 0;
+    margin: 30px 0;
     padding: 0;
 }
 
@@ -980,4 +980,10 @@ section:first-child {
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
     }
+}
+
+.container { 
+  width: 90%;
+  max-width: 750px;
+  margin: 0 auto;
 }
