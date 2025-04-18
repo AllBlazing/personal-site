@@ -964,3 +964,145 @@ section:first-child {
     max-width: 750px;
     margin: 0 auto;
 }
+
+/* Metrics Section */
+.metrics-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.metric-card {
+    background: #1a1a1a;
+    border-radius: 10px;
+    padding: 1.5rem;
+    text-align: center;
+    border: 1px solid #333;
+}
+
+.metric-icon {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #90EE90;
+}
+
+.metric-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #fff;
+    margin: 0.5rem 0;
+}
+
+.metric-label {
+    color: #90EE90;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+}
+
+.metric-timestamp {
+    font-size: 0.8rem;
+    color: #666;
+}
+
+/* Supplement Stack */
+.supplement-stack {
+    display: grid;
+    gap: 1.5rem;
+    margin: 2rem 0;
+}
+
+.supplement-section {
+    background: #1a1a1a;
+    border-radius: 10px;
+    padding: 1.5rem;
+    border: 1px solid #333;
+}
+
+.supplement-section h3 {
+    color: #90EE90;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.supplement-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #333;
+}
+
+.supplement-item:last-child {
+    border-bottom: none;
+}
+
+/* Training Schedule */
+.training-schedule {
+    background: #1a1a1a;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+}
+
+.schedule-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 1rem;
+}
+
+.schedule-day {
+    background: #242424;
+    border-radius: 8px;
+    padding: 1rem;
+}
+
+.schedule-day h4 {
+    color: #90EE90;
+    margin-bottom: 0.5rem;
+}
+
+.training-hiit { background: rgba(100, 149, 237, 0.1); }
+.training-strength { background: rgba(147, 112, 219, 0.1); }
+.training-hyrox { background: rgba(144, 238, 144, 0.1); }
+.training-cardio { background: rgba(255, 165, 0, 0.1); }
+
+/* Email Collection Dark Theme */
+.email-section {
+    background: #1a1a1a;
+    padding: 3rem;
+    border-radius: 10px;
+    text-align: center;
+    margin: 2rem 0;
+}
+
+.email-section h2 {
+    color: #90EE90;
+    margin-bottom: 1.5rem;
+}
+
+.email-section input[type="email"] {
+    background: #242424;
+    border: 1px solid #333;
+    color: #fff;
+    padding: 1rem;
+    border-radius: 5px;
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 1rem;
+}
+
+.email-section button {
+    background: #90EE90;
+    color: #1a1a1a;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.email-section button:hover {
+    background: #7ac47a;
+}

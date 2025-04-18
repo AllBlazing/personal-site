@@ -171,53 +171,145 @@
         </section>
 
         <!-- Training & Nutrition Section -->
-        <section class="training-section">
-            <h2 class="section-title">Training & Nutrition</h2>
+        <section class="training-nutrition">
+            <h2>Training & Nutrition</h2>
             
+            <!-- Metrics -->
             <div class="metrics-container">
                 <div class="metric-card">
-                    <h3>VO2Max</h3>
-                    <div class="metric-value">
-                        <span id="vo2max-value">--</span>
-                        <span class="trend-indicator" id="vo2max-trend"></span>
-                    </div>
-                    <div class="metric-description">Current VO2Max level</div>
+                    <i class="fas fa-lungs metric-icon"></i>
+                    <div class="metric-value">60</div>
+                    <div class="metric-label">VO2Max</div>
+                    <div class="metric-timestamp">Updated: March 14, 2024</div>
                 </div>
-                
                 <div class="metric-card">
-                    <h3>HRV</h3>
-                    <div class="metric-value">
-                        <span id="hrv-value">--</span>
-                        <span class="trend-indicator" id="hrv-trend"></span>
-                    </div>
-                    <div class="metric-description">Heart Rate Variability</div>
+                    <i class="fas fa-heartbeat metric-icon"></i>
+                    <div class="metric-value">--</div>
+                    <div class="metric-label">HRV</div>
+                    <div class="metric-timestamp">Coming soon</div>
+                </div>
+                <div class="metric-card">
+                    <i class="fas fa-dumbbell metric-icon"></i>
+                    <div class="metric-value">19</div>
+                    <div class="metric-label">Pull-ups</div>
+                    <div class="metric-timestamp">Updated: March 14, 2024</div>
                 </div>
             </div>
 
-            <div class="training-content">
-                <div class="training-tabs">
-                    <button class="training-tab active" data-tab="schedule">Training Schedule</button>
-                    <button class="training-tab" data-tab="supplements">Supplements</button>
-                    <button class="training-tab" data-tab="smoothies">Recovery Smoothies</button>
-                </div>
-
-                <div class="content-management">
-                    <input type="text" id="content-search" class="content-search" placeholder="Search content...">
-                    <div id="content-grid" class="content-grid"></div>
-                </div>
-
-                <div class="training-panels">
-                    <div class="training-panel active" id="schedule-panel">
-                        <!-- Schedule content will be loaded dynamically -->
+            <!-- Training Schedule -->
+            <div class="training-schedule">
+                <h3>Weekly Training Schedule</h3>
+                <div class="schedule-grid">
+                    <div class="schedule-day">
+                        <h4>Monday</h4>
+                        <div class="training-hiit">HIIT / Core 45 mins or easy run</div>
+                        <div class="schedule-note">*skip if tired</div>
                     </div>
-                    <div class="training-panel" id="supplements-panel">
-                        <!-- Supplements content will be loaded dynamically -->
+                    <div class="schedule-day">
+                        <h4>Tuesday</h4>
+                        <div class="training-strength">Strength 45 mins + 300 wall balls (volume) 9KG / 6KG 15 mins</div>
                     </div>
-                    <div class="training-panel" id="smoothies-panel">
-                        <!-- Smoothies content will be loaded dynamically -->
+                    <div class="schedule-day">
+                        <h4>Wednesday</h4>
+                        <div class="training-hyrox">Hyrox (wall balls) / running 45mins</div>
+                    </div>
+                    <div class="schedule-day">
+                        <h4>Thursday</h4>
+                        <div class="training-strength">Strength 45 mins + 100 wall balls (time) 9KG 7 mins + 100 for time 6kg</div>
+                    </div>
+                    <div class="schedule-day">
+                        <h4>Friday</h4>
+                        <div class="training-cardio">AM Run -threshold 50 mins</div>
+                        <div class="training-cardio">PM Row threshold 40 mins</div>
+                    </div>
+                    <div class="schedule-day">
+                        <h4>Saturday</h4>
+                        <div class="training-hiit">Tennis lesson + doubles 1-2 hrs</div>
+                        <div class="training-hiit">Core 20 mins</div>
+                    </div>
+                    <div class="schedule-day">
+                        <h4>Sunday</h4>
+                        <div class="training-hyrox">Hyrox (wall balls) / running 90mins</div>
                     </div>
                 </div>
             </div>
+
+            <!-- Supplement Stack -->
+            <div class="supplement-stack">
+                <div class="supplement-section">
+                    <h3>☀️ Morning (Kickstart the Day)</h3>
+                    <div class="supplement-item">
+                        <span>Taurine</span>
+                        <span>1000mg</span>
+                    </div>
+                    <div class="supplement-item">
+                        <span>Beta-Alanine</span>
+                        <span>2g (split dose)</span>
+                    </div>
+                </div>
+
+                <div class="supplement-section">
+                    <h3>🏋️‍♂️ Pre-Workout</h3>
+                    <div class="supplement-item">
+                        <span>Citrulline Malate</span>
+                        <span>4g</span>
+                        <span>*high intensity days only</span>
+                    </div>
+                    <div class="supplement-item">
+                        <span>Beta-Alanine</span>
+                        <span>2g (2nd half)</span>
+                    </div>
+                    <div class="supplement-item">
+                        <span>Beetroot Extract</span>
+                        <span>3000mg</span>
+                    </div>
+                </div>
+
+                <div class="supplement-section">
+                    <h3>💪 Post-Workout Recovery</h3>
+                    <div class="supplement-item">
+                        <span>Whey Protein (Grass-Fed)</span>
+                        <span>30g</span>
+                    </div>
+                    <div class="supplement-item">
+                        <span>Creatine Monohydrate</span>
+                        <span>5g</span>
+                    </div>
+                    <div class="supplement-item">
+                        <span>Recovery Smoothie</span>
+                        <span>Himalayan Salt, Coconut Water, Honey, Lemon, Pineapple</span>
+                    </div>
+                </div>
+
+                <div class="supplement-section">
+                    <h3>🌙 Evening (Sleep & Recovery)</h3>
+                    <div class="supplement-item">
+                        <span>Montmorency Cherry</span>
+                        <span>1000mg</span>
+                    </div>
+                    <div class="supplement-item">
+                        <span>Saffron</span>
+                        <span>28mg</span>
+                        <span>*alternate days</span>
+                    </div>
+                    <div class="supplement-item">
+                        <span>L-Theanine</span>
+                        <span>200mg</span>
+                    </div>
+                    <div class="supplement-item">
+                        <span>Magnesium Glycinate</span>
+                        <span>300mg</span>
+                        <span>*alternate days</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Email Collection Section -->
+        <section class="email-section">
+            <h2>Stay Updated</h2>
+            <input type="email" placeholder="Your email" aria-label="Email subscription">
+            <button type="button">Subscribe</button>
         </section>
     </main>
 
