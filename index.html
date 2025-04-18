@@ -58,12 +58,19 @@
                     <img src="mark%20-%20me1.jpeg" alt="Mark Trewren" class="profile-pic">
                 </div>
                 <div class="about-text">
-                    <p class="introduction">
-                        👨‍👧‍👦 Dad of 3 (best bit).<br>
-                        🌍 90+ countries.<br>
-                        🏁 Ironman. 100mi. Sub3.<br>
-                        🎯 Hyrox & vibe coding.
-                    </p>
+                    <p>👋 Hey, I'm Mark — dad of three (that's the best bit).</p>
+                    
+                    <p>I've spent a lifetime chasing what's just over the next hill — from 100-mile ultras, IM 🏃‍♂️🚴‍♂️ and a sub 3 marathon to exploring 90+ countries 🌍, visiting everywhere from Yemen to Japan to Syria to Panama. Always curious, always moving.</p>
+                    
+                    <p>A few years ago, I dove into startup life as a non-technical founder. Built a feature-rich app with a small team and big dreams. It didn't land — and honestly, it drained me. Financially, emotionally, the whole lot..</p>
+                    
+                    <p>So I hit reset. Learned to code using AI 🤖 with the help of a Scriba course and Cursor as my playground. I've since built a few small tools I needed — and I'm sharing them here in case they help you too 🛠️.</p>
+                    
+                    <p>I'm inspired by laptop builders like Pieter Levels, Jack Friks & Marc Lou — drawn to the freedom, ownership, and quiet confidence of shipping simple, useful things.</p>
+                    
+                    <p>When I'm not vibe coding, you'll find me training for Hyrox 💪, chasing a PR, or doing LEGO with the kids 🧱. Probably in that order.</p>
+                    
+                    <p>👇 Check out what I've built — and feel free to say hey on X.</p>
                 </div>
             </div>
         </section>
@@ -75,51 +82,29 @@
                 projects
             </h2>
             <div class="projects-list">
-                <p class="project-update">Update 2024-09-18: it is now hosted on its own VPS box away from all my other sites so I can hack more on it.</p>
-                
                 <div class="project-item">
-                    <a href="#" class="project-link">Pieter™ PC</a>
-                    <span class="project-description">- A fully functional 1994-era PC that is fully connected to the internet with a dial up modem and actual ISP I run</span>
+                    <a href="#" class="project-link">ScanSleepAI</a>
+                    <span class="project-description">- This is a web based project...</span>
                 </div>
 
                 <div class="project-item">
-                    <a href="#" class="project-link">Pieter Online ISP</a>
-                    <span class="project-description">- A real & fully functional dial up internet service which the Pieter.com PC connects to the internet with</span>
+                    <a href="#" class="project-link">WishListExtAI</a>
+                    <span class="project-description">- This is a Chrome extension...</span>
                 </div>
 
                 <div class="project-item">
-                    <a href="#" class="project-link">ftp.pieter.com</a>
-                    <span class="project-description">- A real anonymous FTP server with classic software downloads, games, and utilities</span>
+                    <a href="#" class="project-link">HyTracker</a>
+                    <span class="project-description">- This is an app that allows you to track your strength, running and Hyrox specific tracked activities in one place</span>
                 </div>
 
                 <div class="project-item">
-                    <a href="#" class="project-link">JSON.pub</a>
-                    <span class="project-description">- A new JSON visualizer that also accepts other data types like XML, serialized, hex, base64 and binary input.</span>
+                    <a href="#" class="project-link">FoxThree</a>
+                    <span class="project-description">- This is a productivity and social media all in one post...</span>
                 </div>
 
                 <div class="project-item">
-                    <a href="#" class="project-link">lofi air traffic control</a>
-                    <span class="project-description">🇧🇷 brazil edition</span>
-                </div>
-
-                <div class="project-item">
-                    <a href="#" class="project-link">Pieter™ Flight Simulator</a>
-                    <span class="project-description">- Fly multiplayer with my flight sim I made with Cursor</span>
-                </div>
-
-                <div class="project-item">
-                    <a href="#" class="project-link">Pretzel's Magical Birthday Claw Machine</a>
-                    <span class="project-description">- A claw machine game I made for my friend's birthday to learn phyics in JS</span>
-                </div>
-
-                <div class="project-item">
-                    <a href="#" class="project-link">2025 Vibe Coding Game Jam</a>
-                    <span class="project-description">- Enter your AI-made game in the first ever Vibe Coding Game Jam</span>
-                </div>
-
-                <div class="project-item">
-                    <a href="#" class="project-link">WebImage Maker '97 - AI Edition</a>
-                    <span class="project-description">- a simple AI image generator that allows you to create images from text prompts using classic only browsers like Netscape or MSIE4</span>
+                    <a href="#" class="project-link">Trewrenmerch</a>
+                    <span class="project-description">- This is my merch shop...</span>
                 </div>
             </div>
         </section>
@@ -575,7 +560,10 @@
             // Sort activities by date in descending order (newest first)
             activities.sort((a, b) => new Date(b.start_date) - new Date(a.start_date));
 
-            const html = activities.map(activity => {
+            // Take only the first 5 activities
+            const recentActivities = activities.slice(0, 5);
+
+            const html = recentActivities.map(activity => {
                 const date = new Date(activity.start_date).toLocaleDateString('en-US', {
                     weekday: 'short',
                     month: 'short',

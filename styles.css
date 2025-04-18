@@ -133,7 +133,7 @@ section:first-child {
 .profile-image {
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start;
     padding: 1rem;
     width: 100%;
 }
@@ -151,6 +151,14 @@ section:first-child {
 .about-text {
     font-size: 1.1rem;
     line-height: 1.8;
+}
+
+.about-text p {
+    margin-bottom: 1.5rem;
+}
+
+.about-text p:last-child {
+    margin-bottom: 0;
 }
 
 /* Projects Section */
@@ -269,19 +277,17 @@ section:first-child {
 }
 
 .github-stats {
-    width: 100%;
-    max-width: 800px;
+    background-color: #1a1a1a;
     padding: 1rem;
-    background: rgba(255, 255, 255, 0.05);
     border-radius: 8px;
-    overflow-x: auto;
+    margin: 1rem 0;
 }
 
 .github-contributions {
     width: 100%;
     height: auto;
-    display: block;
-    margin: 0 auto;
+    filter: brightness(0.9) contrast(1.1);
+    background-color: #1a1a1a;
 }
 
 .strava-stats {
@@ -524,6 +530,20 @@ section:first-child {
 @media (max-width: 768px) {
     .about-content {
         grid-template-columns: 1fr;
+        gap: 2rem;
+        padding: 1.5rem;
+    }
+
+    .profile-image {
+        padding: 0;
+    }
+
+    .profile-pic {
+        transform: scale(1.2);
+    }
+
+    .about-text {
+        font-size: 1rem;
     }
 
     .mobile-controls {
@@ -902,7 +922,6 @@ section:first-child {
     }
 }
 
-<<<<<<< HEAD
 /* Success Page */
 .success-page {
     min-height: 100vh;
@@ -938,10 +957,10 @@ section:first-child {
 
 .back-home:hover {
     background-color: #0056b3;
-=======
+}
+
 .container { 
-  width: 90%;
-  max-width: 750px;
-  margin: 0 auto;
->>>>>>> origin/main
+    width: 90%;
+    max-width: 750px;
+    margin: 0 auto;
 }
