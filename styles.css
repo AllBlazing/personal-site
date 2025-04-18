@@ -22,14 +22,13 @@
     --font-size-4xl: 2.5rem;
     
     /* Spacing */
-    --spacing-xs: 0.25rem;
-    --spacing-sm: 0.5rem;
-    --spacing-md: 1rem;
-    --spacing-lg: 2rem;
-    --spacing-xl: 3rem;
-    --spacing-2xl: 4rem;
-    --section-padding: var(--spacing-xl);
-    --section-gap: var(--spacing-2xl);
+    --spacing-xs: 0.25rem;    /* 4px */
+    --spacing-sm: 0.5rem;     /* 8px */
+    --spacing-md: 1rem;       /* 16px */
+    --spacing-lg: 2rem;       /* 32px */
+    --spacing-xl: 3rem;       /* 48px */
+    --section-padding: var(--spacing-lg);
+    --section-gap: var(--spacing-xl);
     
     /* Borders */
     --border-radius-sm: 4px;
@@ -51,6 +50,10 @@
     --header-height: 4rem;
     --container-max-width: 1200px;
     --container-padding: var(--spacing-md);
+
+    /* Standardize hover transitions */
+    --hover-transition: 0.3s ease;
+    --hover-bg: rgba(255, 255, 255, 0.05);
 }
 
 /* Reset and Base Styles */
@@ -334,10 +337,11 @@ body {
 
 /* Sections */
 .section {
-    padding: var(--section-padding) 0;
+    padding: var(--spacing-lg) 0;
     position: relative;
 }
 
+/* Section title to content spacing */
 .section-title {
     font-size: 2.5rem;
     margin-bottom: var(--spacing-md);
@@ -353,15 +357,15 @@ body {
     grid-template-columns: 1fr 2fr;
     gap: var(--spacing-xl);
     align-items: center;
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--bg-secondary);
     padding: var(--spacing-lg);
     border-radius: var(--border-radius-lg);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    transition: transform 0.3s ease;
+    border: 1px solid var(--border-color);
+    transition: background var(--hover-transition);
 }
 
 .about-content:hover {
-    transform: translateY(-5px);
+    background: var(--hover-bg);
 }
 
 .profile-image {
@@ -389,6 +393,10 @@ body {
 }
 
 /* Projects Section */
+#projects {
+    padding: var(--section-padding) 0;
+}
+
 .projects-list {
     display: grid;
     gap: var(--spacing-md);
@@ -397,17 +405,15 @@ body {
 }
 
 .project-item {
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--bg-secondary);
     padding: var(--spacing-md);
-    border-radius: var(--border-radius-lg);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+    transition: background var(--hover-transition);
 }
 
 .project-item:hover {
-    transform: translateY(-5px);
-    background: rgba(255, 255, 255, 0.05);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    background: var(--hover-bg);
 }
 
 .project-link {
@@ -449,12 +455,12 @@ body {
     }
 
     .section {
-        padding: var(--section-padding) 0;
+        padding: var(--spacing-md) 0;
     }
 
     .section-title {
         font-size: 2rem;
-        margin-bottom: var(--spacing-md);
+        margin-bottom: var(--spacing-sm);
     }
 
     .cta-buttons {
@@ -466,6 +472,20 @@ body {
     .cta-button {
         width: 100%;
         text-align: center;
+    }
+
+    .stats-container,
+    .metrics-container,
+    .projects-list {
+        gap: 0.5rem;
+        margin: 0.5rem 0;
+    }
+
+    .training-schedule,
+    .supplement-stack,
+    .newsletter-section {
+        padding: var(--spacing-md);
+        margin: var(--spacing-lg) 0;
     }
 }
 
@@ -557,25 +577,13 @@ body {
 
 /* Newsletter Section */
 .newsletter-section {
+    margin: var(--section-padding) 0;
+    padding: var(--spacing-md);
     background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
-    padding: var(--section-padding) var(--spacing-md);
-    margin: var(--section-gap) 0;
     border: 1px solid var(--border-color);
     border-radius: var(--border-radius-lg);
     position: relative;
     overflow: hidden;
-}
-
-.newsletter-section::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(45deg, var(--accent-color) 0%, transparent 100%);
-    opacity: 0.05;
-    pointer-events: none;
 }
 
 .newsletter-content {
@@ -586,8 +594,8 @@ body {
 }
 
 .newsletter-content h2 {
-    font-size: 2.5rem;
     margin-bottom: var(--spacing-md);
+    font-size: 2.5rem;
     color: var(--text-primary);
 }
 
@@ -687,7 +695,7 @@ body {
 
 @media (max-width: 768px) {
     .newsletter-section {
-        padding: var(--section-padding) var(--spacing-sm);
+        padding: var(--spacing-md);
     }
 
     .newsletter-content h2 {
@@ -812,30 +820,24 @@ body {
     padding: var(--section-padding) 0;
 }
 
-.training-nutrition .section-title {
-    margin-top: var(--spacing-sm);
-    margin-bottom: var(--spacing-md);
-}
-
 .metrics-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: var(--spacing-md);
-    margin: var(--section-gap) 0;
+    margin: var(--spacing-lg) 0;
 }
 
 .metric-card {
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--bg-secondary);
     padding: var(--spacing-lg);
-    border-radius: var(--border-radius-lg);
+    border-radius: var(--border-radius);
     border: 1px solid var(--border-color);
     text-align: center;
-    transition: all var(--transition-base) ease;
+    transition: background var(--hover-transition);
 }
 
 .metric-card:hover {
-    transform: translateY(-5px);
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--hover-bg);
 }
 
 /* Scroll Reveal */
@@ -852,30 +854,29 @@ body {
 
 /* Training Schedule */
 .training-schedule {
+    margin: var(--section-padding) 0;
+    padding: var(--spacing-md);
     background: rgba(255, 255, 255, 0.02);
-    padding: var(--spacing-lg);
     border-radius: var(--border-radius-lg);
     border: 1px solid var(--border-color);
-    margin: var(--section-gap) 0;
 }
 
 .schedule-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     gap: var(--spacing-md);
-    margin-top: var(--section-gap);
+    margin-top: var(--spacing-lg);
 }
 
 .schedule-day {
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--bg-secondary);
     padding: var(--spacing-md);
-    border-radius: var(--border-radius-md);
-    transition: all var(--transition-base) ease;
+    border-radius: var(--border-radius);
+    transition: background var(--hover-transition);
 }
 
 .schedule-day:hover {
-    transform: translateY(-5px);
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--hover-bg);
 }
 
 .schedule-day h4 {
@@ -904,18 +905,22 @@ body {
 }
 
 /* Stats Section */
+#stats {
+    padding: var(--section-padding) 0;
+}
+
 .stats-container {
     display: flex;
     flex-direction: column;
     gap: var(--spacing-md);
-    margin-top: var(--section-gap);
-    padding: var(--section-padding) 0;
+    margin-top: var(--spacing-lg);
+    padding: var(--spacing-md) 0;
 }
 
 .activities-list {
     display: grid;
     gap: var(--spacing-md);
-    margin-top: var(--section-gap);
+    margin-top: var(--spacing-md);
     margin-bottom: 0;
 }
 
@@ -928,42 +933,18 @@ body {
     margin-bottom: var(--spacing-lg);
 }
 
-.github-stats, .strava-stats {
-    background: rgba(255, 255, 255, 0.02);
-    padding: var(--spacing-xl);
-    border-radius: var(--border-radius-lg);
+.github-stats,
+.strava-stats {
+    background: var(--bg-secondary);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius);
     border: 1px solid var(--border-color);
-    transition: all var(--transition-base) ease;
-    position: relative;
-    overflow: hidden;
-    height: fit-content;
-    width: 100%;
 }
 
-.github-stats::before, .strava-stats::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(to right, var(--accent-color), transparent);
-    opacity: 0.5;
-}
-
-.strava-stats::before {
-    background: linear-gradient(to right, #FC4C02, transparent);
-}
-
-.github-stats:hover, .strava-stats:hover {
-    transform: translateY(-5px);
-    background: rgba(255, 255, 255, 0.05);
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-}
-
-.github-stats h3, .strava-header h3 {
+.github-stats h3, 
+.strava-header h3 {
     color: var(--accent-color);
-    margin-bottom: var(--spacing-lg);
+    margin-bottom: var(--spacing-md);
     display: flex;
     align-items: center;
     gap: var(--spacing-sm);
@@ -975,23 +956,17 @@ body {
 }
 
 .github-contributions {
+    max-width: var(--container-max-width);
+    margin: var(--spacing-sm) auto;
     width: 100%;
-    height: auto;
-    border-radius: var(--border-radius-md);
-    transition: transform var(--transition-base) ease;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.github-stats:hover .github-contributions {
-    transform: scale(1.02);
 }
 
 .monthly-summary {
-    background: rgba(255, 255, 255, 0.03);
-    padding: var(--spacing-lg);
-    border-radius: var(--border-radius-md);
+    background: var(--bg-secondary);
+    padding: var(--spacing-md);
+    border-radius: var(--border-radius);
     margin-bottom: var(--spacing-md);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
 }
 
 .stats-grid {
@@ -1003,17 +978,10 @@ body {
 
 .stat-item {
     text-align: center;
-    padding: var(--spacing-lg);
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: var(--border-radius-md);
-    transition: all var(--transition-base) ease;
-    border: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.stat-item:hover {
-    transform: translateY(-3px);
-    background: rgba(255, 255, 255, 0.05);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    padding: var(--spacing-md);
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
 }
 
 .stat-value {
@@ -1021,13 +989,6 @@ body {
     font-weight: 600;
     color: var(--accent-color);
     margin-bottom: var(--spacing-xs);
-    text-shadow: 0 0 10px rgba(187, 243, 76, 0.2);
-}
-
-.stat-label {
-    font-size: 1rem;
-    opacity: 0.8;
-    color: var(--text-secondary);
 }
 
 .activity-types {
@@ -1036,39 +997,26 @@ body {
     gap: var(--spacing-sm);
     margin-top: var(--spacing-md);
     padding: var(--spacing-md);
-    background: rgba(255, 255, 255, 0.02);
-    border-radius: var(--border-radius-md);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
 }
 
 .type-tag {
     padding: var(--spacing-sm) var(--spacing-md);
     background: rgba(252, 76, 2, 0.1);
-    border-radius: 50px;
+    border-radius: var(--border-radius);
     font-size: 0.9rem;
     color: #FC4C02;
-    transition: all var(--transition-base) ease;
     border: 1px solid rgba(252, 76, 2, 0.2);
 }
 
-.type-tag:hover {
-    background: rgba(252, 76, 2, 0.2);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(252, 76, 2, 0.1);
-}
-
 .activity-item {
-    background: rgba(255, 255, 255, 0.02);
-    padding: var(--spacing-lg);
-    border-radius: var(--border-radius-md);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-    transition: all var(--transition-base) ease;
-}
-
-.activity-item:hover {
-    transform: translateY(-3px);
-    background: rgba(255, 255, 255, 0.05);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
+    border: 1px solid var(--border-color);
 }
 
 .activity-header {
@@ -1106,17 +1054,15 @@ body {
 
 .activity-stats span {
     padding: var(--spacing-sm) var(--spacing-md);
-    background: rgba(255, 255, 255, 0.03);
-    border-radius: var(--border-radius-sm);
+    background: var(--bg-primary);
+    border-radius: var(--border-radius);
     font-size: 0.9rem;
-    transition: all var(--transition-base) ease;
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    transition: background var(--hover-transition);
 }
 
 .activity-stats span:hover {
-    background: rgba(255, 255, 255, 0.08);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    background: var(--hover-bg);
 }
 
 @media (max-width: 768px) {
@@ -1151,42 +1097,38 @@ body {
         margin-top: var(--spacing-xs);
         margin-bottom: var(--spacing-sm);
     }
+
+    .github-stats {
+        padding: var(--spacing-sm);
+    }
+    
+    .github-contributions {
+        margin: var(--spacing-xs) auto;
+    }
 }
 
 /* 3D Card Effect */
 .card-3d {
     transform-style: preserve-3d;
-    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: background var(--hover-transition);
 }
 
 .card-3d:hover {
-    transform: rotateY(10deg) rotateX(5deg);
+    background: var(--hover-bg);
 }
 
 /* Floating Elements */
 .floating {
-    animation: float 6s ease-in-out infinite;
-}
-
-@keyframes float {
-    0% {
-        transform: translateY(0px);
-    }
-    50% {
-        transform: translateY(-20px);
-    }
-    100% {
-        transform: translateY(0px);
-    }
+    animation: none;
 }
 
 /* Supplement Stack */
 .supplement-stack {
+    margin: var(--section-padding) 0;
+    padding: var(--spacing-md);
     background: rgba(255, 255, 255, 0.02);
-    padding: var(--spacing-lg);
     border-radius: var(--border-radius-lg);
     border: 1px solid var(--border-color);
-    margin: var(--section-gap) 0;
 }
 
 .supplement-stack .section-subtitle {
@@ -1227,7 +1169,7 @@ body {
     gap: var(--spacing-sm);
     padding: var(--spacing-sm);
     border-bottom: 1px solid var(--border-color);
-    transition: all var(--transition-base) ease;
+    transition: background var(--hover-transition);
 }
 
 .supplement-item:last-child {
@@ -1235,7 +1177,7 @@ body {
 }
 
 .supplement-item:hover {
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--hover-bg);
 }
 
 .supplement-item span:last-child {
@@ -1525,10 +1467,10 @@ body {
 /* Responsive Design */
 @media (max-width: 768px) {
     :root {
-        --section-padding: var(--spacing-sm);
-        --section-gap: var(--spacing-sm);
-        --element-gap: var(--spacing-sm);
-        --card-padding: var(--spacing-sm);
+        /* Adjust spacing for mobile */
+        --section-padding: 3rem;     /* 48px for mobile */
+        --spacing-md: 1.5rem;       /* 24px for mobile */
+        --spacing-sm: 0.75rem;      /* 12px for mobile */
     }
 
     .section {
@@ -1537,7 +1479,7 @@ body {
 
     .section-title {
         font-size: 2rem;
-        margin-bottom: var(--spacing-md);
+        margin-bottom: var(--spacing-sm);
     }
 
     .container {
@@ -1546,16 +1488,16 @@ body {
 
     .stats-container {
         gap: var(--spacing-sm);
-        margin-top: var(--section-gap);
+        margin-top: var(--spacing-sm);
     }
 
     .metrics-container {
         gap: var(--spacing-sm);
-        margin: var(--section-gap) 0;
+        margin: var(--spacing-sm) 0;
     }
 
     .newsletter-section {
-        padding: var(--section-padding) var(--spacing-sm);
+        padding: var(--section-padding) 0;
     }
 }
 
@@ -1591,4 +1533,32 @@ body {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+/* Consistent paragraph spacing */
+p {
+    margin-bottom: var(--spacing-sm);
+}
+
+p:last-child {
+    margin-bottom: 0;
+}
+
+/* Consistent list spacing */
+ul, ol {
+    margin: var(--spacing-sm) 0;
+}
+
+/* Consistent form spacing */
+.form-group {
+    margin-bottom: var(--spacing-md);
+}
+
+/* Card spacing */
+.card, 
+.metric-card,
+.project-item,
+.activity-item {
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
 }

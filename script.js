@@ -260,7 +260,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // 3D Card Effect
-document.querySelectorAll('.card-3d').forEach(card => {
+document.querySelectorAll('.metric-card').forEach(card => {
     card.addEventListener('mousemove', (e) => {
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
