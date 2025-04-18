@@ -18,6 +18,9 @@ class ContentManager {
             this.setupSearch();
         } catch (error) {
             console.error('Error loading content:', error);
+            // Remove loading state if present
+            const loadingElements = document.querySelectorAll('.loading');
+            loadingElements.forEach(el => el.remove());
         }
     }
 
@@ -63,74 +66,25 @@ class ContentManager {
 // Polar Device Integration
 class PolarIntegration {
     constructor() {
-        this.apiKey = process.env.POLAR_API_KEY;
-        this.userId = process.env.POLAR_USER_ID;
-        this.clientId = process.env.POLAR_CLIENT_ID;
-        this.clientSecret = process.env.POLAR_CLIENT_SECRET;
-        this.accessToken = process.env.POLAR_ACCESS_TOKEN;
         this.baseUrl = 'https://www.polaraccesslink.com/v3';
-        this.tokenExpiry = null;
+        this.init();
     }
 
-    async ensureValidToken() {
-        if (!this.accessToken || (this.tokenExpiry && Date.now() >= this.tokenExpiry)) {
-            await this.refreshToken();
-        }
-    }
+    init() {
+        // Remove loading states immediately
+        const loadingElements = document.querySelectorAll('.loading');
+        loadingElements.forEach(el => {
+            el.textContent = 'Data unavailable';
+            el.classList.remove('loading');
+        });
 
-    async refreshToken() {
-        try {
-            const response = await fetch('https://polarremote.com/v2/oauth2/token', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                    'Authorization': `Basic ${btoa(`${this.clientId}:${this.clientSecret}`)}`
-                },
-                body: new URLSearchParams({
-                    grant_type: 'refresh_token',
-                    refresh_token: this.accessToken
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to refresh token');
-            }
-
-            const data = await response.json();
-            this.accessToken = data.access_token;
-            this.tokenExpiry = Date.now() + (data.expires_in * 1000);
-            
-            // Update .env file with new token
-            await this.updateEnvToken(data.access_token);
-        } catch (error) {
-            console.error('Error refreshing token:', error);
-            throw error;
-        }
-    }
-
-    async updateEnvToken(newToken) {
-        try {
-            const response = await fetch('/api/update-token', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    token: newToken
-                })
-            });
-
-            if (!response.ok) {
-                throw new Error('Failed to update token');
-            }
-        } catch (error) {
-            console.error('Error updating token:', error);
-        }
+        // Initialize displays with default values
+        this.updateVO2MaxDisplay({ value: '--', trend: 'neutral' });
+        this.updateHRVDisplay({ value: '--', trend: 'neutral' });
     }
 
     async getVO2Max() {
         try {
-            await this.ensureValidToken();
             const response = await fetch(`${this.baseUrl}/users/${this.userId}/vo2max`, {
                 headers: {
                     'Authorization': `Bearer ${this.accessToken}`,
@@ -156,7 +110,6 @@ class PolarIntegration {
 
     async getHRV() {
         try {
-            await this.ensureValidToken();
             const response = await fetch(`${this.baseUrl}/users/${this.userId}/hrv`, {
                 headers: {
                     'Authorization': `Bearer ${this.accessToken}`,
@@ -213,30 +166,28 @@ class PolarIntegration {
     }
 
     updateVO2MaxDisplay(data) {
-        const vo2maxElement = document.getElementById('vo2max-value');
+        const valueElement = document.getElementById('vo2max-value');
         const trendElement = document.getElementById('vo2max-trend');
         
-        if (vo2maxElement) {
-            vo2maxElement.textContent = data.value.toFixed(1);
-            vo2maxElement.setAttribute('data-timestamp', data.timestamp);
+        if (valueElement) {
+            valueElement.textContent = data.value;
         }
         
         if (trendElement) {
-            trendElement.className = `trend-indicator ${data.trend}`;
+            trendElement.className = 'trend-indicator ' + data.trend;
         }
     }
 
     updateHRVDisplay(data) {
-        const hrvElement = document.getElementById('hrv-value');
+        const valueElement = document.getElementById('hrv-value');
         const trendElement = document.getElementById('hrv-trend');
         
-        if (hrvElement) {
-            hrvElement.textContent = data.value.toFixed(1);
-            hrvElement.setAttribute('data-timestamp', data.timestamp);
+        if (valueElement) {
+            valueElement.textContent = data.value;
         }
         
         if (trendElement) {
-            trendElement.className = `trend-indicator ${data.trend}`;
+            trendElement.className = 'trend-indicator ' + data.trend;
         }
     }
 }
@@ -278,6 +229,13 @@ class LazyLoader {
 
 // Initialize components
 document.addEventListener('DOMContentLoaded', () => {
+    // Remove any loading states
+    const loadingElements = document.querySelectorAll('.loading');
+    loadingElements.forEach(el => {
+        el.textContent = 'Data unavailable';
+        el.classList.remove('loading');
+    });
+
     const contentManager = new ContentManager();
     const polarIntegration = new PolarIntegration();
     const lazyLoader = new LazyLoader();

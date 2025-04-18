@@ -20,6 +20,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
+    
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 </head>
 <body>
     <header class="header" role="banner">
@@ -162,10 +166,8 @@
                             <h3>Monthly Activities</h3>
                         </div>
                         <div id="monthly-summary" class="monthly-summary">
-                            <div class="loading">Calculating monthly stats...</div>
                         </div>
                         <div id="activities-list" class="activities-list">
-                            <div class="loading">Loading activities...</div>
                         </div>
                     </div>
                 </div>
@@ -240,23 +242,12 @@
             <div class="newsletter-content">
                 <h2>Stay Updated</h2>
                 <p>Subscribe for the latest updates and news</p>
-                <form id="newsletter-form" class="newsletter-form">
+                <form name="newsletter" method="POST" data-netlify="true" data-netlify-recaptcha="true" action="/success.html" class="newsletter-form">
                     <div class="input-group">
-                        <input type="text" id="name" name="name" placeholder="Your name" required>
-                        <input type="email" id="email" name="email" placeholder="Your email" required>
+                        <input type="email" name="email" placeholder="Your email" required>
                     </div>
-                    <div class="input-group">
-                        <select id="interests" name="interests" multiple class="interests-select">
-                            <option value="coding">Coding & Tech</option>
-                            <option value="running">Running</option>
-                            <option value="hyrox">HYROX</option>
-                            <option value="fitness">Fitness</option>
-                            <option value="travel">Travel</option>
-                        </select>
-                    </div>
-                    <div class="g-recaptcha" data-sitekey="6LehQRIrAAAAABC16prRa7Kg6hwlk_ly0YBlSLLW"></div>
+                    <div data-netlify-recaptcha="true"></div>
                     <button type="submit" class="subscribe-btn">Subscribe</button>
-                    <div id="newsletter-message" class="newsletter-message"></div>
                 </form>
             </div>
         </div>
@@ -620,80 +611,6 @@
         getActivities();
     </script>
 
-    <!-- reCAPTCHA Script -->
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-
-    <!-- Newsletter Script -->
-    <script>
-        document.getElementById('newsletter-form').addEventListener('submit', async function(e) {
-            e.preventDefault();
-            const messageDiv = document.getElementById('newsletter-message');
-            
-            // Get form data
-            const name = document.getElementById('name').value;
-            const email = document.getElementById('email').value;
-            const interests = Array.from(document.getElementById('interests').selectedOptions)
-                                 .map(option => option.value);
-            
-            // Get reCAPTCHA response
-            const recaptchaResponse = grecaptcha.getResponse();
-            
-            if (!recaptchaResponse) {
-                messageDiv.textContent = 'Please complete the reCAPTCHA';
-                messageDiv.className = 'newsletter-message error';
-                return;
-            }
-
-            // Basic email validation
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                messageDiv.textContent = 'Please enter a valid email address';
-                messageDiv.className = 'newsletter-message error';
-                return;
-            }
-
-            try {
-                const response = await fetch('YOUR_API_GATEWAY_ENDPOINT', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        name,
-                        email,
-                        interests,
-                        recaptchaResponse,
-                        timestamp: new Date().toISOString()
-                    })
-                });
-
-                if (!response.ok) {
-                    throw new Error('Subscription failed');
-                }
-
-                messageDiv.textContent = 'Thank you for subscribing!';
-                messageDiv.className = 'newsletter-message success';
-                
-                // Reset form
-                document.getElementById('name').value = '';
-                document.getElementById('email').value = '';
-                document.getElementById('interests').selectedIndex = -1;
-                grecaptcha.reset();
-                
-            } catch (error) {
-                console.error('Subscription error:', error);
-                messageDiv.textContent = 'Something went wrong. Please try again.';
-                messageDiv.className = 'newsletter-message error';
-            }
-        });
-
-        // Initialize select2 for better interests selection
-        document.addEventListener('DOMContentLoaded', function() {
-            const interests = document.getElementById('interests');
-            interests.setAttribute('placeholder', 'Select your interests (optional)');
-        });
-    </script>
-
     <!-- Mobile Navigation -->
     <nav class="mobile-nav">
         <ul class="nav-links">
@@ -704,9 +621,7 @@
         </ul>
     </nav>
 
-    <!-- Loading Overlay -->
-    <div class="loading-overlay" id="loading-overlay">
-        <div class="loading-spinner"></div>
-    </div>
+    <!-- Scripts -->
+    <script src="script.js"></script>
 </body>
 </html>
