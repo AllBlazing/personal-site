@@ -23,84 +23,109 @@
 </head>
 <body>
     <header class="header" role="banner">
-        <a href="/" class="site-title">Mark Trewren</a>
-        <nav role="navigation">
-            <ul class="nav-links">
-                <li>
-                    <a href="#about">
-                        <i class="fas fa-user"></i>
-                        /about
-                    </a>
-                </li>
-                <li>
-                    <a href="#projects">
-                        <i class="fas fa-code"></i>
-                        /projects
-                    </a>
-                </li>
-            </ul>
-        </nav>
+        <div class="header-content">
+            <a href="#" class="site-title">Mark Trewren</a>
+            <nav role="navigation">
+                <ul class="nav-links">
+                    <li>
+                        <a href="#about">
+                            <i class="fas fa-user"></i>
+                            /about
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#projects">
+                            <i class="fas fa-code"></i>
+                            /projects
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#training">
+                            <i class="fas fa-dumbbell"></i>
+                            /training
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </header>
 
     <main id="main-content" role="main">
-        <!-- About Section -->
-        <section id="about" class="section">
-            <h2 class="section-title">
-                <i class="fas fa-user"></i>
-                about
-            </h2>
-            <div class="about-content">
-                <div class="profile-image">
-                    <img src="mark%20-%20me1.jpeg" alt="Mark Trewren" class="profile-pic">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="parallax-wrapper" data-speed="0.5">
+                <div class="parallax-bg"></div>
+            </div>
+            <div class="hero-content">
+                <h1>Developer & Athlete</h1>
+                <p class="hero-subtitle">Building useful tools and chasing PRs</p>
+                <div class="cta-buttons">
+                    <a href="#projects" class="cta-button primary">View Projects</a>
+                    <a href="#training" class="cta-button secondary">Training Stats</a>
                 </div>
-                <div class="about-text">
-                    <p>👋 Hey, I'm Mark — dad of three (that's the best bit).</p>
-                    
-                    <p>I've spent a lifetime chasing what's just over the next hill — from 100-mile ultras, IM 🏃‍♂️🚴‍♂️ and a sub 3 marathon to exploring 90+ countries 🌍, visiting everywhere from Yemen to Japan to Syria to Panama. Always curious, always moving.</p>
-                    
-                    <p>A few years ago, I dove into startup life as a non-technical founder. Built a feature-rich app with a small team and big dreams. It didn't land — and honestly, it drained me. Financially, emotionally, the whole lot..</p>
-                    
-                    <p>So I hit reset. Learned to code using AI 🤖 with the help of a Scriba course and Cursor as my playground. I've since built a few small tools I needed — and I'm sharing them here in case they help you too 🛠️.</p>
-                    
-                    <p>I'm inspired by laptop builders like Pieter Levels, Jack Friks & Marc Lou — drawn to the freedom, ownership, and quiet confidence of shipping simple, useful things.</p>
-                    
-                    <p>When I'm not vibe coding, you'll find me training for Hyrox 💪, chasing a PR, or doing LEGO with the kids 🧱. Probably in that order.</p>
-                    
-                    <p>👇 Check out what I've built — and feel free to say hey on X.</p>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="section reveal">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-user"></i>
+                    about
+                </h2>
+                <div class="about-content">
+                    <div class="profile-image">
+                        <img src="mark%20-%20me1.jpeg" alt="Mark Trewren" class="profile-pic">
+                    </div>
+                    <div class="about-text">
+                        <p>👋 Hey, I'm Mark — dad of three (that's the best bit).</p>
+                        
+                        <p>I've spent a lifetime chasing what's just over the next hill — from 100-mile ultras, IM 🏃‍♂️🚴‍♂️ and a sub 3 marathon to exploring 90+ countries 🌍, from Yemen to Japan to Syria. Always curious, always moving.</p>
+                        
+                        <p>After a draining startup journey as a non-technical founder, I hit reset. Learned to code using AI 🤖 with Scriba and Cursor. Now I build simple, useful tools — sharing them here in case they help you too 🛠️.</p>
+                        
+                        <p>Inspired by laptop builders like Pieter Levels, Jack Friks & Marc Lou — drawn to the freedom and quiet confidence of shipping useful things.</p>
+                        
+                        <p>When I'm not coding, I'm training for Hyrox 💪, chasing PRs, or doing LEGO with the kids 🧱. Probably in that order.</p>
+                        
+                        <p>👇 Check out what I've built — and feel free to say hey on X.</p>
+                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Projects Section -->
-        <section id="projects" class="section">
-            <h2 class="section-title">
-                <i class="fas fa-code"></i>
-                projects
-            </h2>
-            <div class="projects-list">
-                <div class="project-item">
-                    <a href="#" class="project-link">ScanSleepAI</a>
-                    <span class="project-description">- This is a web based project...</span>
-                </div>
+        <section id="projects" class="section reveal">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-code"></i>
+                    projects
+                </h2>
+                <div class="projects-list">
+                    <div class="project-item">
+                        <a href="#" class="project-link">ScanSleepAI</a>
+                        <span class="project-description">- This is a web based project...</span>
+                    </div>
 
-                <div class="project-item">
-                    <a href="#" class="project-link">WishListExtAI</a>
-                    <span class="project-description">- This is a Chrome extension...</span>
-                </div>
+                    <div class="project-item">
+                        <a href="#" class="project-link">WishListExtAI</a>
+                        <span class="project-description">- This is a Chrome extension...</span>
+                    </div>
 
-                <div class="project-item">
-                    <a href="#" class="project-link">HyTracker</a>
-                    <span class="project-description">- This is an app that allows you to track your strength, running and Hyrox specific tracked activities in one place</span>
-                </div>
+                    <div class="project-item">
+                        <a href="#" class="project-link">HyTracker</a>
+                        <span class="project-description">- This is an app that allows you to track your strength, running and Hyrox specific tracked activities in one place</span>
+                    </div>
 
-                <div class="project-item">
-                    <a href="#" class="project-link">FoxThree</a>
-                    <span class="project-description">- This is a productivity and social media all in one post...</span>
-                </div>
+                    <div class="project-item">
+                        <a href="#" class="project-link">FoxThree</a>
+                        <span class="project-description">- This is a productivity and social media all in one post...</span>
+                    </div>
 
-                <div class="project-item">
-                    <a href="#" class="project-link">Trewrenmerch</a>
-                    <span class="project-description">- This is my merch shop...</span>
+                    <div class="project-item">
+                        <a href="#" class="project-link">Trewrenmerch</a>
+                        <span class="project-description">- This is my merch shop...</span>
+                    </div>
                 </div>
             </div>
         </section>
@@ -127,28 +152,31 @@
         </section>
 
         <!-- Stats Section -->
-        <section id="stats" class="section">
-            <h2 class="section-title">
-                <i class="fas fa-chart-bar"></i>
-                stats
-            </h2>
-            <div class="stats-container">
-                <div class="visitor-counter" aria-live="polite">
-                    <span class="counter-label">visitor</span>
-                    <span id="visitorCount">0</span>
-                </div>
-                <div class="github-stats">
-                    <img src="https://github-readme-stats.vercel.app/api?username=AllBlazing&show_icons=true&theme=dark&bg_color=000000&text_color=ffffff&icon_color=BBF34C&title_color=BBF34C" alt="AllBlazing's Github stats" class="github-contributions">
-                </div>
-                <div class="strava-stats">
-                    <div id="strava-activities">
-                        <div class="strava-header">
-                            <i class="fab fa-strava" style="color: #FC4C02; font-size: 24px; margin-right: 8px;"></i>
-                            <h3>Monthly Activities</h3>
-                        </div>
-                        <div id="monthly-summary" class="monthly-summary">
-                        </div>
-                        <div id="activities-list" class="activities-list">
+        <section id="stats" class="section reveal">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-chart-bar"></i>
+                    stats
+                </h2>
+                <div class="stats-container">
+                    <div class="visitor-counter" aria-live="polite">
+                        <span class="counter-label">visitor</span>
+                        <span id="visitorCount">0</span>
+                    </div>
+                    <div class="github-stats card-3d">
+                        <h3>GitHub</h3>
+                        <img src="https://ghchart.rshah.org/AllBlazing" alt="AllBlazing's Github contribution chart" class="github-contributions">
+                    </div>
+                    <div class="strava-stats card-3d">
+                        <div id="strava-activities">
+                            <div class="strava-header">
+                                <i class="fab fa-strava" style="color: #FC4C02; font-size: 24px; margin-right: 8px;"></i>
+                                <h3>Monthly Activities</h3>
+                            </div>
+                            <div id="monthly-summary" class="monthly-summary">
+                            </div>
+                            <div id="activities-list" class="activities-list">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -167,155 +195,177 @@
         </section>
 
         <!-- Training & Nutrition Section -->
-        <section class="training-nutrition">
-            <h2>Training & Nutrition</h2>
-            
-            <!-- Metrics -->
-            <div class="metrics-container">
-                <div class="metric-card">
-                    <i class="fas fa-lungs metric-icon"></i>
-                    <div class="metric-value">60</div>
-                    <div class="metric-label">VO2Max</div>
-                    <div class="metric-timestamp">Updated: April 18, 2025</div>
-                </div>
-                <div class="metric-card">
-                    <i class="fas fa-heartbeat metric-icon"></i>
-                    <div class="metric-value">--</div>
-                    <div class="metric-label">HRV</div>
-                    <div class="metric-timestamp">Coming soon</div>
-                </div>
-                <div class="metric-card">
-                    <i class="fas fa-dumbbell metric-icon"></i>
-                    <div class="metric-value">19</div>
-                    <div class="metric-label">Pull-ups</div>
-                    <div class="metric-timestamp">Updated: April 18, 2025</div>
-                </div>
-            </div>
-
-            <!-- Training Schedule -->
-            <div class="training-schedule">
-                <h3>Weekly Training Schedule</h3>
-                <div class="schedule-grid">
-                    <div class="schedule-day">
-                        <h4>Monday</h4>
-                        <div class="training-hiit">HIIT / Core 45 mins or easy run</div>
-                        <div class="schedule-note">*skip if tired</div>
+        <section class="training-nutrition section reveal">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-dumbbell"></i>
+                    Training & Nutrition
+                </h2>
+                <div class="metrics-container">
+                    <div class="metric-card card-3d">
+                        <i class="fas fa-lungs metric-icon"></i>
+                        <div class="metric-value">60</div>
+                        <div class="metric-label">VO2Max</div>
+                        <div class="metric-timestamp">Updated: April 18, 2025</div>
                     </div>
-                    <div class="schedule-day">
-                        <h4>Tuesday</h4>
-                        <div class="training-strength">Strength 45 mins + 300 wall balls (volume) 9KG / 6KG 15 mins</div>
+                    <div class="metric-card card-3d">
+                        <i class="fas fa-heartbeat metric-icon"></i>
+                        <div class="metric-value">--</div>
+                        <div class="metric-label">HRV</div>
+                        <div class="metric-timestamp">Coming soon</div>
                     </div>
-                    <div class="schedule-day">
-                        <h4>Wednesday</h4>
-                        <div class="training-hyrox">Hyrox (wall balls) / running 45mins</div>
-                    </div>
-                    <div class="schedule-day">
-                        <h4>Thursday</h4>
-                        <div class="training-strength">Strength 45 mins + 100 wall balls (time) 9KG 7 mins + 100 for time 6kg</div>
-                    </div>
-                    <div class="schedule-day">
-                        <h4>Friday</h4>
-                        <div class="training-cardio">AM Run -threshold 50 mins</div>
-                        <div class="training-cardio">PM Row threshold 40 mins</div>
-                    </div>
-                    <div class="schedule-day">
-                        <h4>Saturday</h4>
-                        <div class="training-hiit">Tennis lesson + doubles 1-2 hrs</div>
-                        <div class="training-hiit">Core 20 mins</div>
-                    </div>
-                    <div class="schedule-day">
-                        <h4>Sunday</h4>
-                        <div class="training-hyrox">Hyrox (wall balls) / running 90mins</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Supplement Stack -->
-            <div class="supplement-stack">
-                <div class="supplement-section">
-                    <h3>☀️ Morning (Kickstart the Day)</h3>
-                    <div class="supplement-item">
-                        <span>Taurine</span>
-                        <span>1000mg</span>
-                    </div>
-                    <div class="supplement-item">
-                        <span>Beta-Alanine</span>
-                        <span>2g (split dose)</span>
+                    <div class="metric-card card-3d">
+                        <i class="fas fa-dumbbell metric-icon"></i>
+                        <div class="metric-value">19</div>
+                        <div class="metric-label">Pull-ups</div>
+                        <div class="metric-timestamp">Updated: April 18, 2025</div>
                     </div>
                 </div>
 
-                <div class="supplement-section">
-                    <h3>🏋️‍♂️ Pre-Workout</h3>
-                    <div class="supplement-item">
-                        <span>Citrulline Malate</span>
-                        <span>4g</span>
-                        <span>*high intensity days only</span>
-                    </div>
-                    <div class="supplement-item">
-                        <span>Beta-Alanine</span>
-                        <span>2g (2nd half)</span>
-                    </div>
-                    <div class="supplement-item">
-                        <span>Beetroot Extract</span>
-                        <span>3000mg</span>
+                <!-- Training Schedule -->
+                <div class="training-schedule">
+                    <h3>Weekly Training Schedule</h3>
+                    <div class="schedule-grid">
+                        <div class="schedule-day">
+                            <h4>Monday</h4>
+                            <div class="training-hiit">HIIT / Core 45 mins or easy run</div>
+                            <div class="schedule-note">*skip if tired</div>
+                        </div>
+                        <div class="schedule-day">
+                            <h4>Tuesday</h4>
+                            <div class="training-strength">Strength 45 mins + 300 wall balls (volume) 9KG / 6KG 15 mins</div>
+                        </div>
+                        <div class="schedule-day">
+                            <h4>Wednesday</h4>
+                            <div class="training-hyrox">Hyrox (wall balls) / running 45mins</div>
+                        </div>
+                        <div class="schedule-day">
+                            <h4>Thursday</h4>
+                            <div class="training-strength">Strength 45 mins + 100 wall balls (time) 9KG 7 mins + 100 for time 6kg</div>
+                        </div>
+                        <div class="schedule-day">
+                            <h4>Friday</h4>
+                            <div class="training-cardio">AM Run -threshold 50 mins</div>
+                            <div class="training-cardio">PM Row threshold 40 mins</div>
+                        </div>
+                        <div class="schedule-day">
+                            <h4>Saturday</h4>
+                            <div class="training-hiit">Tennis lesson + doubles 1-2 hrs</div>
+                            <div class="training-hiit">Core 20 mins</div>
+                        </div>
+                        <div class="schedule-day">
+                            <h4>Sunday</h4>
+                            <div class="training-hyrox">Hyrox (wall balls) / running 90mins</div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="supplement-section">
-                    <h3>💪 Post-Workout Recovery</h3>
-                    <div class="supplement-item">
-                        <span>Whey Protein (Grass-Fed)</span>
-                        <span>30g</span>
+                <!-- Supplement Stack -->
+                <div class="supplement-stack">
+                    <div class="supplement-section">
+                        <h3>☀️ Morning (Kickstart the Day)</h3>
+                        <div class="supplement-item">
+                            <span>Taurine</span>
+                            <span>1000mg</span>
+                        </div>
+                        <div class="supplement-item">
+                            <span>Beta-Alanine</span>
+                            <span>2g (split dose)</span>
+                        </div>
                     </div>
-                    <div class="supplement-item">
-                        <span>Creatine Monohydrate</span>
-                        <span>5g</span>
-                    </div>
-                    <div class="supplement-item">
-                        <span>Recovery Smoothie</span>
-                        <span>Himalayan Salt, Coconut Water, Honey, Lemon, Pineapple</span>
-                    </div>
-                </div>
 
-                <div class="supplement-section">
-                    <h3>🌙 Evening (Sleep & Recovery)</h3>
-                    <div class="supplement-item">
-                        <span>Montmorency Cherry</span>
-                        <span>1000mg</span>
+                    <div class="supplement-section">
+                        <h3>🏋️‍♂️ Pre-Workout</h3>
+                        <div class="supplement-item">
+                            <span>Citrulline Malate</span>
+                            <span>4g</span>
+                            <span>*high intensity days only</span>
+                        </div>
+                        <div class="supplement-item">
+                            <span>Beta-Alanine</span>
+                            <span>2g (2nd half)</span>
+                        </div>
+                        <div class="supplement-item">
+                            <span>Beetroot Extract</span>
+                            <span>3000mg</span>
+                        </div>
                     </div>
-                    <div class="supplement-item">
-                        <span>Saffron</span>
-                        <span>28mg</span>
-                        <span>*alternate days</span>
+
+                    <div class="supplement-section">
+                        <h3>💪 Post-Workout Recovery</h3>
+                        <div class="supplement-item">
+                            <span>Whey Protein (Grass-Fed)</span>
+                            <span>30g</span>
+                        </div>
+                        <div class="supplement-item">
+                            <span>Creatine Monohydrate</span>
+                            <span>5g</span>
+                        </div>
+                        <div class="supplement-item">
+                            <span>Recovery Smoothie</span>
+                            <span>Himalayan Salt, Coconut Water, Honey, Lemon, Pineapple</span>
+                        </div>
                     </div>
-                    <div class="supplement-item">
-                        <span>L-Theanine</span>
-                        <span>200mg</span>
-                    </div>
-                    <div class="supplement-item">
-                        <span>Magnesium Glycinate</span>
-                        <span>300mg</span>
-                        <span>*alternate days</span>
+
+                    <div class="supplement-section">
+                        <h3>🌙 Evening (Sleep & Recovery)</h3>
+                        <div class="supplement-item">
+                            <span>Montmorency Cherry</span>
+                            <span>1000mg</span>
+                        </div>
+                        <div class="supplement-item">
+                            <span>Saffron</span>
+                            <span>28mg</span>
+                            <span>*alternate days</span>
+                        </div>
+                        <div class="supplement-item">
+                            <span>L-Theanine</span>
+                            <span>200mg</span>
+                        </div>
+                        <div class="supplement-item">
+                            <span>Magnesium Glycinate</span>
+                            <span>300mg</span>
+                            <span>*alternate days</span>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Newsletter Signup -->
-        <section class="newsletter-section">
+        <!-- Newsletter Section -->
+        <section class="newsletter-section section reveal">
             <div class="container">
                 <div class="newsletter-content">
                     <h2>Stay Updated</h2>
                     <p>Get notified about new projects and training insights</p>
-                    <form name="newsletter" method="POST" data-netlify="true" class="newsletter-form">
+                    <form 
+                        name="newsletter" 
+                        method="POST" 
+                        data-netlify="true" 
+                        netlify-honeypot="bot-field" 
+                        action="/success" 
+                        class="newsletter-form"
+                    >
+                        <input type="hidden" name="form-name" value="newsletter" />
+                        <input type="hidden" name="subject" value="New newsletter subscription" />
+                        <p class="hidden">
+                            <label>Don't fill this out if you're human: <input name="bot-field" /></label>
+                        </p>
                         <div class="input-group">
                             <input type="email" name="email" placeholder="Enter your email" required>
+                        </div>
+                        <div class="input-group">
+                            <textarea name="message" placeholder="Leave a message (optional)" rows="3"></textarea>
                         </div>
                         <button type="submit" class="subscribe-btn">
                             <i class="fas fa-paper-plane"></i>
                             Subscribe
                         </button>
                     </form>
+                    <div class="form-success" style="display: none;">
+                        <i class="fas fa-check-circle"></i>
+                        <p>Thanks for subscribing! We'll be in touch soon.</p>
+                    </div>
                 </div>
             </div>
         </section>
