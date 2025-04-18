@@ -20,10 +20,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="styles.css">
-    
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
 </head>
 <body>
     <header class="header" role="banner">
@@ -142,12 +138,12 @@
                     <span id="visitorCount">0</span>
                 </div>
                 <div class="github-stats">
-                    <img src="https://ghchart.rshah.org/BBF34C/AllBlazing" alt="AllBlazing's Github contributions" class="github-contributions">
+                    <img src="https://github-readme-stats.vercel.app/api?username=AllBlazing&show_icons=true&theme=dark&bg_color=000000&text_color=ffffff&icon_color=BBF34C&title_color=BBF34C" alt="AllBlazing's Github stats" class="github-contributions">
                 </div>
                 <div class="strava-stats">
                     <div id="strava-activities">
                         <div class="strava-header">
-                            <img src="https://www.strava.com/images/brands/logo.svg" alt="Strava" class="strava-logo">
+                            <i class="fab fa-strava" style="color: #FC4C02; font-size: 24px; margin-right: 8px;"></i>
                             <h3>Monthly Activities</h3>
                         </div>
                         <div id="monthly-summary" class="monthly-summary">
@@ -180,7 +176,7 @@
                     <i class="fas fa-lungs metric-icon"></i>
                     <div class="metric-value">60</div>
                     <div class="metric-label">VO2Max</div>
-                    <div class="metric-timestamp">Updated: March 14, 2024</div>
+                    <div class="metric-timestamp">Updated: April 18, 2025</div>
                 </div>
                 <div class="metric-card">
                     <i class="fas fa-heartbeat metric-icon"></i>
@@ -192,7 +188,7 @@
                     <i class="fas fa-dumbbell metric-icon"></i>
                     <div class="metric-value">19</div>
                     <div class="metric-label">Pull-ups</div>
-                    <div class="metric-timestamp">Updated: March 14, 2024</div>
+                    <div class="metric-timestamp">Updated: April 18, 2025</div>
                 </div>
             </div>
 
@@ -305,30 +301,25 @@
             </div>
         </section>
 
-        <!-- Email Collection Section -->
-        <section class="email-section">
-            <h2>Stay Updated</h2>
-            <input type="email" placeholder="Your email" aria-label="Email subscription">
-            <button type="button">Subscribe</button>
+        <!-- Newsletter Signup -->
+        <section class="newsletter-section">
+            <div class="container">
+                <div class="newsletter-content">
+                    <h2>Stay Updated</h2>
+                    <p>Get notified about new projects and training insights</p>
+                    <form name="newsletter" method="POST" data-netlify="true" class="newsletter-form">
+                        <div class="input-group">
+                            <input type="email" name="email" placeholder="Enter your email" required>
+                        </div>
+                        <button type="submit" class="subscribe-btn">
+                            <i class="fas fa-paper-plane"></i>
+                            Subscribe
+                        </button>
+                    </form>
+                </div>
+            </div>
         </section>
     </main>
-
-    <!-- Newsletter Signup -->
-    <section class="newsletter-section">
-        <div class="container">
-            <div class="newsletter-content">
-                <h2>Stay Updated</h2>
-                <p>Subscribe for the latest updates and news</p>
-                <form name="newsletter" method="POST" data-netlify="true" data-netlify-recaptcha="true" action="/success.html" class="newsletter-form">
-                    <div class="input-group">
-                        <input type="email" name="email" placeholder="Your email" required>
-                    </div>
-                    <div data-netlify-recaptcha="true"></div>
-                    <button type="submit" class="subscribe-btn">Subscribe</button>
-                </form>
-            </div>
-        </div>
-    </section>
 
     <footer class="footer" role="contentinfo">
         <div class="footer-content">
