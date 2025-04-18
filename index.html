@@ -47,9 +47,9 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#training">
-                            <i class="fas fa-dumbbell"></i>
-                            /training
+                        <a href="#health">
+                            <i class="fas fa-heartbeat"></i>
+                            /health
                         </a>
                     </li>
                 </ul>
@@ -68,9 +68,11 @@
                 <div class="hero-text animate-fade-in">
                     <h1 class="hero-title">Developer & Athlete</h1>
                     <p class="hero-subtitle">Building useful tools and chasing PRs</p>
-                    <div class="cta-buttons">
-                        <a href="#projects" class="button primary">View Projects</a>
-                        <a href="#training" class="button secondary">Training Stats</a>
+                    <div class="hero-cta">
+                        <a href="#projects" class="cta-button">
+                            <i class="fas fa-code"></i>
+                            View Projects
+                        </a>
                     </div>
                 </div>
                 <div class="hero-visual animate-float">
@@ -80,13 +82,51 @@
                             <span class="dot"></span>
                             <span class="dot"></span>
                         </div>
-                        <pre><code>const mark = {
+                        <pre><code class="code-animation">const mark = {
     role: "Developer & Athlete",
     focus: ["Web Dev", "HYROX"],
-    location: "UK",
+    location: "Netherlands",
     currentlyBuilding: "useful tools",
     currentlyTraining: "for next PR"
 };</code></pre>
+                    </div>
+                </div>
+            </div>
+            <div class="scroll-indicator">
+                <div class="scroll-progress"></div>
+            </div>
+        </section>
+
+        <!-- Building in Public Terminal -->
+        <section class="terminal-section reveal">
+            <div class="container">
+                <div class="terminal-window">
+                    <div class="terminal-header">
+                        <div class="terminal-buttons">
+                            <span class="terminal-button close"></span>
+                            <span class="terminal-button minimize"></span>
+                            <span class="terminal-button maximize"></span>
+                        </div>
+                        <div class="terminal-title">building-in-public.sh</div>
+                    </div>
+                    <div class="terminal-body">
+                        <div class="terminal-line">
+                            <span class="terminal-prompt">mark@stellar:~$</span>
+                            <span class="terminal-text" id="current-status">loading current status...</span>
+                        </div>
+                        <div class="terminal-line">
+                            <span class="terminal-prompt">mark@stellar:~$</span>
+                            <span class="terminal-text" id="current-project">loading project...</span>
+                        </div>
+                        <div class="terminal-line ascii-art">
+                            <pre id="ascii-workspace">
+      💻 Current Workspace
+      ├── ☕️ Coffee Level: [██████----] 60%
+      ├── 💪 Energy Level: [████████--] 80%
+      ├── 🎯 Focus Mode: activated
+      └── 🚀 Ship Status: ready to launch
+    </pre>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -156,49 +196,187 @@
             </div>
         </section>
 
-        <!-- Snake Game Section -->
-        <section id="game" class="section">
-            <h2 class="section-title">
-                <i class="fas fa-gamepad"></i>
-                snake game
-            </h2>
-            <div class="game-wrapper">
-                <div class="game-container">
-                    <canvas id="game-canvas" width="400" height="400"></canvas>
-                    <div class="game-score">Score: <span id="score">0</span></div>
-                </div>
-                <p class="game-instructions">Use arrow keys to navigate the snake: ← ↑ ↓ →</p>
-                <div class="mobile-controls" aria-label="Game controls">
-                    <button class="control-btn" data-direction="up">↑</button>
-                    <button class="control-btn" data-direction="left">←</button>
-                    <button class="control-btn" data-direction="down">↓</button>
-                    <button class="control-btn" data-direction="right">→</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Stats Section -->
-        <section id="stats" class="section reveal">
+        <!-- Health Section -->
+        <section id="health" class="health section reveal">
             <div class="container">
                 <h2 class="section-title">
-                    <i class="fas fa-chart-bar"></i>
-                    stats
+                    <i class="fas fa-heartbeat"></i>
+                    Health
                 </h2>
-                <div class="stats-container">
-                    <div class="github-stats card-3d">
-                        <h3>GitHub</h3>
-                        <img src="https://ghchart.rshah.org/AllBlazing" alt="AllBlazing's Github contribution chart" class="github-contributions">
+
+                <div class="health-grid">
+                    <!-- Training Schedule Card -->
+                    <div class="health-card card-3d">
+                        <h3 class="section-subtitle" style="color: var(--accent-color);">
+                            <i class="fas fa-calendar-week" style="color: var(--accent-color);"></i>
+                            Weekly Training Schedule
+                        </h3>
+                        <div class="schedule-grid">
+                            <div class="schedule-day">
+                                <h4>Monday</h4>
+                                <div class="training-hiit">HIIT / Core 45 mins or easy run</div>
+                                <div class="schedule-note">*skip if tired</div>
+                            </div>
+                            <div class="schedule-day">
+                                <h4>Tuesday</h4>
+                                <div class="training-strength">Strength 45 mins + 300 wall balls (volume) 9KG / 6KG 15 mins</div>
+                            </div>
+                            <div class="schedule-day">
+                                <h4>Wednesday</h4>
+                                <div class="training-hyrox">Hyrox (wall balls) / running 45mins</div>
+                            </div>
+                            <div class="schedule-day">
+                                <h4>Thursday</h4>
+                                <div class="training-strength">Strength 45 mins + 100 wall balls (time) 9KG 7 mins + 100 for time 6kg</div>
+                            </div>
+                            <div class="schedule-day">
+                                <h4>Friday</h4>
+                                <div class="training-cardio">AM Run -threshold 50 mins</div>
+                                <div class="training-cardio">PM Row threshold 40 mins</div>
+                            </div>
+                            <div class="schedule-day">
+                                <h4>Saturday</h4>
+                                <div class="training-hiit">Tennis lesson + doubles 1-2 hrs</div>
+                                <div class="training-hiit">Core 20 mins</div>
+                            </div>
+                            <div class="schedule-day">
+                                <h4>Sunday</h4>
+                                <div class="training-hyrox">Hyrox (wall balls) / running 90mins</div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="strava-stats card-3d">
-                        <div id="strava-activities">
-                            <div class="strava-header">
-                                <i class="fab fa-strava" style="color: #FC4C02; font-size: 24px; margin-right: 8px;"></i>
-                                <h3>Monthly Activities</h3>
+
+                    <!-- Supplement Stack Card -->
+                    <div class="health-card card-3d">
+                        <h3 class="section-subtitle" style="color: var(--accent-color);">
+                            <i class="fas fa-pills" style="color: var(--accent-color);"></i>
+                            Supplement Stack
+                        </h3>
+                        <div class="supplement-stack">
+                            <div class="supplement-section">
+                                <h3>☀️ Morning (Kickstart the Day)</h3>
+                                <div class="supplement-item">
+                                    <span>Taurine</span>
+                                    <span>1000mg</span>
+                                </div>
+                                <div class="supplement-item">
+                                    <span>Beta-Alanine</span>
+                                    <span>2g (split dose)</span>
+                                </div>
                             </div>
-                            <div id="monthly-summary" class="monthly-summary">
+
+                            <div class="supplement-section">
+                                <h3>🏋️‍♂️ Pre-Workout</h3>
+                                <div class="supplement-item">
+                                    <span>Citrulline Malate</span>
+                                    <span>4g</span>
+                                    <span>*high intensity days only</span>
+                                </div>
+                                <div class="supplement-item">
+                                    <span>Beta-Alanine</span>
+                                    <span>2g (2nd half)</span>
+                                </div>
+                                <div class="supplement-item">
+                                    <span>Beetroot Extract</span>
+                                    <span>3000mg</span>
+                                </div>
                             </div>
-                            <div id="activities-list" class="activities-list">
+
+                            <div class="supplement-section">
+                                <h3>💪 Post-Workout Recovery</h3>
+                                <div class="supplement-item">
+                                    <span>Whey Protein (Grass-Fed)</span>
+                                    <span>30g</span>
+                                </div>
+                                <div class="supplement-item">
+                                    <span>Creatine Monohydrate</span>
+                                    <span>5g</span>
+                                </div>
+                                <div class="supplement-item">
+                                    <span>Recovery Smoothie</span>
+                                    <span>Himalayan Salt, Coconut Water, Honey, Lemon, Pineapple</span>
+                                </div>
                             </div>
+
+                            <div class="supplement-section">
+                                <h3>🌙 Evening (Sleep & Recovery)</h3>
+                                <div class="supplement-item">
+                                    <span>Montmorency Cherry</span>
+                                    <span>1000mg</span>
+                                </div>
+                                <div class="supplement-item">
+                                    <span>Saffron</span>
+                                    <span>28mg</span>
+                                    <span>*alternate days</span>
+                                </div>
+                                <div class="supplement-item">
+                                    <span>L-Theanine</span>
+                                    <span>200mg</span>
+                                </div>
+                                <div class="supplement-item">
+                                    <span>Magnesium Glycinate</span>
+                                    <span>300mg</span>
+                                    <span>*alternate days</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Monthly Activities Card -->
+                    <div class="health-card card-3d">
+                        <div class="strava-stats">
+                            <div id="strava-activities">
+                                <div class="strava-header">
+                                    <i class="fab fa-strava" style="color: var(--accent-color); font-size: 24px;"></i>
+                                    <h3>Monthly Activities</h3>
+                                </div>
+                                <div id="monthly-summary" class="monthly-summary">
+                                </div>
+                                <div id="activities-list" class="activities-list">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Metrics Card -->
+                    <div class="health-card card-3d">
+                        <h3 class="section-subtitle">
+                            <i class="fas fa-chart-line"></i>
+                            Metrics
+                        </h3>
+                        <div class="metrics-container">
+                            <div class="metric-card interactive">
+                                <i class="fas fa-lungs metric-icon"></i>
+                                <div class="metric-value">60</div>
+                                <div class="metric-label">VO2Max</div>
+                                <div class="metric-timestamp">Updated: April 18, 2025</div>
+                                <div class="metric-history" style="display: none;">
+                                    <canvas id="vo2maxChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="metric-card interactive">
+                                <i class="fas fa-heartbeat metric-icon"></i>
+                                <div class="metric-value">--</div>
+                                <div class="metric-label">HRV</div>
+                                <div class="metric-timestamp">Coming soon</div>
+                            </div>
+                            <div class="metric-card interactive">
+                                <i class="fas fa-dumbbell metric-icon"></i>
+                                <div class="metric-value">19</div>
+                                <div class="metric-label">Pull-ups</div>
+                                <div class="metric-timestamp">Updated: April 18, 2025</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- GitHub Graph Card -->
+                    <div class="health-card card-3d">
+                        <h3 class="section-subtitle">
+                            <i class="fab fa-github"></i>
+                            GitHub Activity
+                        </h3>
+                        <div class="github-graph">
+                            <img src="https://ghchart.rshah.org/AllBlazing" alt="GitHub Activity Graph" style="width: 100%;">
                         </div>
                     </div>
                 </div>
@@ -211,151 +389,6 @@
                 <i class="fas fa-smile"></i>
                 vibes
             </h2>
-            <div class="meme-container">
-                <img src="https://media.giphy.com/media/13HgwGsXF0aiGY/giphy.gif" alt="Programming vibes" loading="lazy">
-            </div>
-        </section>
-
-        <!-- Training & Nutrition Section -->
-        <section class="training-nutrition section reveal">
-            <div class="container">
-                <h2 class="section-title">
-                    <i class="fas fa-dumbbell"></i>
-                    Training & Nutrition
-                </h2>
-                <div class="metrics-container">
-                    <div class="metric-card card-3d">
-                        <i class="fas fa-lungs metric-icon"></i>
-                        <div class="metric-value">60</div>
-                        <div class="metric-label">VO2Max</div>
-                        <div class="metric-timestamp">Updated: April 18, 2025</div>
-                    </div>
-                    <div class="metric-card card-3d">
-                        <i class="fas fa-heartbeat metric-icon"></i>
-                        <div class="metric-value">--</div>
-                        <div class="metric-label">HRV</div>
-                        <div class="metric-timestamp">Coming soon</div>
-                    </div>
-                    <div class="metric-card card-3d">
-                        <i class="fas fa-dumbbell metric-icon"></i>
-                        <div class="metric-value">19</div>
-                        <div class="metric-label">Pull-ups</div>
-                        <div class="metric-timestamp">Updated: April 18, 2025</div>
-                    </div>
-                </div>
-
-                <!-- Training Schedule -->
-                <div class="training-schedule">
-                    <h3>Weekly Training Schedule</h3>
-                    <div class="schedule-grid">
-                        <div class="schedule-day">
-                            <h4>Monday</h4>
-                            <div class="training-hiit">HIIT / Core 45 mins or easy run</div>
-                            <div class="schedule-note">*skip if tired</div>
-                        </div>
-                        <div class="schedule-day">
-                            <h4>Tuesday</h4>
-                            <div class="training-strength">Strength 45 mins + 300 wall balls (volume) 9KG / 6KG 15 mins</div>
-                        </div>
-                        <div class="schedule-day">
-                            <h4>Wednesday</h4>
-                            <div class="training-hyrox">Hyrox (wall balls) / running 45mins</div>
-                        </div>
-                        <div class="schedule-day">
-                            <h4>Thursday</h4>
-                            <div class="training-strength">Strength 45 mins + 100 wall balls (time) 9KG 7 mins + 100 for time 6kg</div>
-                        </div>
-                        <div class="schedule-day">
-                            <h4>Friday</h4>
-                            <div class="training-cardio">AM Run -threshold 50 mins</div>
-                            <div class="training-cardio">PM Row threshold 40 mins</div>
-                        </div>
-                        <div class="schedule-day">
-                            <h4>Saturday</h4>
-                            <div class="training-hiit">Tennis lesson + doubles 1-2 hrs</div>
-                            <div class="training-hiit">Core 20 mins</div>
-                        </div>
-                        <div class="schedule-day">
-                            <h4>Sunday</h4>
-                            <div class="training-hyrox">Hyrox (wall balls) / running 90mins</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Supplement Stack -->
-                <div class="supplement-stack">
-                    <h3 class="section-subtitle">
-                        <i class="fas fa-pills"></i>
-                        Supplement Stack
-                    </h3>
-                    <div class="supplement-section">
-                        <h3>☀️ Morning (Kickstart the Day)</h3>
-                        <div class="supplement-item">
-                            <span>Taurine</span>
-                            <span>1000mg</span>
-                        </div>
-                        <div class="supplement-item">
-                            <span>Beta-Alanine</span>
-                            <span>2g (split dose)</span>
-                        </div>
-                    </div>
-
-                    <div class="supplement-section">
-                        <h3>🏋️‍♂️ Pre-Workout</h3>
-                        <div class="supplement-item">
-                            <span>Citrulline Malate</span>
-                            <span>4g</span>
-                            <span>*high intensity days only</span>
-                        </div>
-                        <div class="supplement-item">
-                            <span>Beta-Alanine</span>
-                            <span>2g (2nd half)</span>
-                        </div>
-                        <div class="supplement-item">
-                            <span>Beetroot Extract</span>
-                            <span>3000mg</span>
-                        </div>
-                    </div>
-
-                    <div class="supplement-section">
-                        <h3>💪 Post-Workout Recovery</h3>
-                        <div class="supplement-item">
-                            <span>Whey Protein (Grass-Fed)</span>
-                            <span>30g</span>
-                        </div>
-                        <div class="supplement-item">
-                            <span>Creatine Monohydrate</span>
-                            <span>5g</span>
-                        </div>
-                        <div class="supplement-item">
-                            <span>Recovery Smoothie</span>
-                            <span>Himalayan Salt, Coconut Water, Honey, Lemon, Pineapple</span>
-                        </div>
-                    </div>
-
-                    <div class="supplement-section">
-                        <h3>🌙 Evening (Sleep & Recovery)</h3>
-                        <div class="supplement-item">
-                            <span>Montmorency Cherry</span>
-                            <span>1000mg</span>
-                        </div>
-                        <div class="supplement-item">
-                            <span>Saffron</span>
-                            <span>28mg</span>
-                            <span>*alternate days</span>
-                        </div>
-                        <div class="supplement-item">
-                            <span>L-Theanine</span>
-                            <span>200mg</span>
-                        </div>
-                        <div class="supplement-item">
-                            <span>Magnesium Glycinate</span>
-                            <span>300mg</span>
-                            <span>*alternate days</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </section>
 
         <!-- Newsletter Section -->
@@ -397,6 +430,7 @@
         </section>
     </main>
 
+    <!-- Footer -->
     <footer class="footer" role="contentinfo">
         <div class="footer-content">
             <div class="copyright">
@@ -406,8 +440,8 @@
                 <a href="https://www.strava.com/athletes/31036221" target="_blank" aria-label="Strava">
                     <i class="fab fa-strava"></i>
                 </a>
-                <a href="https://www.instagram.com/mark_trewren/" target="_blank" aria-label="Instagram">
-                    <i class="fab fa-instagram"></i>
+                <a href="https://github.com/AllBlazing" target="_blank" aria-label="GitHub">
+                    <i class="fab fa-github"></i>
                 </a>
                 <a href="https://x.com/trewrenmark?s=21&t=DTOIGbJ-1hUnW2q2Go9hbg" target="_blank" aria-label="X">
                     <i class="fab fa-x"></i>
@@ -415,137 +449,6 @@
             </div>
         </div>
     </footer>
-
-    <!-- Snake Game Script -->
-    <script>
-        const canvas = document.getElementById('game-canvas');
-        const ctx = canvas.getContext('2d');
-        const scoreElement = document.getElementById('score');
-        
-        const gridSize = 20;
-        const tileSize = canvas.width / gridSize;
-        
-        let snake = [{x: 10, y: 10}];
-        let food = {x: 15, y: 15};
-        let direction = 'right';
-        let score = 0;
-        let gameLoop;
-        
-        function drawSnake() {
-            snake.forEach(segment => {
-                ctx.fillStyle = '#00ff00';
-                ctx.fillRect(
-                    segment.x * tileSize + 1,
-                    segment.y * tileSize + 1,
-                    tileSize - 2,
-                    tileSize - 2
-                );
-            });
-        }
-        
-        function drawFood() {
-            ctx.fillStyle = '#ff3366';
-            ctx.fillRect(
-                food.x * tileSize + 1,
-                food.y * tileSize + 1,
-                tileSize - 2,
-                tileSize - 2
-            );
-        }
-        
-        function moveSnake() {
-            const head = {...snake[0]};
-            
-            switch(direction) {
-                case 'up': head.y--; break;
-                case 'down': head.y++; break;
-                case 'left': head.x--; break;
-                case 'right': head.x++; break;
-            }
-            
-            if (head.x < 0) head.x = gridSize - 1;
-            if (head.x >= gridSize) head.x = 0;
-            if (head.y < 0) head.y = gridSize - 1;
-            if (head.y >= gridSize) head.y = 0;
-            
-            if (snake.some(segment => segment.x === head.x && segment.y === head.y)) {
-                resetGame();
-                return;
-            }
-            
-            snake.unshift(head);
-            
-            if (head.x === food.x && head.y === food.y) {
-                score += 10;
-                scoreElement.textContent = score;
-                food = {
-                    x: Math.floor(Math.random() * gridSize),
-                    y: Math.floor(Math.random() * gridSize)
-                };
-            } else {
-                snake.pop();
-            }
-        }
-        
-        function resetGame() {
-            snake = [{x: 10, y: 10}];
-            direction = 'right';
-            score = 0;
-            scoreElement.textContent = score;
-            food = {
-                x: Math.floor(Math.random() * gridSize),
-                y: Math.floor(Math.random() * gridSize)
-            };
-        }
-        
-        function update() {
-            ctx.fillStyle = '#111111';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            ctx.strokeStyle = '#1a1a1a';
-            for (let i = 0; i <= gridSize; i++) {
-                ctx.beginPath();
-                ctx.moveTo(i * tileSize, 0);
-                ctx.lineTo(i * tileSize, canvas.height);
-                ctx.stroke();
-                
-                ctx.beginPath();
-                ctx.moveTo(0, i * tileSize);
-                ctx.lineTo(canvas.width, i * tileSize);
-                ctx.stroke();
-            }
-            
-            moveSnake();
-            drawSnake();
-            drawFood();
-        }
-        
-        document.addEventListener('keydown', (e) => {
-            switch(e.key) {
-                case 'ArrowUp': if(direction !== 'down') direction = 'up'; break;
-                case 'ArrowDown': if(direction !== 'up') direction = 'down'; break;
-                case 'ArrowLeft': if(direction !== 'right') direction = 'left'; break;
-                case 'ArrowRight': if(direction !== 'left') direction = 'right'; break;
-            }
-        });
-        
-        // Mobile Controls
-        const controlBtns = document.querySelectorAll('.control-btn');
-        controlBtns.forEach(btn => {
-            btn.addEventListener('touchstart', (e) => {
-                e.preventDefault();
-                const dir = btn.dataset.direction;
-                const event = new KeyboardEvent('keydown', {
-                    key: `Arrow${dir.charAt(0).toUpperCase() + dir.slice(1)}`
-                });
-                document.dispatchEvent(event);
-            });
-        });
-        
-        // Start game
-        resetGame();
-        gameLoop = setInterval(update, 100);
-    </script>
 
     <!-- Mobile Navigation -->
     <nav class="mobile-nav">
@@ -748,6 +651,77 @@
 
         // Load activities when the page loads
         getActivities();
+    </script>
+
+    <!-- Code animation -->
+    <script>
+        // Code animation
+        const codeLines = [
+            'const mark = {\n    role: "Developer & Athlete",\n    focus: ["Web Dev", "HYROX"],\n    location: "Netherlands",\n    currentlyBuilding: "useful tools",\n    currentlyTraining: "for next PR"\n};',
+            'const projects = {\n    HyTracker: "Fitness tracking app",\n    ScanSleepAI: "Sleep optimization",\n    WishListExtAI: "Shopping assistant"\n};',
+            'const stats = {\n    VO2Max: 60,\n    PullUps: 19,\n    Countries: 90+\n};'
+        ];
+        
+        let currentLine = 0;
+        const codeElement = document.querySelector('.code-animation');
+        
+        function animateCode() {
+            codeElement.textContent = codeLines[currentLine];
+            currentLine = (currentLine + 1) % codeLines.length;
+        }
+        
+        setInterval(animateCode, 3000);
+        
+        // Scroll progress indicator
+        window.addEventListener('scroll', () => {
+            const scrollProgress = document.querySelector('.scroll-progress');
+            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+            const scrolled = (window.scrollY / scrollHeight) * 100;
+            scrollProgress.style.width = scrolled + '%';
+        });
+    </script>
+
+    <!-- Interactive metric cards -->
+    <script>
+        document.querySelectorAll('.metric-card.interactive').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                const history = this.querySelector('.metric-history');
+                if (history) {
+                    history.style.display = 'block';
+                    // Initialize chart if not already initialized
+                    if (!history.dataset.initialized) {
+                        const canvas = history.querySelector('canvas');
+                        if (canvas) {
+                            const ctx = canvas.getContext('2d');
+                            new Chart(ctx, {
+                                type: 'line',
+                                data: {
+                                    labels: ['Jan', 'Feb', 'Mar', 'Apr'],
+                                    datasets: [{
+                                        label: canvas.id === 'vo2maxChart' ? 'VO2Max' : 'Pull-ups',
+                                        data: [55, 57, 58, 60],
+                                        borderColor: 'var(--accent-color)',
+                                        tension: 0.1
+                                    }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    maintainAspectRatio: false
+                                }
+                            });
+                            history.dataset.initialized = true;
+                        }
+                    }
+                }
+            });
+
+            card.addEventListener('mouseleave', function() {
+                const history = this.querySelector('.metric-history');
+                if (history) {
+                    history.style.display = 'none';
+                }
+            });
+        });
     </script>
 </body>
 </html>

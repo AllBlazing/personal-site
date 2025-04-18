@@ -603,3 +603,53 @@ function initParticles() {
 
 // Initialize particles when DOM is loaded
 document.addEventListener('DOMContentLoaded', initParticles);
+
+// Terminal Window Updates
+const statusMessages = [
+    "brewing fresh coffee ☕️",
+    "pushing code to production 🚀",
+    "debugging like a detective 🔍",
+    "building something cool 🛠️",
+    "learning new tech stack 📚",
+    "optimizing performance ⚡️",
+    "squashing bugs 🐛",
+    "shipping features ✨"
+];
+
+const projectMessages = [
+    "HyTracker: tracking those gains 💪",
+    "ScanSleepAI: optimizing rest 😴",
+    "WishListExtAI: making shopping smarter 🛍️",
+    "Personal Site: adding indie vibes ✨",
+    "New Secret Project: stay tuned 🤫"
+];
+
+function updateTerminal() {
+    const currentStatus = document.getElementById('current-status');
+    const currentProject = document.getElementById('current-project');
+    const workspace = document.getElementById('ascii-workspace');
+
+    // Update status with random message
+    currentStatus.textContent = statusMessages[Math.floor(Math.random() * statusMessages.length)];
+    
+    // Update project with random message
+    currentProject.textContent = projectMessages[Math.floor(Math.random() * projectMessages.length)];
+    
+    // Update coffee and energy levels randomly
+    const coffeeLevel = Math.floor(Math.random() * 10) + 1;
+    const energyLevel = Math.floor(Math.random() * 10) + 1;
+    
+    workspace.innerHTML = `
+      💻 Current Workspace
+      ├── ☕️ Coffee Level: [${'█'.repeat(coffeeLevel)}${'-'.repeat(10-coffeeLevel)}] ${coffeeLevel*10}%
+      ├── 💪 Energy Level: [${'█'.repeat(energyLevel)}${'-'.repeat(10-energyLevel)}] ${energyLevel*10}%
+      ├── 🎯 Focus Mode: ${Math.random() > 0.3 ? 'activated' : 'recharging'}
+      └── 🚀 Ship Status: ${Math.random() > 0.5 ? 'ready to launch' : 'preparing for takeoff'}
+    `;
+}
+
+// Update terminal every 5 seconds
+setInterval(updateTerminal, 5000);
+
+// Initial update
+updateTerminal();
