@@ -87,7 +87,7 @@ body {
 
 /* Section Styles */
 section {
-    margin: 6rem 0;
+    margin: 30px 0;
     padding: 0;
 }
 
@@ -902,6 +902,7 @@ section:first-child {
     }
 }
 
+<<<<<<< HEAD
 /* Success Page */
 .success-page {
     min-height: 100vh;
@@ -937,4 +938,10 @@ section:first-child {
 
 .back-home:hover {
     background-color: #0056b3;
+=======
+.container { 
+  width: 90%;
+  max-width: 750px;
+  margin: 0 auto;
+>>>>>>> origin/main
 }
