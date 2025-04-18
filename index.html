@@ -60,15 +60,34 @@
     <main id="main-content" role="main">
         <!-- Hero Section -->
         <section class="hero">
-            <div class="parallax-wrapper" data-speed="0.5">
-                <div class="parallax-bg"></div>
+            <div class="hero-background">
+                <div class="gradient-overlay"></div>
+                <div class="particle-container" id="particles"></div>
             </div>
-            <div class="hero-content">
-                <h1>Developer & Athlete</h1>
-                <p class="hero-subtitle">Building useful tools and chasing PRs</p>
-                <div class="cta-buttons">
-                    <a href="#projects" class="cta-button primary">View Projects</a>
-                    <a href="#training" class="cta-button secondary">Training Stats</a>
+            <div class="hero-content container">
+                <div class="hero-text animate-fade-in">
+                    <h1 class="hero-title">Developer & Athlete</h1>
+                    <p class="hero-subtitle">Building useful tools and chasing PRs</p>
+                    <div class="cta-buttons">
+                        <a href="#projects" class="button primary">View Projects</a>
+                        <a href="#training" class="button secondary">Training Stats</a>
+                    </div>
+                </div>
+                <div class="hero-visual animate-float">
+                    <div class="code-preview">
+                        <div class="code-header">
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                            <span class="dot"></span>
+                        </div>
+                        <pre><code>const mark = {
+    role: "Developer & Athlete",
+    focus: ["Web Dev", "HYROX"],
+    location: "UK",
+    currentlyBuilding: "useful tools",
+    currentlyTraining: "for next PR"
+};</code></pre>
+                    </div>
                 </div>
             </div>
         </section>
