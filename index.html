@@ -35,33 +35,7 @@
     <!-- Styles -->
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/css/lightgallery.min.css">
     <link rel="stylesheet" href="styles.css">
-    <style>
-        .loading-placeholder {
-            min-height: 200px;
-            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-            background-size: 200% 100%;
-            animation: loading 1.5s infinite;
-            border-radius: 8px;
-        }
-        
-        @keyframes loading {
-            0% { background-position: 200% 0; }
-            100% { background-position: -200% 0; }
-        }
-        
-        .section-transition {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.6s ease;
-        }
-        
-        .section-transition.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-    </style>
 </head>
 <body>
     <header class="header" role="banner">
@@ -82,15 +56,9 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#training">
-                            <i class="fas fa-dumbbell"></i>
-                            /training
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#stats">
-                            <i class="fas fa-chart-line"></i>
-                            /stats
+                        <a href="#health">
+                            <i class="fas fa-heartbeat"></i>
+                            /health
                         </a>
                     </li>
                 </ul>
@@ -100,7 +68,7 @@
 
     <main id="main-content" role="main">
         <!-- Hero Section -->
-        <section class="hero section-transition">
+        <section class="hero">
             <div class="hero-background">
                 <div class="gradient-overlay"></div>
                 <div class="particle-container" id="particles"></div>
@@ -138,11 +106,10 @@
             </div>
         </section>
 
-        <!-- Terminal Section -->
-        <section class="terminal-section section-transition">
+        <!-- Building in Public Terminal -->
+        <section class="terminal-section reveal">
             <div class="container">
-                <div class="loading-placeholder" id="terminal-loading"></div>
-                <div class="terminal-window" style="display: none;">
+                <div class="terminal-window">
                     <div class="terminal-header">
                         <div class="terminal-buttons">
                             <span class="terminal-button close"></span>
@@ -175,7 +142,7 @@
         </section>
 
         <!-- About Section -->
-        <section id="about" class="section section-transition">
+        <section id="about" class="section reveal">
             <div class="container">
                 <h2 class="section-title">
                     <i class="fas fa-user"></i>
@@ -186,24 +153,24 @@
                         <img src="mark%20-%20me1.jpeg" alt="Mark Trewren" class="profile-pic">
                     </div>
                     <div class="about-text">
-                        <p>👋 Mark here -- dad-in-training, code-curious, always trying to move forward.</p>
+                        <p>👋 Hey, I'm Mark — dad of three (that's the best bit).</p>
                         
-                        <p>I've run 100-mile ultras, tackled Ironman, gone sub-3 in the marathon 🏃‍♂️🚴‍♂️ - and wandered far-flung places 🌍 from Yemen to Japan to Nicaragua. Always curious, always moving forward.</p>
+                        <p>I've spent a lifetime chasing what's just over the next hill — from 100-mile ultras, IM 🏃‍♂️🚴‍♂️ and a sub 3 marathon to exploring 90+ countries 🌍, from Yemen to Japan to Syria. Always curious, always moving.</p>
                         
-                        <p>After a swing at startup life left me frustrated, I hit reset. Learned to code with AI 🤖, and now I ship products I need — maybe you do too 🛠️.</p>
+                        <p>After a draining startup journey as a non-technical founder, I hit reset. Learned to code using AI 🤖 with Scriba and Cursor. Now I build simple, useful tools — sharing them here in case they help you too 🛠️.</p>
                         
-                        <p>Inspired by quiet builders and laptop freedom: Levels, Friks, and Lou 💻.</p>
+                        <p>Inspired by indie hackers like Pieter Levels, Jack Friks & Marc Lou — drawn to the freedom and quiet confidence of shipping useful things.</p>
                         
-                        <p>When I'm not vibe coding, I'm training for Hyrox 💪 or knee-deep in a LEGO mission with the kids 🧱.</p>
+                        <p>When I'm not coding, I'm training for Hyrox 💪, chasing PRs, or doing LEGO with the kids 🧱.</p>
                         
-                        <p>👇 Take a peek at what I've built - or say hey on X.</p>
+                        <p>👇 Check out what I've built — and feel free to say hey on X.</p>
                     </div>
                 </div>
             </div>
         </section>
 
         <!-- Projects Section -->
-        <section id="projects" class="section section-transition">
+        <section id="projects" class="section reveal">
             <div class="container">
                 <h2 class="section-title">
                     <i class="fas fa-code"></i>
@@ -238,16 +205,21 @@
             </div>
         </section>
 
-        <!-- Training Section -->
-        <section id="training" class="section section-transition">
+        <!-- Health Section -->
+        <section id="health" class="health section reveal">
             <div class="container">
                 <h2 class="section-title">
-                    <i class="fas fa-dumbbell"></i>
-                    training
+                    <i class="fas fa-heartbeat"></i>
+                    Health
                 </h2>
-                <div class="training-content">
-                    <div class="training-schedule">
-                        <h3 class="section-subtitle">Weekly Schedule</h3>
+
+                <div class="health-grid">
+                    <!-- Training Schedule Card -->
+                    <div class="health-card card-3d">
+                        <h3 class="section-subtitle" style="color: var(--accent-color);">
+                            <i class="fas fa-calendar-week" style="color: var(--accent-color);"></i>
+                            Weekly Training Schedule
+                        </h3>
                         <div class="schedule-grid">
                             <div class="schedule-day">
                                 <h4>Monday</h4>
@@ -282,51 +254,138 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </section>
 
-        <!-- Stats Section -->
-        <section id="stats" class="section section-transition">
-            <div class="container">
-                <h2 class="section-title">
-                    <i class="fas fa-chart-line"></i>
-                    stats
-                </h2>
-                <div class="stats-content">
-                    <div class="metrics-container">
-                        <div class="metric-card interactive">
-                            <i class="fas fa-lungs metric-icon"></i>
-                            <div class="metric-value">60</div>
-                            <div class="metric-label">VO2Max</div>
-                            <div class="metric-timestamp">Updated: April 18, 2025</div>
-                            <div class="metric-history" style="display: none;">
-                                <canvas id="vo2maxChart"></canvas>
+                    <!-- Supplement Stack Card -->
+                    <div class="health-card card-3d">
+                        <h3 class="section-subtitle" style="color: var(--accent-color);">
+                            <i class="fas fa-pills" style="color: var(--accent-color);"></i>
+                            Supplement Stack
+                        </h3>
+                        <div class="supplement-stack">
+                            <div class="supplement-section">
+                                <h3>☀️ Morning (Kickstart the Day)</h3>
+                                <div class="supplement-item">
+                                    <span>Taurine</span>
+                                    <span>1000mg</span>
+                                </div>
+                                <div class="supplement-item">
+                                    <span>Beta-Alanine</span>
+                                    <span>2g (split dose)</span>
+                                </div>
                             </div>
-                        </div>
-                        <div class="metric-card interactive">
-                            <i class="fas fa-heartbeat metric-icon"></i>
-                            <div class="metric-value">--</div>
-                            <div class="metric-label">HRV</div>
-                            <div class="metric-timestamp">Coming soon</div>
-                        </div>
-                        <div class="metric-card interactive">
-                            <i class="fas fa-dumbbell metric-icon"></i>
-                            <div class="metric-value">19</div>
-                            <div class="metric-label">Pull-ups</div>
-                            <div class="metric-timestamp">Updated: April 18, 2025</div>
+
+                            <div class="supplement-section">
+                                <h3>🏋️‍♂️ Pre-Workout</h3>
+                                <div class="supplement-item">
+                                    <span>Citrulline Malate</span>
+                                    <span>4g</span>
+                                    <span>*high intensity days only</span>
+                                </div>
+                                <div class="supplement-item">
+                                    <span>Beta-Alanine</span>
+                                    <span>2g (2nd half)</span>
+                                </div>
+                                <div class="supplement-item">
+                                    <span>Beetroot Extract</span>
+                                    <span>3000mg</span>
+                                </div>
+                            </div>
+
+                            <div class="supplement-section">
+                                <h3>💪 Post-Workout Recovery</h3>
+                                <div class="supplement-item">
+                                    <span>Whey Protein (Grass-Fed)</span>
+                                    <span>30g</span>
+                                </div>
+                                <div class="supplement-item">
+                                    <span>Creatine Monohydrate</span>
+                                    <span>5g</span>
+                                </div>
+                                <div class="supplement-item">
+                                    <span>Recovery Smoothie</span>
+                                    <span>Himalayan Salt, Coconut Water, Honey, Lemon, Pineapple</span>
+                                </div>
+                            </div>
+
+                            <div class="supplement-section">
+                                <h3>🌙 Evening (Sleep & Recovery)</h3>
+                                <div class="supplement-item">
+                                    <span>Montmorency Cherry</span>
+                                    <span>1000mg</span>
+                                </div>
+                                <div class="supplement-item">
+                                    <span>Saffron</span>
+                                    <span>28mg</span>
+                                    <span>*alternate days</span>
+                                </div>
+                                <div class="supplement-item">
+                                    <span>L-Theanine</span>
+                                    <span>200mg</span>
+                                </div>
+                                <div class="supplement-item">
+                                    <span>Magnesium Glycinate</span>
+                                    <span>300mg</span>
+                                    <span>*alternate days</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="strava-stats">
-                        <div id="strava-activities">
-                            <div class="strava-header">
-                                <i class="fab fa-strava" style="color: var(--accent-color); font-size: 24px;"></i>
-                                <h3>Monthly Activities</h3>
+
+                    <!-- Monthly Activities Card -->
+                    <div class="health-card card-3d">
+                        <div class="strava-stats">
+                            <div id="strava-activities">
+                                <div class="strava-header">
+                                    <i class="fab fa-strava" style="color: var(--accent-color); font-size: 24px;"></i>
+                                    <h3>Monthly Activities</h3>
+                                </div>
+                                <div id="monthly-summary" class="monthly-summary">
+                                </div>
+                                <div id="activities-list" class="activities-list">
+                                </div>
                             </div>
-                            <div id="monthly-summary" class="monthly-summary">
+                        </div>
+                    </div>
+
+                    <!-- Metrics Card -->
+                    <div class="health-card card-3d">
+                        <h3 class="section-subtitle">
+                            <i class="fas fa-chart-line"></i>
+                            Metrics
+                        </h3>
+                        <div class="metrics-container">
+                            <div class="metric-card interactive">
+                                <i class="fas fa-lungs metric-icon"></i>
+                                <div class="metric-value">60</div>
+                                <div class="metric-label">VO2Max</div>
+                                <div class="metric-timestamp">Updated: April 18, 2025</div>
+                                <div class="metric-history" style="display: none;">
+                                    <canvas id="vo2maxChart"></canvas>
+                                </div>
                             </div>
-                            <div id="activities-list" class="activities-list">
+                            <div class="metric-card interactive">
+                                <i class="fas fa-heartbeat metric-icon"></i>
+                                <div class="metric-value">--</div>
+                                <div class="metric-label">HRV</div>
+                                <div class="metric-timestamp">Coming soon</div>
                             </div>
+                            <div class="metric-card interactive">
+                                <i class="fas fa-dumbbell metric-icon"></i>
+                                <div class="metric-value">19</div>
+                                <div class="metric-label">Pull-ups</div>
+                                <div class="metric-timestamp">Updated: April 18, 2025</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- GitHub Graph Card -->
+                    <div class="health-card card-3d">
+                        <h3 class="section-subtitle">
+                            <i class="fab fa-github"></i>
+                            GitHub Activity
+                        </h3>
+                        <div class="github-graph">
+                            <img src="https://ghchart.rshah.org/AllBlazing" alt="GitHub Activity Graph" style="width: 100%;">
                         </div>
                     </div>
                 </div>
@@ -334,29 +393,15 @@
         </section>
 
         <!-- Vibes Section -->
-        <section id="vibes" class="section section-transition">
-            <div class="container">
-                <h2 class="section-title">
-                    <i class="fas fa-smile"></i>
-                    vibes
-                </h2>
-                <p class="section-subtitle">A visual journey through my adventures and achievements</p>
-                <div class="gallery-container">
-                    <button class="gallery-nav prev" aria-label="Previous images">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    <button class="gallery-nav next" aria-label="Next images">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
-                    <div class="gallery-grid" id="gallery-grid">
-                        <!-- Gallery items will be loaded here by gallery-data.js -->
-                    </div>
-                </div>
-            </div>
+        <section id="vibes" class="section">
+            <h2 class="section-title">
+                <i class="fas fa-smile"></i>
+                vibes
+            </h2>
         </section>
 
         <!-- Newsletter Section -->
-        <section class="newsletter-section section-transition">
+        <section class="newsletter-section section reveal">
             <div class="container">
                 <div class="newsletter-content">
                     <h2>Stay Updated</h2>
@@ -426,10 +471,6 @@
 
     <!-- Scripts -->
     <script src="script.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/lightgallery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/plugins/zoom/lg-zoom.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/plugins/fullscreen/lg-fullscreen.min.js"></script>
-    <script src="gallery-data.js"></script>
 
     <!-- Strava API Integration -->
     <script>
