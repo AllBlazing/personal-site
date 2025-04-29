@@ -4,6 +4,7 @@ const ASSETS_TO_CACHE = [
     '/index.html',
     '/styles.css',
     '/script.js',
+    '/gallery.js',
     '/mark%20-%20me1.jpeg',
     '/vibe-coding-meme.png'
 ];
@@ -35,24 +36,26 @@ self.addEventListener('activate', (event) => {
 
 // Fetch Event
 self.addEventListener('fetch', (event) => {
+    // Don't cache gallery images, always fetch from network
+    if (event.request.url.includes('images-for-vibe-section')) {
+        event.respondWith(fetch(event.request));
+        return;
+    }
+
     event.respondWith(
         caches.match(event.request)
             .then((response) => {
                 if (response) {
                     return response;
                 }
-                return fetch(event.request)
-                    .then((response) => {
-                        if (!response || response.status !== 200 || response.type !== 'basic') {
-                            return response;
-                        }
-                        const responseToCache = response.clone();
-                        caches.open(CACHE_NAME)
-                            .then((cache) => {
-                                cache.put(event.request, responseToCache);
-                            });
-                        return response;
-                    });
+                return fetch(event.request);
+            })
+            .catch(() => {
+                // Return a fallback response for failed requests
+                return new Response('Network error occurred', {
+                    status: 503,
+                    statusText: 'Service Unavailable'
+                });
             })
     );
 });

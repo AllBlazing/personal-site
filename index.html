@@ -35,10 +35,8 @@
     <!-- Styles -->
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/css/lightgallery.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/css/lg-zoom.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/css/lg-thumbnail.min.css">
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <style>
         .loading-placeholder {
             min-height: 200px;
@@ -478,21 +476,12 @@
         <!-- Journey Section -->
         <section id="journey" class="section">
             <div class="container">
-                <h2 class="section-title">Journey</h2>
-                <div class="journey-gallery">
-                    <button class="nav-button prev" aria-label="Previous image">
-                        <i class="fas fa-chevron-left"></i>
-                    </button>
-                    
-                    <div class="gallery-container">
-                        <div class="gallery-track">
-                            <!-- Images will be inserted here by JavaScript -->
-                        </div>
-                    </div>
-                    
-                    <button class="nav-button next" aria-label="Next image">
-                        <i class="fas fa-chevron-right"></i>
-                    </button>
+                <h2 class="section-title">
+                    <i class="fas fa-road"></i>
+                    Journey
+                </h2>
+                <div id="journey-gallery" class="gallery-container">
+                    <!-- Swiper will be initialized here -->
                 </div>
             </div>
         </section>
@@ -557,14 +546,10 @@
     </nav>
 
     <!-- Scripts -->
-    <script src="https://kit.fontawesome.com/your-font-awesome-kit.js"></script>
-    <script src="journey-gallery.js"></script>
-    <script src="script.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/lightgallery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/plugins/zoom/lg-zoom.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/plugins/thumbnail/lg-thumbnail.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/plugins/fullscreen/lg-fullscreen.min.js"></script>
-    <script src="gallery-data.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
+    <script defer src="gallery.js"></script>
+    <script defer src="script.js"></script>
 
     <!-- Code animation -->
     <script>

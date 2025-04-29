@@ -1,0 +1,30 @@
+{
+    "training": {
+        "strength": {
+            "title": "Strength Training",
+            "description": "Focus on compound movements and wall balls"
+        },
+        "cardio": {
+            "title": "Cardio Training",
+            "description": "Mix of running and rowing"
+        },
+        "hiit": {
+            "title": "HIIT",
+            "description": "High intensity interval training with core work"
+        }
+    },
+    "supplements": {
+        "morning": {
+            "title": "Morning Stack",
+            "description": "Turmeric, Beetroot Extract"
+        },
+        "post_workout": {
+            "title": "Post Workout",
+            "description": "Whey Protein, Creatine, Electrolytes"
+        },
+        "evening": {
+            "title": "Evening Stack",
+            "description": "Magnesium, L-Theanine, Cherry Extract"
+        }
+    }
+} 

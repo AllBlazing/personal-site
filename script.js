@@ -6,21 +6,50 @@ class ContentManager {
             supplements: {},
             smoothies: {}
         };
+        this.initialized = false;
+    }
+
+    async initialize() {
         this.searchInput = document.getElementById('content-search');
         this.contentGrid = document.getElementById('content-grid');
+        await this.loadContent();
+        this.setupSearch();
+        this.initialized = true;
     }
 
     async loadContent() {
         try {
-            const response = await fetch('/api/content');
-            this.content = await response.json();
-            this.renderContent();
-            this.setupSearch();
+            const response = await fetch('/content.json');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const text = await response.text();
+            try {
+                this.content = JSON.parse(text);
+                this.renderContent();
+            } catch (parseError) {
+                console.error('Error parsing JSON:', parseError);
+                this.handleError('Invalid content format');
+            }
         } catch (error) {
             console.error('Error loading content:', error);
-            // Remove loading state if present
-            const loadingElements = document.querySelectorAll('.loading');
-            loadingElements.forEach(el => el.remove());
+            this.handleError('Failed to load content');
+        }
+    }
+
+    handleError(message) {
+        // Remove loading state if present
+        const loadingElements = document.querySelectorAll('.loading');
+        loadingElements.forEach(el => el.remove());
+        
+        // Show error message
+        if (this.contentGrid) {
+            this.contentGrid.innerHTML = `
+                <div class="error-message">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <p>${message}</p>
+                </div>
+            `;
         }
     }
 
@@ -64,16 +93,36 @@ class ContentManager {
 }
 
 // DOM Ready handler
-document.addEventListener('DOMContentLoaded', () => {
-    initializeUI();
-    initializeStrava();
-    initializeJourneyGallery();
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        // Initialize core UI components first
+        initializeUI();
+        
+        // Initialize content manager
+        const contentManager = new ContentManager();
+        await contentManager.initialize();
+        
+        // Initialize Strava integration
+        await initializeStrava();
+        
+    } catch (error) {
+        console.error('Initialization error:', error);
+    }
 });
 
 // Initialize UI components
 function initializeUI() {
-    initializeHeader();
-    initializeMobileNav();
+    const header = document.querySelector('.header');
+    const mobileNav = document.querySelector('.mobile-nav');
+    
+    if (header) {
+        initializeHeader();
+    }
+    
+    if (mobileNav) {
+        initializeMobileNav();
+    }
+    
     initializeSmoothScroll();
     initializeShare();
     handleSectionTransitions();
@@ -82,6 +131,8 @@ function initializeUI() {
 // Header scroll effect
 function initializeHeader() {
     const header = document.querySelector('.header');
+    if (!header) return;
+    
     let lastScroll = 0;
 
     window.addEventListener('scroll', () => {
@@ -98,6 +149,8 @@ function initializeHeader() {
 // Mobile navigation
 function initializeMobileNav() {
     const mobileNav = document.querySelector('.mobile-nav');
+    if (!mobileNav) return;
+    
     const navLinks = document.querySelectorAll('.nav-links a');
 
     navLinks.forEach(link => {
@@ -116,7 +169,8 @@ function initializeSmoothScroll() {
             e.preventDefault();
             const target = document.querySelector(this.getAttribute('href'));
             if (target) {
-                const headerOffset = document.querySelector('.header').offsetHeight;
+                const header = document.querySelector('.header');
+                const headerOffset = header ? header.offsetHeight : 0;
                 const elementPosition = target.getBoundingClientRect().top;
                 const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
@@ -132,6 +186,8 @@ function initializeSmoothScroll() {
 // Share functionality
 function initializeShare() {
     const shareButtons = document.querySelectorAll('.share-button');
+    if (!shareButtons.length) return;
+    
     shareButtons.forEach(button => {
         button.addEventListener('click', async () => {
             try {
@@ -154,6 +210,9 @@ function initializeShare() {
 
 // Section transitions
 function handleSectionTransitions() {
+    const sections = document.querySelectorAll('.section-transition');
+    if (!sections.length) return;
+    
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -164,7 +223,7 @@ function handleSectionTransitions() {
         threshold: 0.1
     });
 
-    document.querySelectorAll('.section-transition').forEach(section => {
+    sections.forEach(section => {
         observer.observe(section);
     });
 }
@@ -192,6 +251,9 @@ const STRAVA_CONFIG = {
 };
 
 async function initializeStrava() {
+    const statsContainer = document.getElementById('monthly-stats');
+    if (!statsContainer) return;
+    
     try {
         const accessToken = await getStravaAccessToken();
         if (accessToken) {
@@ -740,77 +802,6 @@ function initParticles() {
 // Initialize particles when DOM is loaded
 document.addEventListener('DOMContentLoaded', initParticles);
 
-// Gallery Functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const galleryGrid = document.getElementById('gallery-grid');
-    const filterButtons = document.querySelectorAll('.filter-btn');
-    
-    // Initialize lightGallery
-    const lightGallery = lightGallery(galleryGrid, {
-        selector: '.gallery-item',
-        download: false,
-        counter: false,
-        plugins: [lgZoom, lgFullscreen],
-        mobileSettings: {
-            controls: true,
-            showCloseIcon: true,
-            download: false,
-            rotate: false
-        }
-    });
-
-    // Filter functionality
-    filterButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            // Remove active class from all buttons
-            filterButtons.forEach(btn => btn.classList.remove('active'));
-            // Add active class to clicked button
-            button.classList.add('active');
-            
-            const filter = button.getAttribute('data-filter');
-            const items = galleryGrid.querySelectorAll('.gallery-item');
-            
-            items.forEach(item => {
-                if (filter === 'all' || item.getAttribute('data-category') === filter) {
-                    item.style.display = 'block';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
-        });
-    });
-
-    // Lazy loading
-    const lazyImages = document.querySelectorAll('.gallery-item img[data-src]');
-    const imageObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const img = entry.target;
-                img.src = img.dataset.src;
-                img.removeAttribute('data-src');
-                observer.unobserve(img);
-            }
-        });
-    });
-
-    lazyImages.forEach(img => imageObserver.observe(img));
-});
-
-// Intersection Observer for section animations
-const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.classList.add('active');
-        }
-    });
-}, {
-    threshold: 0.1
-});
-
-document.querySelectorAll('.section-transition').forEach(section => {
-    observer.observe(section);
-});
-
 // Loading states
 function showContent(elementId) {
     const loadingElement = document.getElementById(`${elementId}-loading`);
@@ -917,58 +908,9 @@ window.addEventListener('load', () => {
     // Initialize Strava API after page load
     initializeStrava();
     
-    // Initialize gallery after page load
-    loadGallery();
-    
     // Remove loading placeholders
     document.querySelectorAll('.loading-placeholder').forEach(placeholder => {
         placeholder.style.display = 'none';
     });
 });
-
-// Journey Gallery
-function initializeJourneyGallery() {
-    const track = document.querySelector('.gallery-track');
-    const prevButton = document.querySelector('.nav-button.prev');
-    const nextButton = document.querySelector('.nav-button.next');
-    let currentIndex = 0;
-
-    if (!track || !prevButton || !nextButton) return;
-
-    // Create gallery items
-    journeyImages.forEach((image, index) => {
-        const item = document.createElement('div');
-        item.className = 'gallery-item';
-        item.innerHTML = `
-            <img src="${image.src}" alt="${image.title}">
-            <div class="image-title">${image.title}</div>
-        `;
-        track.appendChild(item);
-    });
-
-    // Update navigation state
-    function updateNavigation() {
-        prevButton.disabled = currentIndex === 0;
-        nextButton.disabled = currentIndex === journeyImages.length - 1;
-        track.style.transform = `translateX(-${currentIndex * 100}%)`;
-    }
-
-    // Add event listeners
-    prevButton.addEventListener('click', () => {
-        if (currentIndex > 0) {
-            currentIndex--;
-            updateNavigation();
-        }
-    });
-
-    nextButton.addEventListener('click', () => {
-        if (currentIndex < journeyImages.length - 1) {
-            currentIndex++;
-            updateNavigation();
-        }
-    });
-
-    // Initialize navigation state
-    updateNavigation();
-}
 
