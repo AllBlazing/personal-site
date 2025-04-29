@@ -63,133 +63,293 @@ class ContentManager {
     }
 }
 
-// Polar Device Integration
-class PolarIntegration {
-    constructor() {
-        this.baseUrl = 'https://www.polaraccesslink.com/v3';
-        this.init();
-    }
+// DOM Ready handler
+document.addEventListener('DOMContentLoaded', () => {
+    initializeUI();
+    initializeStrava();
+    initializeJourneyGallery();
+});
 
-    init() {
-        // Remove loading states immediately
-        const loadingElements = document.querySelectorAll('.loading');
-        loadingElements.forEach(el => {
-            el.textContent = 'Data unavailable';
-            el.classList.remove('loading');
+// Initialize UI components
+function initializeUI() {
+    initializeHeader();
+    initializeMobileNav();
+    initializeSmoothScroll();
+    initializeShare();
+    handleSectionTransitions();
+}
+
+// Header scroll effect
+function initializeHeader() {
+    const header = document.querySelector('.header');
+    let lastScroll = 0;
+
+    window.addEventListener('scroll', () => {
+        const currentScroll = window.pageYOffset;
+        if (currentScroll > lastScroll && currentScroll > 100) {
+            header.classList.add('scrolled');
+        } else {
+            header.classList.remove('scrolled');
+        }
+        lastScroll = currentScroll;
+    });
+}
+
+// Mobile navigation
+function initializeMobileNav() {
+    const mobileNav = document.querySelector('.mobile-nav');
+    const navLinks = document.querySelectorAll('.nav-links a');
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                mobileNav.classList.remove('active');
+            }
+        });
+    });
+}
+
+// Smooth scroll
+function initializeSmoothScroll() {
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                const headerOffset = document.querySelector('.header').offsetHeight;
+                const elementPosition = target.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: 'smooth'
+                });
+            }
+        });
+    });
+}
+
+// Share functionality
+function initializeShare() {
+    const shareButtons = document.querySelectorAll('.share-button');
+    shareButtons.forEach(button => {
+        button.addEventListener('click', async () => {
+            try {
+                if (navigator.share) {
+                    await navigator.share({
+                        title: document.title,
+                        url: window.location.href
+                    });
+                } else {
+                    // Fallback
+                    navigator.clipboard.writeText(window.location.href);
+                    showNotification('Link copied to clipboard!');
+                }
+            } catch (err) {
+                console.error('Share failed:', err);
+            }
+        });
+    });
+}
+
+// Section transitions
+function handleSectionTransitions() {
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('active');
+            }
+        });
+    }, {
+        threshold: 0.1
+    });
+
+    document.querySelectorAll('.section-transition').forEach(section => {
+        observer.observe(section);
+    });
+}
+
+// Notification helper
+function showNotification(message, type = 'info') {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    
+    document.body.appendChild(notification);
+    
+    setTimeout(() => notification.classList.add('show'), 100);
+    setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+    }, 3000);
+}
+
+// Strava integration
+const STRAVA_CONFIG = {
+    clientId: '155072',
+    clientSecret: '4d9a962bc7ad7abc7b65a3fb7aa9d77922569d7c',
+    refreshToken: '0dea72859bd9f5d1feb008a1fed6b1f485792ebb'
+};
+
+async function initializeStrava() {
+    try {
+        const accessToken = await getStravaAccessToken();
+        if (accessToken) {
+            await getActivities(accessToken);
+        }
+    } catch (error) {
+        console.error('Strava initialization failed:', error);
+        updateStravaUI('Failed to initialize Strava');
+    }
+}
+
+async function getStravaAccessToken() {
+    try {
+        const response = await fetch('https://www.strava.com/oauth/token', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                client_id: STRAVA_CONFIG.clientId,
+                client_secret: STRAVA_CONFIG.clientSecret,
+                refresh_token: STRAVA_CONFIG.refreshToken,
+                grant_type: 'refresh_token'
+            })
         });
 
-        // Initialize displays with default values
-        this.updateVO2MaxDisplay({ value: '--', trend: 'neutral' });
-        this.updateHRVDisplay({ value: '--', trend: 'neutral' });
-    }
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
 
-    async getVO2Max() {
-        try {
-            const response = await fetch(`${this.baseUrl}/users/${this.userId}/vo2max`, {
+        const data = await response.json();
+        return data.access_token;
+    } catch (error) {
+        console.error('Error getting Strava access token:', error);
+        return null;
+    }
+}
+
+async function getActivities(accessToken) {
+    const statsContainer = document.getElementById('monthly-stats');
+    const activitiesContainer = document.getElementById('activities-list');
+    const typesContainer = document.getElementById('activity-types');
+    
+    if (!statsContainer || !activitiesContainer) {
+        console.warn('Required containers not found');
+        return;
+    }
+    
+    try {
+        const startOfMonth = new Date();
+        startOfMonth.setDate(1);
+        startOfMonth.setHours(0, 0, 0, 0);
+        
+        const response = await fetch(
+            `https://www.strava.com/api/v3/athlete/activities?after=${Math.floor(startOfMonth.getTime() / 1000)}&per_page=30`,
+            {
                 headers: {
-                    'Authorization': `Bearer ${this.accessToken}`,
-                    'Accept': 'application/json'
+                    'Authorization': `Bearer ${accessToken}`
                 }
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
             }
+        );
 
-            const data = await response.json();
-            return {
-                value: data.vo2max,
-                trend: this.calculateTrend(data.history),
-                timestamp: new Date().toISOString()
-            };
-        } catch (error) {
-            console.error('Error fetching VO2Max:', error);
-            return null;
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const activities = await response.json();
+        
+        // Display the data
+        displayMonthlyStats(activities);
+        displayActivityTypes(activities);
+        displayActivities(activities);
+        
+    } catch (error) {
+        console.error('Error fetching activities:', error);
+        statsContainer.innerHTML = '<div class="error-message">Failed to load stats</div>';
+        activitiesContainer.innerHTML = '<div class="error-message">Failed to load activities</div>';
+        if (typesContainer) {
+            typesContainer.innerHTML = '<div class="error-message">Failed to load activity types</div>';
         }
     }
+}
 
-    async getHRV() {
-        try {
-            const response = await fetch(`${this.baseUrl}/users/${this.userId}/hrv`, {
-                headers: {
-                    'Authorization': `Bearer ${this.accessToken}`,
-                    'Accept': 'application/json'
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const data = await response.json();
-            return {
-                value: data.hrv,
-                trend: this.calculateTrend(data.history),
-                timestamp: new Date().toISOString()
-            };
-        } catch (error) {
-            console.error('Error fetching HRV:', error);
-            return null;
-        }
+function displayMonthlyStats(activities) {
+    const distanceEl = document.getElementById('total-distance');
+    const timeEl = document.getElementById('total-time');
+    const elevationEl = document.getElementById('elevation-gain');
+    const countEl = document.getElementById('activity-count');
+    
+    if (!activities || !activities.length) {
+        [distanceEl, timeEl, elevationEl, countEl].forEach(el => {
+            if (el) el.textContent = '0';
+        });
+        return;
     }
+    
+    const stats = activities.reduce((acc, activity) => ({
+        distance: acc.distance + (activity.distance || 0),
+        time: acc.time + (activity.moving_time || 0),
+        elevation: acc.elevation + (activity.total_elevation_gain || 0)
+    }), { distance: 0, time: 0, elevation: 0 });
+    
+    if (distanceEl) distanceEl.textContent = (stats.distance / 1000).toFixed(1);
+    if (timeEl) timeEl.textContent = formatDuration(stats.time);
+    if (elevationEl) elevationEl.textContent = Math.round(stats.elevation);
+    if (countEl) countEl.textContent = activities.length;
+}
 
-    calculateTrend(history) {
-        if (!history || history.length < 2) return 'neutral';
-        
-        const recent = history.slice(-2);
-        const diff = recent[1] - recent[0];
-        
-        if (diff > 0) return 'up';
-        if (diff < 0) return 'down';
-        return 'neutral';
-    }
+function displayActivityTypes(activities) {
+    const container = document.getElementById('activity-types');
+    if (!container || !activities || !activities.length) return;
+    
+    const types = new Set(activities.map(activity => activity.type));
+    container.innerHTML = Array.from(types)
+        .map(type => `<span class="type-tag">${type}</span>`)
+        .join('');
+}
 
-    async updateMetrics() {
-        const vo2max = await this.getVO2Max();
-        const hrv = await this.getHRV();
-        
-        if (vo2max) {
-            this.updateVO2MaxDisplay(vo2max);
-            this.storeMetric('vo2max', vo2max);
-        }
-        
-        if (hrv) {
-            this.updateHRVDisplay(hrv);
-            this.storeMetric('hrv', hrv);
-        }
+function displayActivities(activities) {
+    const container = document.getElementById('activities-list');
+    if (!container) return;
+    
+    if (!activities || !activities.length) {
+        container.innerHTML = '<div class="no-activities">No activities found this month</div>';
+        return;
     }
+    
+    const recentActivities = activities.slice(0, 5);
+    container.innerHTML = recentActivities.map(activity => {
+        const date = new Date(activity.start_date).toLocaleDateString('en-US', {
+            month: 'short',
+            day: 'numeric'
+        });
+        
+        return `
+            <div class="activity-item">
+                <div class="activity-header">
+                    <h4 class="activity-name">${activity.name}</h4>
+                    <span class="activity-date">${date}</span>
+                </div>
+                <div class="activity-details">
+                    <span class="activity-type">${activity.type}</span>
+                    <span class="activity-stat">${(activity.distance / 1000).toFixed(1)}km</span>
+                    <span class="activity-stat">${formatDuration(activity.moving_time)}</span>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
 
-    storeMetric(type, data) {
-        const storedData = JSON.parse(localStorage.getItem(`polar_${type}`) || '[]');
-        storedData.push(data);
-        localStorage.setItem(`polar_${type}`, JSON.stringify(storedData));
+function formatDuration(seconds) {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    
+    if (hours > 0) {
+        return `${hours}h ${minutes}m`;
     }
-
-    updateVO2MaxDisplay(data) {
-        const valueElement = document.getElementById('vo2max-value');
-        const trendElement = document.getElementById('vo2max-trend');
-        
-        if (valueElement) {
-            valueElement.textContent = data.value;
-        }
-        
-        if (trendElement) {
-            trendElement.className = 'trend-indicator ' + data.trend;
-        }
-    }
-
-    updateHRVDisplay(data) {
-        const valueElement = document.getElementById('hrv-value');
-        const trendElement = document.getElementById('hrv-trend');
-        
-        if (valueElement) {
-            valueElement.textContent = data.value;
-        }
-        
-        if (trendElement) {
-            trendElement.className = 'trend-indicator ' + data.trend;
-        }
-    }
+    return `${minutes}m`;
 }
 
 // Service Worker Registration
@@ -290,16 +450,11 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     const contentManager = new ContentManager();
-    const polarIntegration = new PolarIntegration();
     const lazyLoader = new LazyLoader();
 
     // Load initial content
     contentManager.loadContent();
     lazyLoader.observeImages();
-
-    // Update metrics every 5 minutes
-    polarIntegration.updateMetrics();
-    setInterval(() => polarIntegration.updateMetrics(), 300000);
 
     // Initialize mobile navigation
     const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
@@ -441,25 +596,6 @@ document.addEventListener('DOMContentLoaded', function() {
         `;
         
         messagesContainer.prepend(messageElement);
-    }
-    
-    function showNotification(message, type) {
-        const notification = document.createElement('div');
-        notification.className = `notification ${type}`;
-        notification.textContent = message;
-        
-        document.body.appendChild(notification);
-        
-        setTimeout(() => {
-            notification.classList.add('show');
-        }, 100);
-        
-        setTimeout(() => {
-            notification.classList.remove('show');
-            setTimeout(() => {
-                notification.remove();
-            }, 300);
-        }, 3000);
     }
 });
 
@@ -604,91 +740,6 @@ function initParticles() {
 // Initialize particles when DOM is loaded
 document.addEventListener('DOMContentLoaded', initParticles);
 
-// Terminal functionality
-document.addEventListener('DOMContentLoaded', function() {
-    const loadingPlaceholder = document.getElementById('terminal-loading');
-    const terminalWindow = document.querySelector('.terminal-window');
-    const currentStatus = document.getElementById('current-status');
-    const currentProject = document.getElementById('current-project');
-
-    // Hide terminal window initially
-    if (terminalWindow) {
-        terminalWindow.style.display = 'none';
-    }
-
-    // Simulate loading delay
-    setTimeout(() => {
-        if (loadingPlaceholder && terminalWindow) {
-            // Hide loading placeholder
-            loadingPlaceholder.style.display = 'none';
-            
-            // Show and animate terminal
-            terminalWindow.style.display = 'block';
-            setTimeout(() => {
-                terminalWindow.classList.add('visible');
-            }, 100);
-
-            // Update terminal content
-            if (currentStatus) {
-                currentStatus.textContent = 'status: building cool stuff...';
-            }
-            if (currentProject) {
-                currentProject.textContent = 'project: personal website v2.0';
-            }
-        }
-    }, 1000);
-});
-
-// Terminal Window Updates
-const statusMessages = [
-    "brewing fresh coffee ☕️",
-    "pushing code to production 🚀",
-    "debugging like a detective 🔍",
-    "building something cool 🛠️",
-    "learning new tech stack 📚",
-    "optimizing performance ⚡️",
-    "squashing bugs 🐛",
-    "shipping features ✨"
-];
-
-const projectMessages = [
-    "HyTracker: tracking those gains 💪",
-    "ScanSleepAI: optimizing rest 😴",
-    "WishListExtAI: making shopping smarter 🛍️",
-    "Personal Site: adding indie vibes ✨",
-    "New Secret Project: stay tuned 🤫"
-];
-
-function updateTerminal() {
-    const currentStatus = document.getElementById('current-status');
-    const currentProject = document.getElementById('current-project');
-    const workspace = document.getElementById('ascii-workspace');
-
-    // Update status with random message
-    currentStatus.textContent = statusMessages[Math.floor(Math.random() * statusMessages.length)];
-    
-    // Update project with random message
-    currentProject.textContent = projectMessages[Math.floor(Math.random() * projectMessages.length)];
-    
-    // Update coffee and energy levels randomly
-    const coffeeLevel = Math.floor(Math.random() * 10) + 1;
-    const energyLevel = Math.floor(Math.random() * 10) + 1;
-    
-    workspace.innerHTML = `
-      💻 Current Workspace
-      ├── ☕️ Coffee Level: [${'█'.repeat(coffeeLevel)}${'-'.repeat(10-coffeeLevel)}] ${coffeeLevel*10}%
-      ├── 💪 Energy Level: [${'█'.repeat(energyLevel)}${'-'.repeat(10-energyLevel)}] ${energyLevel*10}%
-      ├── 🎯 Focus Mode: ${Math.random() > 0.3 ? 'activated' : 'recharging'}
-      └── 🚀 Ship Status: ${Math.random() > 0.5 ? 'ready to launch' : 'preparing for takeoff'}
-    `;
-}
-
-// Update terminal every 5 seconds
-setInterval(updateTerminal, 5000);
-
-// Initial update
-updateTerminal();
-
 // Gallery Functionality
 document.addEventListener('DOMContentLoaded', function() {
     const galleryGrid = document.getElementById('gallery-grid');
@@ -770,11 +821,6 @@ function showContent(elementId) {
         contentElement.style.display = 'block';
     }
 }
-
-// Terminal content
-setTimeout(() => {
-    showContent('terminal');
-}, 1000);
 
 // Health content
 setTimeout(() => {
@@ -869,7 +915,7 @@ function handleSwipe() {
 // Performance optimizations
 window.addEventListener('load', () => {
     // Initialize Strava API after page load
-    getActivities();
+    initializeStrava();
     
     // Initialize gallery after page load
     loadGallery();
@@ -879,3 +925,50 @@ window.addEventListener('load', () => {
         placeholder.style.display = 'none';
     });
 });
+
+// Journey Gallery
+function initializeJourneyGallery() {
+    const track = document.querySelector('.gallery-track');
+    const prevButton = document.querySelector('.nav-button.prev');
+    const nextButton = document.querySelector('.nav-button.next');
+    let currentIndex = 0;
+
+    if (!track || !prevButton || !nextButton) return;
+
+    // Create gallery items
+    journeyImages.forEach((image, index) => {
+        const item = document.createElement('div');
+        item.className = 'gallery-item';
+        item.innerHTML = `
+            <img src="${image.src}" alt="${image.title}">
+            <div class="image-title">${image.title}</div>
+        `;
+        track.appendChild(item);
+    });
+
+    // Update navigation state
+    function updateNavigation() {
+        prevButton.disabled = currentIndex === 0;
+        nextButton.disabled = currentIndex === journeyImages.length - 1;
+        track.style.transform = `translateX(-${currentIndex * 100}%)`;
+    }
+
+    // Add event listeners
+    prevButton.addEventListener('click', () => {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateNavigation();
+        }
+    });
+
+    nextButton.addEventListener('click', () => {
+        if (currentIndex < journeyImages.length - 1) {
+            currentIndex++;
+            updateNavigation();
+        }
+    });
+
+    // Initialize navigation state
+    updateNavigation();
+}
+

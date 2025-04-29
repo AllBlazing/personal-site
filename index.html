@@ -36,6 +36,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/css/lightgallery.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/css/lg-zoom.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/css/lg-thumbnail.min.css">
     <link rel="stylesheet" href="styles.css">
     <style>
         .loading-placeholder {
@@ -138,42 +140,6 @@
             </div>
         </section>
 
-        <!-- Terminal Section -->
-        <section class="terminal-section section-transition">
-            <div class="container">
-                <div class="loading-placeholder" id="terminal-loading"></div>
-                <div class="terminal-window" style="display: none;">
-                    <div class="terminal-header">
-                        <div class="terminal-buttons">
-                            <span class="terminal-button close"></span>
-                            <span class="terminal-button minimize"></span>
-                            <span class="terminal-button maximize"></span>
-                        </div>
-                        <div class="terminal-title">building-in-public.sh</div>
-                    </div>
-                    <div class="terminal-body">
-                        <div class="terminal-line">
-                            <span class="terminal-prompt">mark@stellar:~$</span>
-                            <span class="terminal-text" id="current-status">loading current status...</span>
-                        </div>
-                        <div class="terminal-line">
-                            <span class="terminal-prompt">mark@stellar:~$</span>
-                            <span class="terminal-text" id="current-project">loading project...</span>
-                        </div>
-                        <div class="terminal-line ascii-art">
-                            <pre id="ascii-workspace">
-      💻 Current Workspace
-      ├── ☕️ Coffee Level: [██████----] 60%
-      ├── 💪 Energy Level: [████████--] 80%
-      ├── 🎯 Focus Mode: activated
-      └── 🚀 Ship Status: ready to launch
-    </pre>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <!-- About Section -->
         <section id="about" class="section section-transition">
             <div class="container">
@@ -247,38 +213,170 @@
                 </h2>
                 <div class="training-content">
                     <div class="training-schedule">
-                        <h3 class="section-subtitle">Weekly Schedule</h3>
+                        <h3 class="section-subtitle">Training Schedule</h3>
                         <div class="schedule-grid">
-                            <div class="schedule-day">
+                            <div class="schedule-day strength-day">
                                 <h4>Monday</h4>
-                                <div class="training-hiit">HIIT / Core 45 mins or easy run</div>
-                                <div class="schedule-note">*skip if tired</div>
+                                <div class="training-strength">Strength - 1h (with wall ball focus)</div>
                             </div>
-                            <div class="schedule-day">
+                            <div class="schedule-day cardio-day">
                                 <h4>Tuesday</h4>
-                                <div class="training-strength">Strength 45 mins + 300 wall balls (volume) 9KG / 6KG 15 mins</div>
+                                <div class="training-cardio">Running - 45' (vo2 work)</div>
                             </div>
-                            <div class="schedule-day">
+                            <div class="schedule-day hiit-day">
                                 <h4>Wednesday</h4>
-                                <div class="training-hyrox">Hyrox (wall balls) / running 45mins</div>
+                                <div class="training-hiit">HIIT + Core - 45'</div>
                             </div>
-                            <div class="schedule-day">
+                            <div class="schedule-day strength-day">
                                 <h4>Thursday</h4>
-                                <div class="training-strength">Strength 45 mins + 100 wall balls (time) 9KG 7 mins + 100 for time 6kg</div>
+                                <div class="training-strength">Strength - 1h (with wall ball focus)</div>
                             </div>
-                            <div class="schedule-day">
+                            <div class="schedule-day cardio-day">
                                 <h4>Friday</h4>
-                                <div class="training-cardio">AM Run -threshold 50 mins</div>
-                                <div class="training-cardio">PM Row threshold 40 mins</div>
+                                <div class="training-cardio">AM Running - 1h (threshold)</div>
+                                <div class="training-cardio">PM Rowing - 40' (threshold)</div>
+                                <div class="schedule-note">*skip double if tired</div>
                             </div>
-                            <div class="schedule-day">
+                            <div class="schedule-day mixed-day">
                                 <h4>Saturday</h4>
-                                <div class="training-hiit">Tennis lesson + doubles 1-2 hrs</div>
-                                <div class="training-hiit">Core 20 mins</div>
+                                <div class="training-hiit">AM HIIT + Core - 45'</div>
+                                <div class="training-cardio">AM Tennis - 1h</div>
                             </div>
-                            <div class="schedule-day">
+                            <div class="schedule-day hyrox-day">
                                 <h4>Sunday</h4>
-                                <div class="training-hyrox">Hyrox (wall balls) / running 90mins</div>
+                                <div class="training-hyrox">Hyrox - 90'</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Supplements Section -->
+        <section id="supplements" class="section section-transition">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-pills"></i>
+                    supplements
+                </h2>
+                <div class="supplements-container">
+                    <!-- Morning Supplements -->
+                    <div class="supplement-category">
+                        <h3 class="category-title">
+                            <i class="fas fa-sun"></i>
+                            Breakfast Supplements
+                        </h3>
+                        <div class="supplement-list">
+                            <div class="supplement-item">
+                                <div class="supplement-info">
+                                    <span class="supplement-name">Turmeric (w/ Ginger & Black Pepper)</span>
+                                    <span class="supplement-dosage">1340mg</span>
+                                </div>
+                            </div>
+                            <div class="supplement-item">
+                                <div class="supplement-info">
+                                    <span class="supplement-name">Beetroot Extract</span>
+                                    <span class="supplement-dosage">3000mg</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Post-Workout Smoothie -->
+                    <div class="supplement-category">
+                        <h3 class="category-title">
+                            <i class="fas fa-blender"></i>
+                            Post-Workout Smoothie
+                        </h3>
+                        <p class="category-subtitle">Recovery, Electrolyte & Hydration</p>
+                        <div class="supplement-list">
+                            <div class="supplement-item">
+                                <div class="supplement-info">
+                                    <span class="supplement-name">Whey Protein (Grass-Fed) - unflavoured</span>
+                                    <span class="supplement-dosage">30g</span>
+                                </div>
+                            </div>
+                            <div class="supplement-item">
+                                <div class="supplement-info">
+                                    <span class="supplement-name">Creatine Monohydrate - unflavoured</span>
+                                    <span class="supplement-dosage">5g</span>
+                                </div>
+                            </div>
+                            <div class="supplement-item">
+                                <div class="supplement-info">
+                                    <span class="supplement-name">Himalayan Pink Salt</span>
+                                    <span class="supplement-dosage">1/4 tsp</span>
+                                </div>
+                            </div>
+                            <div class="supplement-item">
+                                <div class="supplement-info">
+                                    <span class="supplement-name">Coconut Water - bio</span>
+                                    <span class="supplement-dosage">1/2 cup</span>
+                                </div>
+                            </div>
+                            <div class="supplement-item">
+                                <div class="supplement-info">
+                                    <span class="supplement-name">Honey</span>
+                                    <span class="supplement-dosage">1 tbsp</span>
+                                </div>
+                            </div>
+                            <div class="supplement-item">
+                                <div class="supplement-info">
+                                    <span class="supplement-name">Lemon Juice</span>
+                                    <span class="supplement-dosage">Half a lemon</span>
+                                </div>
+                            </div>
+                            <div class="supplement-item">
+                                <div class="supplement-info">
+                                    <span class="supplement-name">Kale / Spinach leaves</span>
+                                    <span class="supplement-dosage">Handful</span>
+                                </div>
+                            </div>
+                            <div class="supplement-item">
+                                <div class="supplement-info">
+                                    <span class="supplement-name">Pineapple Chunks</span>
+                                    <span class="supplement-dosage">1/2 cup</span>
+                                </div>
+                            </div>
+                            <div class="supplement-item">
+                                <div class="supplement-info">
+                                    <span class="supplement-name">Water</span>
+                                    <span class="supplement-dosage">1/2 cup (or more)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sleep Optimization -->
+                    <div class="supplement-category">
+                        <h3 class="category-title">
+                            <i class="fas fa-moon"></i>
+                            Sleep Optimisation
+                        </h3>
+                        <div class="supplement-list">
+                            <div class="supplement-item">
+                                <div class="supplement-info">
+                                    <span class="supplement-name">Montmorency Cherry</span>
+                                    <span class="supplement-dosage">1000mg</span>
+                                </div>
+                            </div>
+                            <div class="supplement-item">
+                                <div class="supplement-info">
+                                    <span class="supplement-name">Saffron</span>
+                                    <span class="supplement-dosage">28mg</span>
+                                </div>
+                            </div>
+                            <div class="supplement-item">
+                                <div class="supplement-info">
+                                    <span class="supplement-name">L-Theanine</span>
+                                    <span class="supplement-dosage">200mg</span>
+                                </div>
+                            </div>
+                            <div class="supplement-item">
+                                <div class="supplement-info">
+                                    <span class="supplement-name">Magnesium Glycinate</span>
+                                    <span class="supplement-dosage">300mg</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -317,79 +415,113 @@
                             <div class="metric-timestamp">Updated: April 18, 2025</div>
                         </div>
                     </div>
-                    <div class="strava-stats">
-                        <div id="strava-activities">
-                            <div class="strava-header">
-                                <i class="fab fa-strava" style="color: var(--accent-color); font-size: 24px;"></i>
-                                <h3>Monthly Activities</h3>
-                            </div>
-                            <div id="monthly-summary" class="monthly-summary">
-                            </div>
-                            <div id="activities-list" class="activities-list">
-                            </div>
+
+                    <!-- GitHub Contributions -->
+                    <div class="github-stats">
+                        <div class="github-header">
+                            <i class="fab fa-github"></i>
+                            <h3>GitHub Contributions</h3>
+                        </div>
+                        <div class="github-contributions">
+                            <img 
+                                src="https://ghchart.rshah.org/BBF34C/AllBlazing" 
+                                alt="GitHub Contributions Graph"
+                                width="100%"
+                                height="auto"
+                            />
                         </div>
                     </div>
+
+                    <!-- Monthly Activity Section -->
+                    <section id="monthly-stats" class="strava-stats">
+                        <div class="strava-header">
+                            <i class="fab fa-strava"></i>
+                            <h3>Monthly Activity Summary</h3>
+                        </div>
+                        
+                        <div class="monthly-summary">
+                            <div class="stats-grid">
+                                <div class="stat-item">
+                                    <div class="stat-value" id="total-distance">0</div>
+                                    <div class="stat-label">Total Distance (km)</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="total-time">0</div>
+                                    <div class="stat-label">Total Time</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="elevation-gain">0</div>
+                                    <div class="stat-label">Elevation Gain (m)</div>
+                                </div>
+                                <div class="stat-item">
+                                    <div class="stat-value" id="activity-count">0</div>
+                                    <div class="stat-label">Activities</div>
+                                </div>
+                            </div>
+                            
+                            <div id="activity-types" class="activity-types">
+                                <!-- Activity type tags will be dynamically inserted here -->
+                            </div>
+                            
+                            <div class="latest-activities-header">
+                                <h3>Latest Activities</h3>
+                            </div>
+                            <div id="activities-list" class="activities-container">
+                                <!-- Activity items will be dynamically inserted here -->
+                            </div>
+                        </div>
+                    </section>
                 </div>
             </div>
         </section>
 
-        <!-- Vibes Section -->
-        <section id="vibes" class="section section-transition">
+        <!-- Journey Section -->
+        <section id="journey" class="section">
             <div class="container">
-                <h2 class="section-title">
-                    <i class="fas fa-smile"></i>
-                    vibes
-                </h2>
-                <p class="section-subtitle">A visual journey through my adventures and achievements</p>
-                <div class="gallery-container">
-                    <button class="gallery-nav prev" aria-label="Previous images">
+                <h2 class="section-title">Journey</h2>
+                <div class="journey-gallery">
+                    <button class="nav-button prev" aria-label="Previous image">
                         <i class="fas fa-chevron-left"></i>
                     </button>
-                    <button class="gallery-nav next" aria-label="Next images">
+                    
+                    <div class="gallery-container">
+                        <div class="gallery-track">
+                            <!-- Images will be inserted here by JavaScript -->
+                        </div>
+                    </div>
+                    
+                    <button class="nav-button next" aria-label="Next image">
                         <i class="fas fa-chevron-right"></i>
                     </button>
-                    <div class="gallery-grid" id="gallery-grid">
-                        <!-- Gallery items will be loaded here by gallery-data.js -->
-                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Newsletter Section -->
-        <section class="newsletter-section section-transition">
+        <section class="newsletter-section">
             <div class="container">
-                <div class="newsletter-content">
-                    <h2>Stay Updated</h2>
-                    <p>Get notified about new projects and training insights</p>
-                    <form 
-                        name="newsletter" 
-                        method="POST" 
-                        data-netlify="true" 
-                        netlify-honeypot="bot-field" 
-                        action="/success" 
-                        class="newsletter-form"
-                    >
-                        <input type="hidden" name="form-name" value="newsletter" />
-                        <input type="hidden" name="subject" value="New newsletter subscription" />
-                        <p class="hidden">
-                            <label>Don't fill this out if you're human: <input name="bot-field" /></label>
-                        </p>
-                        <div class="input-group">
-                            <input type="email" name="email" placeholder="Enter your email" required>
-                        </div>
-                        <div class="input-group">
-                            <textarea name="message" placeholder="Leave a message (optional)" rows="3"></textarea>
-                        </div>
+                <h2>Stay Updated</h2>
+                <p>Get notified about new projects and training insights</p>
+                <form 
+                    name="newsletter" 
+                    method="POST" 
+                    data-netlify="true" 
+                    netlify-honeypot="bot-field" 
+                    action="/success" 
+                    class="newsletter-form"
+                >
+                    <input type="hidden" name="form-name" value="newsletter" />
+                    <p class="hidden">
+                        <label>Don't fill this out if you're human: <input name="bot-field" /></label>
+                    </p>
+                    <div class="newsletter-input-group">
+                        <input type="email" name="email" placeholder="Enter your email" required>
                         <button type="submit" class="subscribe-btn">
                             <i class="fas fa-paper-plane"></i>
                             Subscribe
                         </button>
-                    </form>
-                    <div class="form-success" style="display: none;">
-                        <i class="fas fa-check-circle"></i>
-                        <p>Thanks for subscribing! We'll be in touch soon.</p>
                     </div>
-                </div>
+                </form>
             </div>
         </section>
     </main>
@@ -425,201 +557,14 @@
     </nav>
 
     <!-- Scripts -->
+    <script src="https://kit.fontawesome.com/your-font-awesome-kit.js"></script>
+    <script src="journey-gallery.js"></script>
     <script src="script.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/lightgallery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/plugins/zoom/lg-zoom.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/plugins/thumbnail/lg-thumbnail.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lightgallery@2.7.2/plugins/fullscreen/lg-fullscreen.min.js"></script>
     <script src="gallery-data.js"></script>
-
-    <!-- Strava API Integration -->
-    <script>
-        const clientId = '155072';
-        const clientSecret = '4d9a962bc7ad7abc7b65a3fb7aa9d77922569d7c';
-        const refreshToken = '0dea72859bd9f5d1feb008a1fed6b1f485792ebb';
-
-        async function getAccessToken() {
-            try {
-                console.log('Requesting access token...');
-                const response = await fetch('https://www.strava.com/oauth/token', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        client_id: clientId,
-                        client_secret: clientSecret,
-                        refresh_token: refreshToken,
-                        grant_type: 'refresh_token'
-                    })
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                const data = await response.json();
-                console.log('Token response:', data);
-                if (data.errors) {
-                    console.error('Token error:', data.errors);
-                    return null;
-                }
-                return data.access_token;
-            } catch (error) {
-                console.error('Error getting access token:', error);
-                document.getElementById('activities-list').innerHTML = 'Authentication error: ' + error.message;
-                return null;
-            }
-        }
-
-        function getStartOfMonth() {
-            const date = new Date();
-            return new Date(date.getFullYear(), date.getMonth(), 1).getTime() / 1000;
-        }
-
-        async function getActivities() {
-            const accessToken = await getAccessToken();
-            if (!accessToken) {
-                document.getElementById('activities-list').innerHTML = 'Unable to load activities: Authentication failed. Please check the console for details.';
-                return;
-            }
-
-            try {
-                console.log('Fetching activities...');
-                const startOfMonth = getStartOfMonth();
-                const response = await fetch(
-                    `https://www.strava.com/api/v3/athlete/activities?after=${startOfMonth}&per_page=100`,
-                    {
-                        headers: {
-                            'Authorization': `Bearer ${accessToken}`,
-                            'Accept': 'application/json',
-                            'Origin': window.location.origin
-                        }
-                    }
-                );
-
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-
-                const activities = await response.json();
-                console.log('Activities response:', activities);
-                
-                if (!Array.isArray(activities)) {
-                    throw new Error('Invalid response format');
-                }
-
-                if (activities.length === 0) {
-                    document.getElementById('activities-list').innerHTML = 'No activities found for this month';
-                    document.getElementById('monthly-summary').innerHTML = 'No activities to summarize';
-                    return;
-                }
-
-                displayMonthlyStats(activities);
-                displayActivities(activities);
-            } catch (error) {
-                console.error('Error fetching activities:', error);
-                document.getElementById('activities-list').innerHTML = 'Error loading activities: ' + error.message;
-            }
-        }
-
-        function displayMonthlyStats(activities) {
-            const stats = activities.reduce((acc, activity) => {
-                acc.totalDistance += activity.distance;
-                acc.totalTime += activity.moving_time;
-                acc.totalElevation += activity.total_elevation_gain;
-                acc.activities += 1;
-                acc.types[activity.type] = (acc.types[activity.type] || 0) + 1;
-                return acc;
-            }, { 
-                totalDistance: 0, 
-                totalTime: 0, 
-                totalElevation: 0,
-                activities: 0,
-                types: {}
-            });
-
-            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
-                              'July', 'August', 'September', 'October', 'November', 'December'];
-            const currentMonth = monthNames[new Date().getMonth()];
-
-            const summaryHtml = `
-                <div class="stats-grid">
-                    <div class="stat-item">
-                        <div class="stat-value">${(stats.totalDistance / 1000).toFixed(1)}km</div>
-                        <div class="stat-label">Total Distance</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">${Math.floor(stats.totalTime / 3600)}h ${Math.floor((stats.totalTime % 3600) / 60)}m</div>
-                        <div class="stat-label">Total Time</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">${Math.floor(stats.totalElevation)}m</div>
-                        <div class="stat-label">Elevation Gain</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">${stats.activities}</div>
-                        <div class="stat-label">Activities</div>
-                    </div>
-                </div>
-                <div class="activity-types">
-                    ${Object.entries(stats.types)
-                        .map(([type, count]) => `<span class="type-tag">${type}: ${count}</span>`)
-                        .join('')}
-                </div>
-            `;
-
-            document.getElementById('monthly-summary').innerHTML = summaryHtml;
-        }
-
-        function displayActivities(activities) {
-            const container = document.getElementById('activities-list');
-            if (!activities.length) {
-                container.innerHTML = 'No activities this month';
-                return;
-            }
-
-            // Sort activities by date in descending order (newest first)
-            activities.sort((a, b) => new Date(b.start_date) - new Date(a.start_date));
-
-            // Take only the first 5 activities
-            const recentActivities = activities.slice(0, 5);
-
-            const html = recentActivities.map(activity => {
-                const date = new Date(activity.start_date).toLocaleDateString('en-US', {
-                    weekday: 'short',
-                    month: 'short',
-                    day: 'numeric'
-                });
-                const distance = (activity.distance / 1000).toFixed(2);
-                const pace = activity.type === 'Run' 
-                    ? `${((activity.moving_time / 60) / (activity.distance / 1000)).toFixed(2)} min/km`
-                    : `${(activity.average_speed * 3.6).toFixed(1)} km/h`;
-                const elevation = Math.floor(activity.total_elevation_gain);
-                
-                return `
-                    <div class="activity-item">
-                        <div class="activity-header">
-                            <span class="activity-type">${activity.type}</span>
-                            <span class="activity-date">${date}</span>
-                        </div>
-                        <div class="activity-name">${activity.name}</div>
-                        <div class="activity-stats">
-                            <span title="Distance">${distance}km</span>
-                            <span title="Pace/Speed">${pace}</span>
-                            <span title="Duration">${Math.floor(activity.moving_time / 60)}mins</span>
-                            <span title="Elevation">↑${elevation}m</span>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-
-            container.innerHTML = html;
-        }
-
-        // Load activities when the page loads
-        getActivities();
-    </script>
 
     <!-- Code animation -->
     <script>
