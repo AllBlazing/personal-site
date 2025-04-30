@@ -1,106 +1,8 @@
-// Content Management System
-class ContentManager {
-    constructor() {
-        this.content = {
-            training: {},
-            supplements: {},
-            smoothies: {}
-        };
-        this.initialized = false;
-    }
-
-    async initialize() {
-        this.searchInput = document.getElementById('content-search');
-        this.contentGrid = document.getElementById('content-grid');
-        await this.loadContent();
-        this.setupSearch();
-        this.initialized = true;
-    }
-
-    async loadContent() {
-        try {
-            const response = await fetch('/content.json');
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            const text = await response.text();
-            try {
-                this.content = JSON.parse(text);
-                this.renderContent();
-            } catch (parseError) {
-                console.error('Error parsing JSON:', parseError);
-                this.handleError('Invalid content format');
-            }
-        } catch (error) {
-            console.error('Error loading content:', error);
-            this.handleError('Failed to load content');
-        }
-    }
-
-    handleError(message) {
-        // Remove loading state if present
-        const loadingElements = document.querySelectorAll('.loading');
-        loadingElements.forEach(el => el.remove());
-        
-        // Show error message
-        if (this.contentGrid) {
-            this.contentGrid.innerHTML = `
-                <div class="error-message">
-                    <i class="fas fa-exclamation-circle"></i>
-                    <p>${message}</p>
-                </div>
-            `;
-        }
-    }
-
-    renderContent() {
-        if (!this.contentGrid) return;
-
-        const html = Object.entries(this.content).map(([category, items]) => `
-            <div class="content-item" data-category="${category}">
-                <h3>${category}</h3>
-                <div class="content-details">
-                    ${this.renderItems(items)}
-                </div>
-            </div>
-        `).join('');
-
-        this.contentGrid.innerHTML = html;
-    }
-
-    renderItems(items) {
-        return Object.entries(items).map(([key, value]) => `
-            <div class="item" data-key="${key}">
-                <h4>${value.title}</h4>
-                <p>${value.description}</p>
-            </div>
-        `).join('');
-    }
-
-    setupSearch() {
-        if (!this.searchInput) return;
-
-        this.searchInput.addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase();
-            const items = document.querySelectorAll('.content-item');
-
-            items.forEach(item => {
-                const text = item.textContent.toLowerCase();
-                item.style.display = text.includes(searchTerm) ? 'block' : 'none';
-            });
-        });
-    }
-}
-
 // DOM Ready handler
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        // Initialize core UI components first
+        // Initialize core UI components
         initializeUI();
-        
-        // Initialize content manager
-        const contentManager = new ContentManager();
-        await contentManager.initialize();
         
         // Initialize Strava integration
         await initializeStrava();
@@ -129,6 +31,63 @@ function initializeUI() {
     initializeSmoothScroll();
     initializeShare();
     handleSectionTransitions();
+    initializeHero();
+}
+
+// Hero Section Animations
+function initializeHero() {
+    // Background slideshow
+    const slides = document.querySelectorAll('.background-slideshow .slide');
+    if (!slides.length) {
+        console.warn('No slideshow slides found');
+        return;
+    }
+
+    // Set image centering for hero background slides
+    slides.forEach(slide => {
+        slide.style.objectFit = 'cover';
+        slide.style.objectPosition = 'center 30%';
+    });
+
+    let currentSlide = 0;
+    let currentStat = 0;
+    const stats = ['Fitness', 'Productivity'];
+    const statValues = [85, 82];
+
+    function nextSlide() {
+        slides[currentSlide].classList.remove('active');
+        currentSlide = (currentSlide + 1) % slides.length;
+        slides[currentSlide].classList.add('active');
+    }
+
+    function updateStats() {
+        const statLoaders = document.querySelectorAll('.stat-loader');
+        statLoaders.forEach((loader, index) => {
+            const progressBar = loader.querySelector('.progress-fill');
+            const progressText = loader.querySelector('.progress-text');
+            const statLabel = loader.querySelector('.loader-label');
+            
+            if (progressBar && progressText && statLabel) {
+                progressBar.style.width = '0%';
+                progressText.textContent = 'Loading...';
+                statLabel.textContent = stats[index];
+                
+                setTimeout(() => {
+                    progressBar.style.width = `${statValues[index]}%`;
+                    progressText.textContent = `${statValues[index]}%`;
+                }, 100);
+            }
+        });
+    }
+
+    // Initialize first slide
+    slides[0].classList.add('active');
+
+    // Start slideshow
+    setInterval(nextSlide, 5000);
+
+    // Initialize stats
+    updateStats();
 }
 
 // Header scroll effect
@@ -224,7 +183,6 @@ function handleSectionTransitions() {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('active');
-                // Keep the section visible once it's been shown
                 observer.unobserve(entry.target);
             }
         });
@@ -431,22 +389,239 @@ function updateActivityUI(message) {
     }
 }
 
-// Initialize Strava integration when the page loads
-document.addEventListener('DOMContentLoaded', () => {
-    initializeStrava();
-});
+// GitHub Integration
+const GITHUB_USERNAME = 'AllBlazing';
 
-// Service Worker Registration
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
-            .then(registration => {
-                console.log('ServiceWorker registration successful');
-            })
-            .catch(err => {
-                console.log('ServiceWorker registration failed: ', err);
-            });
+async function initializeGitHub() {
+    try {
+        await Promise.all([
+            fetchGitHubStats(),
+            fetchGitHubContributions()
+        ]);
+    } catch (error) {
+        console.error('GitHub initialization failed:', error);
+        updateGitHubUI('Failed to initialize GitHub');
+    }
+}
+
+async function fetchGitHubStats() {
+    try {
+        // Fetch user data
+        const response = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}`);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+        const data = await response.json();
+        
+        // Update repos count
+        document.getElementById('github-repos').textContent = data.public_repos;
+        
+        // Fetch recent commits (last 30 days)
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+        
+        const eventsResponse = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/events/public`);
+        if (!eventsResponse.ok) throw new Error(`HTTP error! status: ${eventsResponse.status}`);
+        const events = await eventsResponse.json();
+        
+        // Count commits from push events
+        const commitCount = events
+            .filter(event => event.type === 'PushEvent')
+            .reduce((acc, event) => acc + event.payload.commits.length, 0);
+        
+        document.getElementById('github-commits').textContent = commitCount;
+        
+        // Calculate current streak from events
+        let currentStreak = 0;
+        const today = new Date().toDateString();
+        const uniqueDates = new Set();
+        
+        events.forEach(event => {
+            const eventDate = new Date(event.created_at).toDateString();
+            if (event.type === 'PushEvent') {
+                uniqueDates.add(eventDate);
+            }
+        });
+        
+        // Convert dates to array and sort
+        const sortedDates = Array.from(uniqueDates).sort((a, b) => new Date(b) - new Date(a));
+        
+        // Calculate streak
+        for (let i = 0; i < sortedDates.length; i++) {
+            const date = new Date(sortedDates[i]);
+            const expectedDate = new Date(today);
+            expectedDate.setDate(expectedDate.getDate() - i);
+            
+            if (date.toDateString() === expectedDate.toDateString()) {
+                currentStreak++;
+            } else {
+                break;
+            }
+        }
+        
+        document.getElementById('github-streak').textContent = currentStreak;
+        
+    } catch (error) {
+        console.error('Error fetching GitHub stats:', error);
+        document.getElementById('github-repos').textContent = '0';
+        document.getElementById('github-commits').textContent = '0';
+        document.getElementById('github-streak').textContent = '0';
+    }
+}
+
+async function fetchGitHubContributions() {
+    try {
+        const container = document.querySelector('.github-contributions');
+        if (!container) return;
+        
+        // Create a placeholder contribution graph
+        const today = new Date();
+        const oneYearAgo = new Date(today);
+        oneYearAgo.setFullYear(today.getFullYear() - 1);
+        
+        // Calculate exact number of weeks between dates
+        const millisecondsPerWeek = 7 * 24 * 60 * 60 * 1000;
+        const weeksCount = Math.ceil((today - oneYearAgo) / millisecondsPerWeek);
+        
+        const cellSize = 10;
+        const cellGap = 2;
+        const monthLabelHeight = 20;
+        const dayLabelWidth = 30;
+        
+        // Create SVG container with space for labels
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('width', (dayLabelWidth + weeksCount * (cellSize + cellGap)) + 'px');
+        svg.setAttribute('height', (monthLabelHeight + 7 * (cellSize + cellGap)) + 'px');
+        svg.style.maxWidth = '800px';
+        svg.style.width = '100%';
+        svg.style.height = 'auto';
+        
+        // Add day labels (only Mon/Wed/Fri)
+        const days = ['', 'Mon', '', 'Wed', '', 'Fri', ''];
+        days.forEach((day, index) => {
+            if (day) { // Only create labels for Mon/Wed/Fri
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', '0');
+                text.setAttribute('y', monthLabelHeight + (index * (cellSize + cellGap)) + cellSize);
+                text.setAttribute('class', 'contribution-label day-label');
+                text.textContent = day;
+                svg.appendChild(text);
+            }
+        });
+        
+        // Add month labels
+        const months = [];
+        let currentDate = new Date(oneYearAgo);
+        
+        for (let week = 0; week < weeksCount; week++) {
+            if (currentDate.getDate() <= 7) {
+                months.push({
+                    name: currentDate.toLocaleString('default', { month: 'short' }),
+                    x: dayLabelWidth + week * (cellSize + cellGap)
+                });
+            }
+            currentDate.setDate(currentDate.getDate() + 7);
+        }
+        
+        months.forEach(month => {
+            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            text.setAttribute('x', month.x.toString());
+            text.setAttribute('y', '10');
+            text.setAttribute('class', 'contribution-label month-label');
+            text.textContent = month.name;
+            svg.appendChild(text);
+        });
+        
+        // Create contribution cells
+        for (let week = 0; week < weeksCount; week++) {
+            for (let day = 0; day < 7; day++) {
+                const cellDate = new Date(oneYearAgo);
+                cellDate.setDate(cellDate.getDate() + (week * 7) + day);
+                
+                // Only create cells up to today
+                if (cellDate <= today) {
+                    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                    rect.setAttribute('x', dayLabelWidth + week * (cellSize + cellGap));
+                    rect.setAttribute('y', monthLabelHeight + day * (cellSize + cellGap));
+                    rect.setAttribute('width', cellSize);
+                    rect.setAttribute('height', cellSize);
+                    rect.setAttribute('rx', 2);
+                    rect.setAttribute('class', 'ContributionCalendar-day');
+                    rect.setAttribute('data-level', '0');
+                    
+                    // Add title for tooltip
+                    const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+                    title.textContent = `${cellDate.toLocaleDateString()} - No contributions`;
+                    rect.appendChild(title);
+                    
+                    svg.appendChild(rect);
+                }
+            }
+        }
+        
+        container.innerHTML = '';
+        container.appendChild(svg);
+        
+        // Fetch contribution data from GitHub API
+        const eventsResponse = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/events/public`);
+        if (!eventsResponse.ok) throw new Error(`HTTP error! status: ${eventsResponse.status}`);
+        const events = await eventsResponse.json();
+        
+        // Process events and update contribution cells
+        const contributionMap = new Map();
+        events.forEach(event => {
+            if (event.type === 'PushEvent') {
+                const date = new Date(event.created_at).toDateString();
+                const currentCount = contributionMap.get(date) || 0;
+                contributionMap.set(date, currentCount + event.payload.commits.length);
+            }
+        });
+        
+        // Update cell colors and tooltips based on contribution count
+        contributionMap.forEach((count, dateString) => {
+            const date = new Date(dateString);
+            if (date >= oneYearAgo && date <= today) {
+                const daysSinceStart = Math.floor((date - oneYearAgo) / (1000 * 60 * 60 * 24));
+                const weekIndex = Math.floor(daysSinceStart / 7);
+                const dayIndex = date.getDay();
+                
+                const cellIndex = weekIndex * 7 + dayIndex + months.length + days.length;
+                const cell = svg.children[cellIndex];
+                if (cell) {
+                    const level = count === 0 ? '0' : 
+                                count <= 2 ? '1' : 
+                                count <= 4 ? '2' : 
+                                count <= 6 ? '3' : '4';
+                    cell.setAttribute('data-level', level);
+                    
+                    // Update tooltip
+                    const title = cell.querySelector('title');
+                    if (title) {
+                        title.textContent = `${date.toLocaleDateString()} - ${count} contribution${count !== 1 ? 's' : ''}`;
+                    }
+                }
+            }
+        });
+        
+    } catch (error) {
+        console.error('Error fetching GitHub contributions:', error);
+        const container = document.querySelector('.github-contributions');
+        if (container) {
+            container.innerHTML = '<p class="error-message">Failed to load GitHub contributions</p>';
+        }
+    }
+}
+
+// Helper function to update UI on error
+function updateGitHubUI(message) {
+    const containers = ['github-repos', 'github-commits', 'github-streak'];
+    containers.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) element.textContent = '0';
     });
+    
+    const contributionsContainer = document.querySelector('.github-contributions');
+    if (contributionsContainer) {
+        contributionsContainer.innerHTML = `<p class="error-message">${message}</p>`;
+    }
 }
 
 // Lazy Loading Implementation
@@ -533,11 +708,9 @@ document.addEventListener('DOMContentLoaded', () => {
         el.classList.remove('loading');
     });
 
-    const contentManager = new ContentManager();
     const lazyLoader = new LazyLoader();
 
     // Load initial content
-    contentManager.loadContent();
     lazyLoader.observeImages();
 
     // Initialize mobile navigation
@@ -986,245 +1159,5 @@ window.addEventListener('load', () => {
     document.querySelectorAll('.loading-placeholder').forEach(placeholder => {
         placeholder.style.display = 'none';
     });
-});
-
-// GitHub Integration
-const GITHUB_USERNAME = 'AllBlazing';
-
-async function initializeGitHub() {
-    try {
-        await Promise.all([
-            fetchGitHubStats(),
-            fetchGitHubContributions()
-        ]);
-    } catch (error) {
-        console.error('GitHub initialization failed:', error);
-        updateGitHubUI('Failed to initialize GitHub');
-    }
-}
-
-async function fetchGitHubStats() {
-    try {
-        // Fetch user data
-        const response = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}`);
-        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-        const data = await response.json();
-        
-        // Update repos count
-        document.getElementById('github-repos').textContent = data.public_repos;
-        
-        // Fetch recent commits (last 30 days)
-        const thirtyDaysAgo = new Date();
-        thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-        
-        const eventsResponse = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/events/public`);
-        if (!eventsResponse.ok) throw new Error(`HTTP error! status: ${eventsResponse.status}`);
-        const events = await eventsResponse.json();
-        
-        // Count commits from push events
-        const commitCount = events
-            .filter(event => event.type === 'PushEvent')
-            .reduce((acc, event) => acc + event.payload.commits.length, 0);
-        
-        document.getElementById('github-commits').textContent = commitCount;
-        
-        // Calculate current streak from events
-        let currentStreak = 0;
-        const today = new Date().toDateString();
-        const uniqueDates = new Set();
-        
-        events.forEach(event => {
-            const eventDate = new Date(event.created_at).toDateString();
-            if (event.type === 'PushEvent') {
-                uniqueDates.add(eventDate);
-            }
-        });
-        
-        // Convert dates to array and sort
-        const sortedDates = Array.from(uniqueDates).sort((a, b) => new Date(b) - new Date(a));
-        
-        // Calculate streak
-        for (let i = 0; i < sortedDates.length; i++) {
-            const date = new Date(sortedDates[i]);
-            const expectedDate = new Date(today);
-            expectedDate.setDate(expectedDate.getDate() - i);
-            
-            if (date.toDateString() === expectedDate.toDateString()) {
-                currentStreak++;
-            } else {
-                break;
-            }
-        }
-        
-        document.getElementById('github-streak').textContent = currentStreak;
-        
-    } catch (error) {
-        console.error('Error fetching GitHub stats:', error);
-        document.getElementById('github-repos').textContent = '0';
-        document.getElementById('github-commits').textContent = '0';
-        document.getElementById('github-streak').textContent = '0';
-    }
-}
-
-async function fetchGitHubContributions() {
-    try {
-        const container = document.querySelector('.github-contributions');
-        if (!container) return;
-        
-        // Create a placeholder contribution graph
-        const today = new Date();
-        const oneYearAgo = new Date(today);
-        oneYearAgo.setFullYear(today.getFullYear() - 1);
-        
-        // Calculate exact number of weeks between dates
-        const millisecondsPerWeek = 7 * 24 * 60 * 60 * 1000;
-        const weeksCount = Math.ceil((today - oneYearAgo) / millisecondsPerWeek);
-        
-        const cellSize = 10;
-        const cellGap = 2;
-        const monthLabelHeight = 20;
-        const dayLabelWidth = 30;
-        
-        // Create SVG container with space for labels
-        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        svg.setAttribute('width', (dayLabelWidth + weeksCount * (cellSize + cellGap)) + 'px');
-        svg.setAttribute('height', (monthLabelHeight + 7 * (cellSize + cellGap)) + 'px');
-        svg.style.maxWidth = '800px';
-        svg.style.width = '100%';
-        svg.style.height = 'auto';
-        
-        // Add day labels (only Mon/Wed/Fri)
-        const days = ['', 'Mon', '', 'Wed', '', 'Fri', ''];
-        days.forEach((day, index) => {
-            if (day) { // Only create labels for Mon/Wed/Fri
-                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                text.setAttribute('x', '0');
-                text.setAttribute('y', monthLabelHeight + (index * (cellSize + cellGap)) + cellSize);
-                text.setAttribute('class', 'contribution-label day-label');
-                text.textContent = day;
-                svg.appendChild(text);
-            }
-        });
-        
-        // Add month labels
-        const months = [];
-        let currentDate = new Date(oneYearAgo);
-        
-        for (let week = 0; week < weeksCount; week++) {
-            if (currentDate.getDate() <= 7) {
-                months.push({
-                    name: currentDate.toLocaleString('default', { month: 'short' }),
-                    x: dayLabelWidth + week * (cellSize + cellGap)
-                });
-            }
-            currentDate.setDate(currentDate.getDate() + 7);
-        }
-        
-        months.forEach(month => {
-            const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-            text.setAttribute('x', month.x.toString());
-            text.setAttribute('y', '10');
-            text.setAttribute('class', 'contribution-label month-label');
-            text.textContent = month.name;
-            svg.appendChild(text);
-        });
-        
-        // Create contribution cells
-        for (let week = 0; week < weeksCount; week++) {
-            for (let day = 0; day < 7; day++) {
-                const cellDate = new Date(oneYearAgo);
-                cellDate.setDate(cellDate.getDate() + (week * 7) + day);
-                
-                // Only create cells up to today
-                if (cellDate <= today) {
-                    const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
-                    rect.setAttribute('x', dayLabelWidth + week * (cellSize + cellGap));
-                    rect.setAttribute('y', monthLabelHeight + day * (cellSize + cellGap));
-                    rect.setAttribute('width', cellSize);
-                    rect.setAttribute('height', cellSize);
-                    rect.setAttribute('rx', 2);
-                    rect.setAttribute('class', 'ContributionCalendar-day');
-                    rect.setAttribute('data-level', '0');
-                    
-                    // Add title for tooltip
-                    const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
-                    title.textContent = `${cellDate.toLocaleDateString()} - No contributions`;
-                    rect.appendChild(title);
-                    
-                    svg.appendChild(rect);
-                }
-            }
-        }
-        
-        container.innerHTML = '';
-        container.appendChild(svg);
-        
-        // Fetch contribution data from GitHub API
-        const eventsResponse = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/events/public`);
-        if (!eventsResponse.ok) throw new Error(`HTTP error! status: ${eventsResponse.status}`);
-        const events = await eventsResponse.json();
-        
-        // Process events and update contribution cells
-        const contributionMap = new Map();
-        events.forEach(event => {
-            if (event.type === 'PushEvent') {
-                const date = new Date(event.created_at).toDateString();
-                const currentCount = contributionMap.get(date) || 0;
-                contributionMap.set(date, currentCount + event.payload.commits.length);
-            }
-        });
-        
-        // Update cell colors and tooltips based on contribution count
-        contributionMap.forEach((count, dateString) => {
-            const date = new Date(dateString);
-            if (date >= oneYearAgo && date <= today) {
-                const daysSinceStart = Math.floor((date - oneYearAgo) / (1000 * 60 * 60 * 24));
-                const weekIndex = Math.floor(daysSinceStart / 7);
-                const dayIndex = date.getDay();
-                
-                const cellIndex = weekIndex * 7 + dayIndex + months.length + days.length;
-                const cell = svg.children[cellIndex];
-                if (cell) {
-                    const level = count === 0 ? '0' : 
-                                count <= 2 ? '1' : 
-                                count <= 4 ? '2' : 
-                                count <= 6 ? '3' : '4';
-                    cell.setAttribute('data-level', level);
-                    
-                    // Update tooltip
-                    const title = cell.querySelector('title');
-                    if (title) {
-                        title.textContent = `${date.toLocaleDateString()} - ${count} contribution${count !== 1 ? 's' : ''}`;
-                    }
-                }
-            }
-        });
-        
-    } catch (error) {
-        console.error('Error fetching GitHub contributions:', error);
-        const container = document.querySelector('.github-contributions');
-        if (container) {
-            container.innerHTML = '<p class="error-message">Failed to load GitHub contributions</p>';
-        }
-    }
-}
-
-// Helper function to update UI on error
-function updateGitHubUI(message) {
-    const containers = ['github-repos', 'github-commits', 'github-streak'];
-    containers.forEach(id => {
-        const element = document.getElementById(id);
-        if (element) element.textContent = '0';
-    });
-    
-    const contributionsContainer = document.querySelector('.github-contributions');
-    if (contributionsContainer) {
-        contributionsContainer.innerHTML = `<p class="error-message">${message}</p>`;
-    }
-}
-
-// Initialize GitHub integration when the page loads
-document.addEventListener('DOMContentLoaded', () => {
-    initializeGitHub();
 });
 

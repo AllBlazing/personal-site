@@ -81,35 +81,39 @@ const images = [
 let currentIndex = 0;
 const imagesPerView = 3;
 
-function createGallery() {
-    console.log('Creating gallery...');
-    
-    const container = document.getElementById('journey-gallery');
+function initGallery() {
+    const container = document.querySelector('#journey-gallery');
     if (!container) {
-        console.error('Gallery container not found');
+        console.warn('Gallery container not found, will retry in 100ms');
+        setTimeout(initGallery, 100);
         return;
     }
-    console.log('Found gallery container:', container);
 
-    // Create gallery structure
-    container.innerHTML = `
-        <button class="gallery-nav prev" aria-label="Previous image">
-            <i class="fas fa-chevron-left"></i>
-        </button>
-        <div class="gallery-grid"></div>
-        <button class="gallery-nav next" aria-label="Next image">
-            <i class="fas fa-chevron-right"></i>
-        </button>
-    `;
+    // Create gallery structure if it doesn't exist
+    if (!container.querySelector('.gallery-grid')) {
+        container.innerHTML = `
+            <button class="gallery-nav prev" aria-label="Previous image">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <div class="gallery-grid"></div>
+            <button class="gallery-nav next" aria-label="Next image">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        `;
+    }
 
     const gallery = container.querySelector('.gallery-grid');
     const prevButton = container.querySelector('.gallery-nav.prev');
     const nextButton = container.querySelector('.gallery-nav.next');
 
+    if (!gallery || !prevButton || !nextButton) {
+        console.error('Gallery elements not found');
+        return;
+    }
+
     function updateGallery() {
         gallery.innerHTML = '';
         
-        // Display only three images starting from currentIndex
         for (let i = currentIndex; i < currentIndex + imagesPerView && i < images.length; i++) {
             const image = images[i];
             const item = document.createElement('div');
@@ -121,19 +125,9 @@ function createGallery() {
             const img = document.createElement('img');
             img.src = image.src;
             img.alt = image.title;
-            img.style.objectPosition = 'center 20%'; // Default position favoring upper portion
-            
-            // Add load event to check image dimensions and adjust positioning
-            img.onload = function() {
-                const ratio = this.naturalWidth / this.naturalHeight;
-                if (ratio < 1) {
-                    // Portrait image
-                    this.style.objectPosition = 'center 10%';
-                } else if (ratio > 1.5) {
-                    // Very wide landscape image
-                    this.style.objectPosition = 'center 30%';
-                }
-            };
+            img.loading = 'lazy';
+            img.style.objectFit = 'cover';
+            img.style.objectPosition = 'center 30%';
             
             const caption = document.createElement('div');
             caption.className = 'gallery-caption';
@@ -144,19 +138,24 @@ function createGallery() {
             item.appendChild(caption);
             gallery.appendChild(item);
             
-            // Log any image load errors
+            // Handle image load errors
             img.onerror = () => {
-                console.error(`Failed to load image ${i + 1}:`, image.src);
-                item.innerHTML = `<div class="error-message">Failed to load: ${image.title}</div>`;
+                console.warn(`Failed to load image: ${image.src}`);
+                imgWrapper.innerHTML = `
+                    <div class="error-message">
+                        <i class="fas fa-image"></i>
+                        <span>Image not found</span>
+                    </div>
+                `;
             };
         }
 
-        // Update button states
+        // Update button visibility
         prevButton.style.display = currentIndex === 0 ? 'none' : 'flex';
         nextButton.style.display = currentIndex + imagesPerView >= images.length ? 'none' : 'flex';
     }
 
-    // Add click handlers for navigation
+    // Navigation handlers
     prevButton.addEventListener('click', () => {
         if (currentIndex > 0) {
             currentIndex = Math.max(0, currentIndex - imagesPerView);
@@ -177,11 +176,8 @@ function createGallery() {
 }
 
 // Initialize gallery when DOM is ready
-console.log('Gallery script loaded');
 if (document.readyState === 'loading') {
-    console.log('Document still loading, adding DOMContentLoaded listener');
-    document.addEventListener('DOMContentLoaded', createGallery);
+    document.addEventListener('DOMContentLoaded', initGallery);
 } else {
-    console.log('Document already loaded, creating gallery immediately');
-    createGallery();
+    initGallery();
 } 
