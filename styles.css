@@ -3,11 +3,11 @@
     /* Colors */
     --bg-primary: #121212;
     --bg-secondary: #1A1A1A;
-    --accent-color: #E2FE38;
+    --accent-color: #BBF34C;
     --accent-color-rgb: 226, 254, 56;
     --accent-color-transparent: rgba(226, 254, 56, 0.1);
-    --text-primary: #FFFFFF;
-    --text-secondary: rgba(255, 255, 255, 0.7);
+    --text-primary: #ffffff;
+    --text-secondary: #ffffff;
     --border-color: rgba(255, 255, 255, 0.1);
     
     /* Typography */
@@ -73,6 +73,11 @@
     --card-margin: var(--spacing-lg);
     --element-margin: var(--spacing-md);
     --text-margin: var(--spacing-sm);
+
+    /* New colors */
+    --background-color: #000000;
+    --card-background: rgba(255, 255, 255, 0.05);
+    --card-hover: rgba(255, 255, 255, 0.1);
 }
 
 /* Reset and Base Styles */
@@ -486,10 +491,7 @@ img {
     font-weight: 700;
     line-height: var(--line-height-heading);
     margin-bottom: var(--spacing-md);
-    background: linear-gradient(135deg, #ffffff 0%, var(--accent-color) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 20px rgba(187, 243, 76, 0.3);
+    color: var(--text-primary);
 }
 
 .hero-subtitle {
@@ -1731,7 +1733,7 @@ img {
 .personal-best-value {
     font-size: 1.75rem;
     font-weight: 600;
-    color: var(--accent-color);
+    color: var(--text-primary);
     margin: var(--spacing-xs) 0;
 }
 
@@ -1834,8 +1836,7 @@ img {
 
 .supplement-dosage {
     font-size: 0.9rem;
-    color: inherit;
-    opacity: 0.9;
+    color: var(--text-primary);
 }
 
 .activity-details {
@@ -1852,8 +1853,7 @@ img {
 
 .activity-stat {
     font-size: 0.9rem;
-    color: inherit;
-    opacity: 0.8;
+    color: var(--text-primary);
 }
 
 /* Stats Section */
@@ -2113,7 +2113,7 @@ img {
 
 .supplement-dosage {
     font-size: 0.9rem;
-    color: var(--accent-color);
+    color: var(--text-primary);
 }
 
 /* Activity details */
@@ -2130,7 +2130,7 @@ img {
 
 .activity-stat {
     font-size: 0.9rem;
-    color: var(--accent-color);
+    color: var(--text-primary);
 }
 
 /* Section subtitles */
@@ -2226,4 +2226,41 @@ img {
     .mobile-share-btn {
         display: none;
     }
+}
+
+.health-grid,
+.health-card {
+    display: none;
+}
+
+/* New styles */
+.section-title,
+.section-subtitle,
+.hero-title,
+.hero-subtitle,
+.about-text,
+.project-title,
+.project-description,
+.schedule-day h4,
+.training-strength,
+.training-cardio,
+.training-hiit,
+.training-hyrox,
+.supplement-name,
+.supplement-dosage,
+.personal-best-value,
+.personal-best-label,
+.personal-best-details,
+.stat-value,
+.stat-label,
+.activity-stat {
+    color: var(--text-primary);
+}
+
+.highlight,
+.hero-cta .cta-button,
+.project-stats .stat,
+.schedule-note,
+.mobile-share-btn {
+    color: var(--accent-color);
 }
