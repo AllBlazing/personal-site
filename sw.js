@@ -1,12 +1,10 @@
-const CACHE_NAME = 'personal-site-v1';
+const CACHE_NAME = 'personal-site-v2';
 const ASSETS_TO_CACHE = [
     '/',
     '/index.html',
     '/styles.css',
     '/script.js',
-    '/gallery.js',
-    '/mark%20-%20me1.jpeg',
-    '/vibe-coding-meme.png'
+    '/gallery.js'
 ];
 
 // Install Service Worker
@@ -37,8 +35,21 @@ self.addEventListener('activate', (event) => {
 // Fetch Event
 self.addEventListener('fetch', (event) => {
     // Don't cache gallery images, always fetch from network
-    if (event.request.url.includes('images-for-vibe-section')) {
-        event.respondWith(fetch(event.request));
+    if (event.request.url.includes('images-for-journey') || event.request.url.includes('images-for-vibe-section')) {
+        event.respondWith(
+            fetch(event.request)
+                .catch(() => {
+                    // If the request to the new path fails, try the old path
+                    if (event.request.url.includes('images-for-vibe-section')) {
+                        return fetch(event.request.url.replace('images-for-vibe-section', 'images-for-journey'));
+                    }
+                    // If both fail, return a fallback response
+                    return new Response('Image not found', {
+                        status: 404,
+                        statusText: 'Not Found'
+                    });
+                })
+        );
         return;
     }
 
@@ -51,7 +62,6 @@ self.addEventListener('fetch', (event) => {
                 return fetch(event.request);
             })
             .catch(() => {
-                // Return a fallback response for failed requests
                 return new Response('Network error occurred', {
                     status: 503,
                     statusText: 'Service Unavailable'

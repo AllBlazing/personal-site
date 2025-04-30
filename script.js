@@ -592,6 +592,14 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.cta-button, .metric-card').forEach(element => {
         element.classList.add('floating');
     });
+
+    // Check if the messages feature/container exists before calling loadMessages
+    const messagesContainerElement = document.getElementById('messages-container'); // Or the relevant container ID
+    if (messagesContainerElement) {
+        loadMessages(); 
+    } else {
+        console.warn('Messages container not found. Skipping loadMessages().');
+    }
 });
 
 // Messages functionality
@@ -600,32 +608,47 @@ document.addEventListener('DOMContentLoaded', function() {
     const messagesContainer = document.getElementById('messages-container');
     
     // Load messages from localStorage on page load
-    loadMessages();
+    // Check if the container exists before trying to load messages into it
+    if (messagesContainer) {
+        loadMessages();
+    } else {
+        console.warn("Messages container (#messages-container) not found. Skipping initial loadMessages().");
+    }
     
     // Handle form submission
-    messageForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        const formData = {
-            name: document.getElementById('name').value,
-            email: document.getElementById('email').value,
-            message: document.getElementById('message').value,
-            attendance: document.getElementById('attendance').value,
-            date: new Date().toISOString()
-        };
-        
-        // Save message to localStorage
-        saveMessage(formData);
-        
-        // Add message to the display
-        addMessageToDisplay(formData);
-        
-        // Reset form
-        messageForm.reset();
-        
-        // Show success message
-        showNotification('Message sent successfully!', 'success');
-    });
+    // Check if the form exists before adding a listener
+    if (messageForm) {
+        messageForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = {
+                name: document.getElementById('name').value,
+                email: document.getElementById('email').value,
+                message: document.getElementById('message').value,
+                attendance: document.getElementById('attendance').value,
+                date: new Date().toISOString()
+            };
+            
+            // Save message to localStorage
+            saveMessage(formData);
+            
+            // Add message to the display
+            // We need to ensure the container exists here as well
+            if (messagesContainer) {
+                 addMessageToDisplay(formData);
+            } else {
+                console.warn("Messages container (#messages-container) not found when trying to display new message.");
+            }
+            
+            // Reset form
+            messageForm.reset();
+            
+            // Show success message
+            showNotification('Message sent successfully!', 'success');
+        });
+    } else {
+         console.warn("Message form (#message-form) not found. Skipping form submission listener setup.");
+    }
     
     function saveMessage(message) {
         let messages = JSON.parse(localStorage.getItem('messages') || '[]');
@@ -634,12 +657,26 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function loadMessages() {
+        // The check is now done *before* calling this function for initial load,
+        // but we add it inside too for robustness.
+        const container = document.getElementById('messages-container');
+        if (!container) {
+            console.error('Messages container element not found inside loadMessages.');
+            return; // Stop the function if container is missing
+        }
         const messages = JSON.parse(localStorage.getItem('messages') || '[]');
-        messagesContainer.innerHTML = '';
+        container.innerHTML = ''; // Now safe to access innerHTML
         messages.forEach(message => addMessageToDisplay(message));
     }
     
     function addMessageToDisplay(message) {
+        // Need to check container existence again inside this function if it can be called independently
+        const container = document.getElementById('messages-container');
+        if (!container) {
+            console.error('Messages container element not found inside addMessageToDisplay.');
+            return;
+        }
+        
         const messageElement = document.createElement('div');
         messageElement.className = `message-item ${message.attendance}`;
         
@@ -657,7 +694,8 @@ document.addEventListener('DOMContentLoaded', function() {
             </div>
         `;
         
-        messagesContainer.prepend(messageElement);
+        // Use container variable instead of querying the DOM again
+        container.prepend(messageElement);
     }
 });
 
@@ -867,32 +905,46 @@ navLinks.forEach(link => {
 const galleryScroll = document.querySelector('.gallery-scroll');
 const galleryNav = document.querySelectorAll('.gallery-nav');
 
-galleryNav.forEach(button => {
-    button.addEventListener('click', () => {
-        const scrollAmount = galleryScroll.offsetWidth;
-        const direction = button.classList.contains('prev') ? -1 : 1;
-        
-        galleryScroll.scrollBy({
-            left: scrollAmount * direction,
-            behavior: 'smooth'
+// Check if gallery navigation elements exist before adding listeners
+if (galleryScroll && galleryNav.length > 0) {
+    galleryNav.forEach(button => {
+        button.addEventListener('click', () => {
+            const scrollAmount = galleryScroll.offsetWidth;
+            const direction = button.classList.contains('prev') ? -1 : 1;
+            
+            galleryScroll.scrollBy({
+                left: scrollAmount * direction,
+                behavior: 'smooth'
+            });
         });
     });
-});
+} else {
+    console.warn("Gallery navigation elements (.gallery-scroll or .gallery-nav) not found. Skipping navigation button listeners.");
+}
 
 // Touch improvements for mobile
 let touchStartX = 0;
 let touchEndX = 0;
 
-galleryScroll.addEventListener('touchstart', (e) => {
-    touchStartX = e.changedTouches[0].screenX;
-});
+// Check if gallery scroll element exists before adding touch listeners
+if (galleryScroll) {
+    galleryScroll.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+    });
 
-galleryScroll.addEventListener('touchend', (e) => {
-    touchEndX = e.changedTouches[0].screenX;
-    handleSwipe();
-});
+    galleryScroll.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipe();
+    });
+} else {
+     console.warn("Gallery scroll element (.gallery-scroll) not found. Skipping touch listeners.");
+}
 
+// Ensure handleSwipe is defined only if galleryScroll exists, or check inside handleSwipe
 function handleSwipe() {
+    // Add check inside handleSwipe as well for safety
+    if (!galleryScroll) return; 
+    
     const swipeDistance = touchEndX - touchStartX;
     if (Math.abs(swipeDistance) > 50) {
         const scrollAmount = galleryScroll.offsetWidth;
