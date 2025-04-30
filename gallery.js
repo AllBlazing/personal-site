@@ -115,15 +115,32 @@ function createGallery() {
             const item = document.createElement('div');
             item.className = 'gallery-item';
             
+            const imgWrapper = document.createElement('div');
+            imgWrapper.className = 'gallery-img-wrapper';
+            
             const img = document.createElement('img');
             img.src = image.src;
             img.alt = image.title;
+            img.style.objectPosition = 'center 20%'; // Default position favoring upper portion
+            
+            // Add load event to check image dimensions and adjust positioning
+            img.onload = function() {
+                const ratio = this.naturalWidth / this.naturalHeight;
+                if (ratio < 1) {
+                    // Portrait image
+                    this.style.objectPosition = 'center 10%';
+                } else if (ratio > 1.5) {
+                    // Very wide landscape image
+                    this.style.objectPosition = 'center 30%';
+                }
+            };
             
             const caption = document.createElement('div');
             caption.className = 'gallery-caption';
             caption.textContent = image.title;
             
-            item.appendChild(img);
+            imgWrapper.appendChild(img);
+            item.appendChild(imgWrapper);
             item.appendChild(caption);
             gallery.appendChild(item);
             

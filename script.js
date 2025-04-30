@@ -211,22 +211,27 @@ function initializeShare() {
     });
 }
 
-// Section transitions
+// Handle section transitions
 function handleSectionTransitions() {
-    const sections = document.querySelectorAll('.section-transition');
-    if (!sections.length) return;
-    
+    const sections = document.querySelectorAll('.section');
+    const options = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.1
+    };
+
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('active');
+                // Keep the section visible once it's been shown
+                observer.unobserve(entry.target);
             }
         });
-    }, {
-        threshold: 0.1
-    });
+    }, options);
 
     sections.forEach(section => {
+        section.classList.add('section-transition');
         observer.observe(section);
     });
 }
@@ -254,9 +259,6 @@ const STRAVA_CONFIG = {
 };
 
 async function initializeStrava() {
-    const statsContainer = document.getElementById('monthly-stats');
-    if (!statsContainer) return;
-    
     try {
         const accessToken = await getStravaAccessToken();
         if (accessToken) {
@@ -296,12 +298,10 @@ async function getStravaAccessToken() {
 }
 
 async function getActivities(accessToken) {
-    const statsContainer = document.getElementById('monthly-stats');
     const activitiesContainer = document.getElementById('activities-list');
-    const typesContainer = document.getElementById('activity-types');
     
-    if (!statsContainer || !activitiesContainer) {
-        console.warn('Required containers not found');
+    if (!activitiesContainer) {
+        console.warn('Activities container not found');
         return;
     }
     
@@ -327,16 +327,11 @@ async function getActivities(accessToken) {
         
         // Display the data
         displayMonthlyStats(activities);
-        displayActivityTypes(activities);
         displayActivities(activities);
         
     } catch (error) {
         console.error('Error fetching activities:', error);
-        statsContainer.innerHTML = '<div class="error-message">Failed to load stats</div>';
-        activitiesContainer.innerHTML = '<div class="error-message">Failed to load activities</div>';
-        if (typesContainer) {
-            typesContainer.innerHTML = '<div class="error-message">Failed to load activity types</div>';
-        }
+        updateActivityUI('Failed to load activities');
     }
 }
 
@@ -347,9 +342,7 @@ function displayMonthlyStats(activities) {
     const countEl = document.getElementById('activity-count');
     
     if (!activities || !activities.length) {
-        [distanceEl, timeEl, elevationEl, countEl].forEach(el => {
-            if (el) el.textContent = '0';
-        });
+        updateStatsUI('0');
         return;
     }
     
@@ -359,20 +352,10 @@ function displayMonthlyStats(activities) {
         elevation: acc.elevation + (activity.total_elevation_gain || 0)
     }), { distance: 0, time: 0, elevation: 0 });
     
-    if (distanceEl) distanceEl.textContent = (stats.distance / 1000).toFixed(1);
+    if (distanceEl) distanceEl.textContent = `${(stats.distance / 1000).toFixed(1)} km`;
     if (timeEl) timeEl.textContent = formatDuration(stats.time);
-    if (elevationEl) elevationEl.textContent = Math.round(stats.elevation);
-    if (countEl) countEl.textContent = activities.length;
-}
-
-function displayActivityTypes(activities) {
-    const container = document.getElementById('activity-types');
-    if (!container || !activities || !activities.length) return;
-    
-    const types = new Set(activities.map(activity => activity.type));
-    container.innerHTML = Array.from(types)
-        .map(type => `<span class="type-tag">${type}</span>`)
-        .join('');
+    if (elevationEl) elevationEl.textContent = `${Math.round(stats.elevation)}m`;
+    if (countEl) countEl.textContent = activities.length.toString();
 }
 
 function displayActivities(activities) {
@@ -380,27 +363,43 @@ function displayActivities(activities) {
     if (!container) return;
     
     if (!activities || !activities.length) {
-        container.innerHTML = '<div class="no-activities">No activities found this month</div>';
+        container.innerHTML = '<div class="schedule-day">No activities found this month</div>';
         return;
     }
     
-    const recentActivities = activities.slice(0, 5);
+    const recentActivities = activities.slice(0, 4); // Show only 4 most recent activities
     container.innerHTML = recentActivities.map(activity => {
         const date = new Date(activity.start_date).toLocaleDateString('en-US', {
             month: 'short',
             day: 'numeric'
         });
         
+        let activityClass = 'mixed-day';
+        let activityIcon = '🏃‍♂️';
+        
+        if (activity.type.toLowerCase().includes('run')) {
+            activityClass = 'cardio-day';
+            activityIcon = '🏃‍♂️';
+        } else if (activity.type.toLowerCase().includes('weight') || activity.type.toLowerCase().includes('workout')) {
+            activityClass = 'strength-day';
+            activityIcon = '💪';
+        } else if (activity.type.toLowerCase().includes('ride')) {
+            activityClass = 'hiit-day';
+            activityIcon = '🚴‍♂️';
+        } else if (activity.type.toLowerCase().includes('swim')) {
+            activityClass = 'hiit-day';
+            activityIcon = '🏊‍♂️';
+        }
+        
         return `
-            <div class="activity-item">
-                <div class="activity-header">
-                    <h4 class="activity-name">${activity.name}</h4>
-                    <span class="activity-date">${date}</span>
-                </div>
-                <div class="activity-details">
-                    <span class="activity-type">${activity.type}</span>
-                    <span class="activity-stat">${(activity.distance / 1000).toFixed(1)}km</span>
-                    <span class="activity-stat">${formatDuration(activity.moving_time)}</span>
+            <div class="schedule-day ${activityClass}">
+                <h4>${activityIcon} ${activity.name}</h4>
+                <div class="training-${activityClass.replace('-day', '')}">
+                    <div class="activity-details">
+                        <span class="activity-type">${activity.type} · ${date}</span>
+                        <span class="activity-stat">${(activity.distance / 1000).toFixed(1)}km · ${formatDuration(activity.moving_time)}</span>
+                        ${activity.total_elevation_gain ? `<span class="activity-stat">⛰️ ${Math.round(activity.total_elevation_gain)}m</span>` : ''}
+                    </div>
                 </div>
             </div>
         `;
@@ -416,6 +415,26 @@ function formatDuration(seconds) {
     }
     return `${minutes}m`;
 }
+
+function updateStatsUI(value) {
+    const elements = ['total-distance', 'total-time', 'elevation-gain', 'activity-count'];
+    elements.forEach(id => {
+        const element = document.getElementById(id);
+        if (element) element.textContent = value;
+    });
+}
+
+function updateActivityUI(message) {
+    const container = document.getElementById('activities-list');
+    if (container) {
+        container.innerHTML = `<div class="schedule-day"><div class="error-message">${message}</div></div>`;
+    }
+}
+
+// Initialize Strava integration when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    initializeStrava();
+});
 
 // Service Worker Registration
 if ('serviceWorker' in navigator) {
