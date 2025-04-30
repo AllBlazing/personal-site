@@ -3,7 +3,10 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Mark Trewren | Developer & Athlete</title>
     
     <!-- Google Analytics -->
@@ -20,6 +23,8 @@
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000000">
+    <meta name="msapplication-TileColor" content="#000000">
     
     <!-- Enhanced SEO Meta Tags -->
     <meta name="description" content="Mark Trewren - Developer and athlete specializing in web development and endurance sports.">
@@ -75,21 +80,21 @@
                         </a>
                     </li>
                     <li>
-                        <a href="#projects">
-                            <i class="fas fa-code"></i>
-                            /projects
+                        <a href="#projects-work">
+                            <i class="fas fa-briefcase"></i>
+                            /projects-work
                         </a>
                     </li>
                     <li>
-                        <a href="#training">
+                        <a href="#projects-personal">
+                            <i class="fas fa-camera"></i>
+                            /projects-personal
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#fitness">
                             <i class="fas fa-dumbbell"></i>
-                            /training
-                        </a>
-                    </li>
-                    <li>
-                        <a href="#stats">
-                            <i class="fas fa-chart-line"></i>
-                            /stats
+                            /fitness
                         </a>
                     </li>
                 </ul>
@@ -162,60 +167,106 @@
                         <p>👇 Take a peek at what I've built - or say hey on X.</p>
                     </div>
                 </div>
+
+                <!-- GitHub Stats -->
+                <div class="github-stats">
+                    <h3 class="section-subtitle">
+                        <i class="fab fa-github"></i>
+                        GitHub Activity
+                    </h3>
+                    <div class="github-contributions">
+                        <!-- GitHub contribution graph will be loaded here -->
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-value" id="github-repos">0</span>
+                            <span class="stat-label">Repositories</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="github-commits">0</span>
+                            <span class="stat-label">Commits</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value" id="github-streak">0</span>
+                            <span class="stat-label">Day Streak</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
-        <!-- Projects Section -->
-        <section id="projects" class="section section-transition">
+        <!-- Projects - Work Section -->
+        <section id="projects-work" class="section section-transition">
             <div class="container">
                 <h2 class="section-title">
-                    <i class="fas fa-code"></i>
-                    projects
+                    <i class="fas fa-briefcase"></i>
+                    projects - work
                 </h2>
-                <div class="projects-list">
-                    <div class="project-item">
-                        <a href="#" class="project-link">ScanSleepAI</a>
-                        <span class="project-description">- This is a web based project...</span>
+                <div class="projects-grid">
+                    <div class="project-card">
+                        <div class="project-content">
+                            <h3 class="project-title">ScanSleepAI</h3>
+                            <p class="project-description">A web-based project for sleep analysis and optimization.</p>
+                            <div class="project-stats">
+                                <span class="stat">Web</span>
+                                <span class="stat">AI</span>
+                                <span class="stat">Health</span>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="project-item">
-                        <a href="#" class="project-link">WishListExtAI</a>
-                        <span class="project-description">- This is a Chrome extension...</span>
+                    <div class="project-card">
+                        <div class="project-content">
+                            <h3 class="project-title">WishListExtAI</h3>
+                            <p class="project-description">A Chrome extension for intelligent wishlist management.</p>
+                            <div class="project-stats">
+                                <span class="stat">Extension</span>
+                                <span class="stat">AI</span>
+                                <span class="stat">Productivity</span>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="project-item">
-                        <a href="#" class="project-link">HyTracker</a>
-                        <span class="project-description">- This is an app that allows you to track your strength, running and Hyrox specific tracked activities in one place</span>
+                    <div class="project-card">
+                        <div class="project-content">
+                            <h3 class="project-title">HyTracker</h3>
+                            <p class="project-description">Track strength, running, and Hyrox activities in one place.</p>
+                            <div class="project-stats">
+                                <span class="stat">Mobile</span>
+                                <span class="stat">Fitness</span>
+                                <span class="stat">Tracking</span>
+                            </div>
+                        </div>
                     </div>
-
-                    <div class="project-item">
-                        <a href="#" class="project-link">FoxThree</a>
-                        <span class="project-description">- This is a productivity and social media all in one post...</span>
-                    </div>
-
-                    <div class="project-item">
-                        <a href="#" class="project-link">Trewrenmerch</a>
-                        <span class="project-description">- This is my merch shop...</span>
-                    </div>
-                </div>
-
-                <!-- Gallery moved here -->
-                <div class="section-subtitle mt-3">
-                    <i class="fas fa-camera"></i>
-                    Project Journey
-                </div>
-                <div id="journey-gallery" class="gallery-container">
-                    <!-- Gallery items will be dynamically added here -->
                 </div>
             </div>
         </section>
 
-        <!-- Training Section -->
-        <section id="training" class="section section-transition">
+        <!-- Projects - Personal Section -->
+        <section id="projects-personal" class="section section-transition">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-camera"></i>
+                    projects - personal
+                </h2>
+                <div id="journey-gallery" class="gallery-container">
+                    <button class="gallery-nav prev" aria-label="Previous image">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <div class="gallery-grid">
+                        <!-- Gallery items will be dynamically added here, limited to 4 visible at a time -->
+                    </div>
+                    <button class="gallery-nav next" aria-label="Next image">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fitness Section -->
+        <section id="fitness" class="section section-transition">
             <div class="container">
                 <h2 class="section-title">
                     <i class="fas fa-dumbbell"></i>
-                    training
+                    fitness
                 </h2>
                 <div class="training-content">
                     <div class="training-schedule">
@@ -251,6 +302,35 @@
                             <div class="schedule-day hyrox-day">
                                 <h4>Sunday</h4>
                                 <div class="training-hyrox">Hyrox - 90'</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="health-grid">
+                        <div class="health-card">
+                            <div class="metric-card">
+                                <div class="metric-icon">
+                                    <i class="fas fa-running"></i>
+                                </div>
+                                <div class="metric-value">42.2</div>
+                                <div class="metric-label">Marathon PB (km)</div>
+                            </div>
+                        </div>
+                        <div class="health-card">
+                            <div class="metric-card">
+                                <div class="metric-icon">
+                                    <i class="fas fa-fire"></i>
+                                </div>
+                                <div class="metric-value">100</div>
+                                <div class="metric-label">Ultra Distance (miles)</div>
+                            </div>
+                        </div>
+                        <div class="health-card">
+                            <div class="metric-card">
+                                <div class="metric-icon">
+                                    <i class="fas fa-dumbbell"></i>
+                                </div>
+                                <div class="metric-value">Hyrox</div>
+                                <div class="metric-label">Current Focus</div>
                             </div>
                         </div>
                     </div>
@@ -395,7 +475,7 @@
             <div class="container">
                 <h2 class="section-title">
                     <i class="fas fa-chart-line"></i>
-                    stats
+                    Current Stats
                 </h2>
                 <div class="stats-content">
                     <div class="metrics-container">
@@ -422,27 +502,11 @@
                         </div>
                     </div>
 
-                    <!-- GitHub Contributions -->
-                    <div class="github-stats">
-                        <div class="github-header">
-                            <i class="fab fa-github"></i>
-                            <h3>GitHub Contributions</h3>
-                        </div>
-                        <div class="github-contributions">
-                            <img 
-                                src="https://ghchart.rshah.org/BBF34C/AllBlazing" 
-                                alt="GitHub Contributions Graph"
-                                width="100%"
-                                height="auto"
-                            />
-                        </div>
-                    </div>
-
                     <!-- Monthly Activity Section -->
                     <section id="monthly-stats" class="strava-stats">
                         <div class="strava-header">
                             <i class="fab fa-strava"></i>
-                            <h3>Monthly Activity Summary</h3>
+                            <h3>Monthly Activity Summary - <span id="current-month"></span></h3>
                         </div>
                         
                         <div class="monthly-summary">
@@ -523,8 +587,8 @@
                 <a href="https://github.com/AllBlazing" target="_blank" aria-label="GitHub">
                     <i class="fab fa-github"></i>
                 </a>
-                <a href="https://x.com/trewrenmark?s=21&t=DTOIGbJ-1hUnW2q2Go9hbg" target="_blank" aria-label="X">
-                    <i class="fab fa-x"></i>
+                <a href="https://x.com/trewrenmark?s=21&t=DTOIGbJ-1hUnW2q2Go9hbg" target="_blank" aria-label="X (Twitter)">
+                    <i class="fab fa-x-twitter"></i>
                 </a>
             </div>
         </div>
@@ -533,12 +597,37 @@
     <!-- Mobile Navigation -->
     <nav class="mobile-nav">
         <ul class="nav-links">
-            <li><a href="#about">About</a></li>
-            <li><a href="#projects">Projects</a></li>
-            <li><a href="#training">Training</a></li>
-            <li><a href="#stats">Stats</a></li>
+            <li>
+                <a href="#about" class="mobile-nav-link">
+                    <i class="fas fa-user"></i>
+                    <span>About</span>
+                </a>
+            </li>
+            <li>
+                <a href="#projects-work" class="mobile-nav-link">
+                    <i class="fas fa-briefcase"></i>
+                    <span>Work</span>
+                </a>
+            </li>
+            <li>
+                <a href="#projects-personal" class="mobile-nav-link">
+                    <i class="fas fa-camera"></i>
+                    <span>Gallery</span>
+                </a>
+            </li>
+            <li>
+                <a href="#fitness" class="mobile-nav-link">
+                    <i class="fas fa-dumbbell"></i>
+                    <span>Fitness</span>
+                </a>
+            </li>
         </ul>
     </nav>
+
+    <!-- Mobile Share Button -->
+    <button id="mobile-share" class="mobile-share-btn" aria-label="Share">
+        <i class="fas fa-share-alt"></i>
+    </button>
 
     <!-- Scripts -->
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
@@ -615,6 +704,81 @@
                 }
             });
         });
+    </script>
+
+    <!-- Mobile Share Script -->
+    <script>
+        document.getElementById('mobile-share').addEventListener('click', async () => {
+            try {
+                if (navigator.share) {
+                    await navigator.share({
+                        title: 'Mark Trewren | Developer & Athlete',
+                        text: 'Check out my personal website',
+                        url: window.location.href
+                    });
+                } else {
+                    // Fallback for browsers that don't support Web Share API
+                    const shareUrl = window.location.href;
+                    const tempInput = document.createElement('input');
+                    document.body.appendChild(tempInput);
+                    tempInput.value = shareUrl;
+                    tempInput.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(tempInput);
+                    alert('Link copied to clipboard!');
+                }
+            } catch (err) {
+                console.error('Error sharing:', err);
+            }
+        });
+    </script>
+
+    <!-- Mobile Navigation Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const mobileNav = document.querySelector('.mobile-nav');
+            const mobileLinks = document.querySelectorAll('.mobile-nav-link');
+            
+            // Smooth scroll for mobile navigation
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const targetId = link.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+            
+            // Handle mobile navigation visibility
+            let lastScrollTop = 0;
+            window.addEventListener('scroll', () => {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                
+                if (scrollTop > lastScrollTop) {
+                    // Scrolling down
+                    mobileNav.style.transform = 'translateY(100%)';
+                } else {
+                    // Scrolling up
+                    mobileNav.style.transform = 'translateY(0)';
+                }
+                
+                lastScrollTop = scrollTop;
+            });
+        });
+    </script>
+
+    <!-- Update current month -->
+    <script>
+        // Update current month
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        const currentMonth = new Date().getMonth();
+        document.getElementById('current-month').textContent = months[currentMonth];
     </script>
 </body>
 </html>

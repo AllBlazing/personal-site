@@ -1,4 +1,4 @@
-// Simple gallery implementation
+// Gallery implementation with navigation
 const images = [
     {
         src: 'images-for-journey/yemen-wedding.jpeg',
@@ -78,6 +78,9 @@ const images = [
     }
 ];
 
+let currentIndex = 0;
+const imagesPerView = 3;
+
 function createGallery() {
     console.log('Creating gallery...');
     
@@ -88,45 +91,72 @@ function createGallery() {
     }
     console.log('Found gallery container:', container);
 
-    // Create loading state
-    container.innerHTML = '<div class="gallery-loading">Loading gallery...</div>';
-    console.log('Added loading message');
+    // Create gallery structure
+    container.innerHTML = `
+        <button class="gallery-nav prev" aria-label="Previous image">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="gallery-grid"></div>
+        <button class="gallery-nav next" aria-label="Next image">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    `;
 
-    // Create gallery grid
-    const gallery = document.createElement('div');
-    gallery.className = 'gallery-grid';
-    
-    // Add images immediately without waiting for load
-    images.forEach((image, index) => {
-        console.log(`Creating item for image ${index + 1}:`, image.src);
+    const gallery = container.querySelector('.gallery-grid');
+    const prevButton = container.querySelector('.gallery-nav.prev');
+    const nextButton = container.querySelector('.gallery-nav.next');
+
+    function updateGallery() {
+        gallery.innerHTML = '';
         
-        const item = document.createElement('div');
-        item.className = 'gallery-item';
-        
-        const img = document.createElement('img');
-        img.src = image.src;
-        img.alt = image.title;
-        
-        const caption = document.createElement('div');
-        caption.className = 'gallery-caption';
-        caption.textContent = image.title;
-        
-        item.appendChild(img);
-        item.appendChild(caption);
-        gallery.appendChild(item);
-        
-        // Log any image load errors
-        img.onerror = () => {
-            console.error(`Failed to load image ${index + 1}:`, image.src);
-            item.innerHTML = `<div class="error-message">Failed to load: ${image.title}</div>`;
-        };
+        // Display only three images starting from currentIndex
+        for (let i = currentIndex; i < currentIndex + imagesPerView && i < images.length; i++) {
+            const image = images[i];
+            const item = document.createElement('div');
+            item.className = 'gallery-item';
+            
+            const img = document.createElement('img');
+            img.src = image.src;
+            img.alt = image.title;
+            
+            const caption = document.createElement('div');
+            caption.className = 'gallery-caption';
+            caption.textContent = image.title;
+            
+            item.appendChild(img);
+            item.appendChild(caption);
+            gallery.appendChild(item);
+            
+            // Log any image load errors
+            img.onerror = () => {
+                console.error(`Failed to load image ${i + 1}:`, image.src);
+                item.innerHTML = `<div class="error-message">Failed to load: ${image.title}</div>`;
+            };
+        }
+
+        // Update button states
+        prevButton.style.display = currentIndex === 0 ? 'none' : 'flex';
+        nextButton.style.display = currentIndex + imagesPerView >= images.length ? 'none' : 'flex';
+    }
+
+    // Add click handlers for navigation
+    prevButton.addEventListener('click', () => {
+        if (currentIndex > 0) {
+            currentIndex = Math.max(0, currentIndex - imagesPerView);
+            updateGallery();
+        }
     });
 
-    // Replace loading message with gallery
-    container.innerHTML = '';
-    container.appendChild(gallery);
+    nextButton.addEventListener('click', () => {
+        if (currentIndex + imagesPerView < images.length) {
+            currentIndex = Math.min(images.length - imagesPerView, currentIndex + imagesPerView);
+            updateGallery();
+        }
+    });
+
+    // Initialize gallery
+    updateGallery();
     container.classList.add('loaded');
-    console.log('Gallery created and added to container');
 }
 
 // Initialize gallery when DOM is ready
