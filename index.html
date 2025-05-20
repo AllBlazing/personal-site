@@ -115,11 +115,11 @@
                     </div>
                     <div class="about-text" style="flex: 2 1 400px; min-width: 300px;">
                         <p>👋 Mark here -- dad-in-training, code-curious, always trying to move forward.</p>
-                        <p>I've run 100-mile ultras, tackled Ironman, gone sub-3 in the marathon 🏃‍♂️🚴‍♂️ - and wandered far-flung places 🌍 from Yemen to Japan to Nicaragua. Always curious, always moving forward.</p>
-                        <p>After a swing at startup life left me frustrated, I hit reset. Learned to code with AI 🤖, and now I ship products I need — maybe you do too 🛠️.</p>
+                        <p>Dabbled in several endurance races and wandered to some far-flung places from Yemen to Japan to Nicaragua. Always curious, always trying to move forward.</p>
+                        <p>Worked as a chartered surveyor, teacher and now taking a swing at startup life. Recently, I learned to code with AI, and now I ship Hyrox products I need - maybe you do too.</p>
                         <p>Inspired by quiet builders and laptop freedom: Levels, Friks, and Lou 💻.</p>
-                        <p>When I'm not vibe coding, I'm training for Hyrox 💪 or knee-deep in a LEGO mission with the kids 🧱.</p>
-                        <p>👇 Take a peek at what I've built - or say hey on X.</p>
+                        <p>When I'm not coding, I'm training for Hyrox or knee-deep in a LEGO mission with the kids.</p>
+                        <p>👇 Take a peek at what I've built - or say hello here: mark@stellarapp.ai</p>
                     </div>
                 </div>
             </div>
@@ -171,57 +171,12 @@
         <!-- Training Dashboard -->
         <!-- HYROX Training Progress section removed as requested -->
 
-        <!-- Projects - Work Section -->
-        <section id="projects-work" class="section section-transition">
-            <div class="container">
-                <h2 class="section-title">
-                    <i class="fas fa-briefcase"></i>
-                    Projects - Work
-                </h2>
-                <div class="projects-grid">
-                    <div class="project-card">
-                        <div class="project-content">
-                            <h3 class="project-title">ScanSleepAI</h3>
-                            <p class="project-description">A web-based project for sleep analysis and optimization.</p>
-                            <div class="project-stats">
-                                <span class="stat">Web</span>
-                                <span class="stat">AI</span>
-                                <span class="stat">Health</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="project-card">
-                        <div class="project-content">
-                            <h3 class="project-title">WishListExtAI</h3>
-                            <p class="project-description">A Chrome extension for intelligent wishlist management.</p>
-                            <div class="project-stats">
-                                <span class="stat">Extension</span>
-                                <span class="stat">AI</span>
-                                <span class="stat">Productivity</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="project-card">
-                        <div class="project-content">
-                            <h3 class="project-title">HyTracker</h3>
-                            <p class="project-description">Track strength, running, and Hyrox activities in one place.</p>
-                            <div class="project-stats">
-                                <span class="stat">Mobile</span>
-                                <span class="stat">Fitness</span>
-                                <span class="stat">Tracking</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <!-- Projects - Personal Section -->
         <section id="projects-personal" class="section section-transition">
             <div class="container">
                 <h2 class="section-title">
                     <i class="fas fa-camera"></i>
-                    Projects - Personal
+                    Journey
                 </h2>
                 <div id="journey-gallery" class="gallery-container">
                     <button class="gallery-nav prev" aria-label="Previous image">
@@ -234,6 +189,34 @@
                         <i class="fas fa-chevron-right"></i>
                     </button>
                 </div>
+            </div>
+        </section>
+
+        <!-- Newsletter Section -->
+        <section class="newsletter-section">
+            <div class="container">
+                <h2>Stay Updated</h2>
+                <p>Get notified about new projects and training insights</p>
+                <form 
+                    name="newsletter" 
+                    method="POST" 
+                    data-netlify="true" 
+                    netlify-honeypot="bot-field" 
+                    action="/success" 
+                    class="newsletter-form"
+                >
+                    <input type="hidden" name="form-name" value="newsletter" />
+                    <p class="hidden">
+                        <label>Don't fill this out if you're human: <input name="bot-field" /></label>
+                    </p>
+                    <div class="newsletter-input-group">
+                        <input type="email" name="email" placeholder="Enter your email" required>
+                        <button type="submit" class="subscribe-btn">
+                            <i class="fas fa-paper-plane"></i>
+                            Subscribe
+                        </button>
+                    </div>
+                </form>
             </div>
         </section>
 
@@ -280,49 +263,6 @@
                                 <div class="training-hyrox">Hyrox - 90'</div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Personal Bests Section -->
-        <section class="section" id="personal-bests">
-            <div class="container">
-                <h2 class="section-title">
-                    <i class="fas fa-trophy"></i>
-                    Personal Bests 🏆
-                </h2>
-                <div class="personal-bests-grid">
-                    <!-- Marathon -->
-                    <div class="personal-best-card">
-                        <div class="personal-best-icon">🏃‍♂️</div>
-                        <div class="personal-best-value">Amsterdam Marathon</div>
-                        <div class="personal-best-label">Marathon PB</div>
-                        <div class="personal-best-details">42.2km</div>
-                    </div>
-                    
-                    <!-- Ultra -->
-                    <div class="personal-best-card">
-                        <div class="personal-best-icon">🌄</div>
-                        <div class="personal-best-value">100 miles</div>
-                        <div class="personal-best-label">Ultra Distance</div>
-                        <div class="personal-best-details">Pennine Way</div>
-                    </div>
-                    
-                    <!-- Ironman -->
-                    <div class="personal-best-card">
-                        <div class="personal-best-icon">🏊‍♂️🚴‍♂️🏃‍♂️</div>
-                        <div class="personal-best-value">✅</div>
-                        <div class="personal-best-label">Ironman Triathlon</div>
-                        <div class="personal-best-details">Swim 3.8km | Bike 180km | Run 42.2km</div>
-                    </div>
-                    
-                    <!-- Current Focus -->
-                    <div class="personal-best-card highlight">
-                        <div class="personal-best-icon">💪</div>
-                        <div class="personal-best-value">HYROX</div>
-                        <div class="personal-best-label">Current Focus</div>
-                        <div class="personal-best-details">8 x 1km Run + 8 Workouts</div>
                     </div>
                 </div>
             </div>
@@ -475,34 +415,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
-
-        <!-- Newsletter Section -->
-        <section class="newsletter-section">
-            <div class="container">
-                <h2>Stay Updated</h2>
-                <p>Get notified about new projects and training insights</p>
-                <form 
-                    name="newsletter" 
-                    method="POST" 
-                    data-netlify="true" 
-                    netlify-honeypot="bot-field" 
-                    action="/success" 
-                    class="newsletter-form"
-                >
-                    <input type="hidden" name="form-name" value="newsletter" />
-                    <p class="hidden">
-                        <label>Don't fill this out if you're human: <input name="bot-field" /></label>
-                    </p>
-                    <div class="newsletter-input-group">
-                        <input type="email" name="email" placeholder="Enter your email" required>
-                        <button type="submit" class="subscribe-btn">
-                            <i class="fas fa-paper-plane"></i>
-                            Subscribe
-                        </button>
-                    </div>
-                </form>
             </div>
         </section>
     </main>
