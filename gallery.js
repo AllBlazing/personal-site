@@ -1,4 +1,17 @@
 // Gallery implementation with navigation
+// --- Per-image style overrides for zoom, position, orientation, etc. ---
+const imageStyleOverrides = {
+    'Yemen wedding, 2011': { objectFit: 'contain', objectPosition: 'center center', transform: 'scale(0.8)' },
+    'UK Ironman Sherbourne, 2006': { objectFit: 'contain', objectPosition: 'center center', transform: 'scale(0.8)' },
+    'Summit of Potosi, Bolivia, 2006': { objectFit: 'contain', objectPosition: 'center center', transform: 'scale(0.8)' },
+    'Qualifying as a Chartered Surveyor, 2003': { objectFit: 'contain', objectPosition: 'center center', transform: 'scale(0.8)' },
+    'London to Istanbul by Motorbike, 2011': { objectFit: 'contain', objectPosition: 'center center', transform: 'scale(0.8)' },
+    'Saudi Arabia Marathon, 2012': { objectFit: 'contain', objectPosition: 'center center', transform: 'scale(0.8)' },
+    'Amsterdam Marathon, 2019 - breaking sub3': { objectFit: 'contain', objectPosition: 'center center', transform: 'scale(0.8)' },
+    'Summit of Cerro Chirripo, Costa Rica, 2005': { objectFit: 'contain', objectPosition: 'center center', transform: 'scale(0.8)' }
+};
+
+// --- Gallery image data ---
 const images = [
     {
         src: 'images-for-journey/Hyrox Berlin, 2025.jpg',
@@ -84,6 +97,7 @@ images.sort((a, b) => extractYear(b.src) - extractYear(a.src));
 let currentIndex = 0;
 const imagesPerView = 3;
 
+// --- Initialize the gallery and navigation ---
 function initGallery() {
     const container = document.querySelector('#journey-gallery');
     if (!container) {
@@ -114,70 +128,36 @@ function initGallery() {
         return;
     }
 
+    // --- Render the gallery images and navigation ---
     function updateGallery() {
         gallery.innerHTML = '';
-        
         for (let i = currentIndex; i < currentIndex + imagesPerView && i < images.length; i++) {
             const image = images[i];
             const item = document.createElement('div');
             item.className = 'gallery-item';
-            
             const imgWrapper = document.createElement('div');
             imgWrapper.className = 'gallery-img-wrapper';
-            
             const img = document.createElement('img');
             img.src = image.src;
             img.alt = image.title;
             img.title = image.title;
             img.loading = 'lazy';
-            // Per-image zoom/position/orientation
-            if (image.title === 'Yemen wedding, 2011') {
-                img.style.objectFit = 'contain';
-                img.style.objectPosition = 'center center';
-                img.style.transform = 'scale(0.8)';
-            } else if (image.title === 'UK Ironman Sherbourne, 2006') {
-                img.style.objectFit = 'contain';
-                img.style.objectPosition = 'center center';
-                img.style.transform = 'scale(0.8)';
-            } else if (image.title === 'Summit of Potosi, Bolivia, 2006') {
-                img.style.objectFit = 'contain';
-                img.style.objectPosition = 'center center';
-                img.style.transform = 'scale(0.8)';
-            } else if (image.title === 'Qualifying as a Chartered Surveyor, 2003') {
-                img.style.objectFit = 'contain';
-                img.style.objectPosition = 'center center';
-                img.style.transform = 'scale(0.8)';
-            } else if (image.title === 'London to Istanbul by Motorbike, 2011') {
-                img.style.objectFit = 'contain';
-                img.style.objectPosition = 'center center';
-                img.style.transform = 'scale(0.8)';
-            } else if (image.title === 'Saudi Arabia Marathon, 2012') {
-                img.style.objectFit = 'contain';
-                img.style.objectPosition = 'center center';
-                img.style.transform = 'scale(0.8)';
-            } else if (image.title === 'Amsterdam Marathon, 2019 - breaking sub3') {
-                img.style.objectFit = 'contain';
-                img.style.objectPosition = 'center center';
-                img.style.transform = 'scale(0.8)';
-            } else if (image.title === 'Summit of Cerro Chirripo, Costa Rica, 2005') {
-                img.style.objectFit = 'contain';
-                img.style.objectPosition = 'center center';
-                img.style.transform = 'scale(0.8)';
+            // --- Apply per-image style overrides if present ---
+            const styleOverride = imageStyleOverrides[image.title];
+            if (styleOverride) {
+                Object.assign(img.style, styleOverride);
             } else {
                 img.style.objectFit = 'cover';
                 img.style.objectPosition = 'center 30%';
             }
-            
             const caption = document.createElement('div');
             caption.className = 'gallery-caption';
             caption.textContent = image.title;
-            
             imgWrapper.appendChild(img);
             item.appendChild(imgWrapper);
             item.appendChild(caption);
             gallery.appendChild(item);
-            
-            // Handle image load errors
+            // --- Handle image load errors gracefully ---
             img.onerror = () => {
                 console.warn(`Failed to load image: ${image.src}`);
                 imgWrapper.innerHTML = `
@@ -188,35 +168,33 @@ function initGallery() {
                 `;
             };
         }
-
-        // Update button visibility
+        // --- Update navigation button visibility ---
         prevButton.style.display = currentIndex === 0 ? 'none' : 'flex';
         nextButton.style.display = currentIndex + imagesPerView >= images.length ? 'none' : 'flex';
     }
 
-    // Navigation handlers
+    // --- Navigation handlers ---
     prevButton.addEventListener('click', () => {
         if (currentIndex > 0) {
             currentIndex = Math.max(0, currentIndex - imagesPerView);
             updateGallery();
         }
     });
-
     nextButton.addEventListener('click', () => {
         if (currentIndex + imagesPerView < images.length) {
             currentIndex = Math.min(images.length - imagesPerView, currentIndex + imagesPerView);
             updateGallery();
         }
     });
-
-    // Initialize gallery
+    // --- Initialize gallery ---
     updateGallery();
     container.classList.add('loaded');
 }
 
-// Initialize gallery when DOM is ready
+// --- Initialize gallery when DOM is ready ---
 if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initGallery);
 } else {
     initGallery();
-} 
+}
+// --- End of gallery.js --- 

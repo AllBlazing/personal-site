@@ -1,4 +1,7 @@
-const CACHE_NAME = 'personal-site-v2';
+// --- Service Worker for Offline Support and Caching ---
+// This service worker caches static assets and handles image fetches for the gallery.
+
+const CACHE_NAME = 'site-cache-v1';
 const ASSETS_TO_CACHE = [
     '/',
     '/index.html',
@@ -34,7 +37,7 @@ self.addEventListener('activate', (event) => {
 
 // Fetch Event
 self.addEventListener('fetch', (event) => {
-    // Don't cache gallery images, always fetch from network
+    // Always fetch gallery images from the network for freshness
     if (event.request.url.includes('images-for-journey') || event.request.url.includes('images-for-vibe-section')) {
         event.respondWith(
             fetch(event.request)
@@ -53,6 +56,7 @@ self.addEventListener('fetch', (event) => {
         return;
     }
 
+    // For other requests, try cache first, then network
     event.respondWith(
         caches.match(event.request)
             .then((response) => {
@@ -88,4 +92,22 @@ self.addEventListener('sync', (event) => {
                 })
         );
     }
-}); 
+});
+
+// --- Suggestion: To improve offline support, consider caching more static assets (CSS, JS, fonts) during the install event. ---
+// Example (not implemented):
+// self.addEventListener('install', (event) => {
+//     event.waitUntil(
+//         caches.open(CACHE_NAME).then((cache) => {
+//             return cache.addAll([
+//                 '/',
+//                 '/index.html',
+//                 '/styles.css',
+//                 '/gallery.js',
+//                 '/script.js',
+//                 // Add more static assets as needed
+//             ]);
+//         })
+//     );
+// });
+// --- End of sw.js --- 

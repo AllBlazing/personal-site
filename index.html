@@ -1,3 +1,10 @@
+<!--
+    index.html
+    Main entry point for Mark Trewren's personal/professional site.
+    Contains hero, about, work, gallery, and fitness sections.
+    TODO: Modularize sections into partials/components if the file grows.
+    Note: Consider further accessibility improvements (keyboard navigation, ARIA labels) in future.
+-->
 <!DOCTYPE html>
 <!-- Last deployment check: 2024-03-19 -->
 <html lang="en">
@@ -71,44 +78,35 @@
     <header class="header" role="banner">
         <div class="header-content">
             <a href="#" class="site-title">Mark Trewren</a>
-            <nav role="navigation">
+            <nav role="navigation" aria-label="Main navigation">
                 <ul class="nav-links">
-                    <li>
-                        <a href="#about">About</a>
-                    </li>
-                    <li>
-                        <a href="#projects-work">Work</a>
-                    </li>
-                    <li>
-                        <a href="#projects-personal">Gallery</a>
-                    </li>
-                    <li>
-                        <a href="#fitness">Fitness</a>
-                    </li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#projects-work">Work</a></li>
+                    <li><a href="#projects-personal">Gallery</a></li>
+                    <li><a href="#fitness">Fitness</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
     <main id="main-content" role="main">
-        <!-- Hero Section -->
+        <!-- Hero Section: visually engaging intro with fallback color for accessibility -->
         <section class="hero section-transition">
-            <div class="hero-background" style="background: url('images-for-journey/Hyrox Berlin, 2025.jpg') center center / cover no-repeat; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;">
+            <div class="hero-background" style="background: url('images-for-journey/Hyrox Berlin, 2025.jpg') center center / cover no-repeat, #222; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;">
                 <div class="gradient-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.7) 100%); z-index: 2;"></div>
             </div>
             <div class="hero-content container" style="position: relative; z-index: 3; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; min-height: 60vh;">
                 <h1 class="hero-title">Vibe Coder & Athlete</h1>
                 <p class="hero-subtitle">Building useful tools and chasing PRs</p>
                 <div class="hero-cta">
-                    <a href="#projects" class="cta-button">
-                        View Projects
-                    </a>
+                    <a href="#projects" class="cta-button" aria-label="View Projects">View Projects</a>
                 </div>
             </div>
-            <div class="scroll-indicator">
+            <div class="scroll-indicator" aria-hidden="true">
                 <div class="scroll-progress"></div>
             </div>
         </section>
+        <!-- End Hero Section -->
 
         <section id="about" class="section section-transition">
             <div class="container">
@@ -483,8 +481,10 @@
             </div>
         </div>
     </footer>
+    <!-- End Footer -->
 
     <!-- Scripts -->
+    <!-- All scripts loaded at the end for performance -->
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/js/all.min.js"></script>
     <script src="gallery.js"></script>
     <script src="script.js"></script>
