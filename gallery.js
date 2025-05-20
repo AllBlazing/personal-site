@@ -1,82 +1,85 @@
 // Gallery implementation with navigation
 const images = [
     {
-        src: 'images-for-journey/yemen-wedding.jpeg',
-        title: 'Wedding in Yemen'
+        src: 'images-for-journey/Hyrox Berlin, 2025.jpg',
+        title: 'Hyrox Berlin, 2025'
     },
     {
-        src: 'images-for-journey/summit-of-potosi,-bolivia.jpeg',
-        title: 'Summit of Potosi, Bolivia'
+        src: 'images-for-journey/Yemen wedding, 2011, 20.jpeg',
+        title: 'Yemen wedding, 2011'
     },
     {
-        src: 'images-for-journey/saudi-marathon.jpeg',
-        title: 'Saudi Marathon'
+        src: 'images-for-journey/Summit-of-potosi,-bolivia, 2006.jpeg',
+        title: 'Summit of Potosi, Bolivia, 2006'
     },
     {
-        src: 'images-for-journey/saudi-desert-125cc.jpeg',
-        title: 'Desert Riding in Saudi'
+        src: 'images-for-journey/Amsterdam Marathon, 2019 - breaking sub3.png',
+        title: 'Amsterdam Marathon, 2019 - breaking sub3'
     },
     {
-        src: 'images-for-journey/rics.jpeg',
-        title: 'RICS'
+        src: 'images-for-journey/Summit of Cerro Chirripo, Costa Rica, 2005.png',
+        title: 'Summit of Cerro Chirripo, Costa Rica, 2005'
     },
     {
-        src: 'images-for-journey/on-top-of-car-saudi.jpg',
-        title: 'On Top of Car in Saudi'
+        src: 'images-for-journey/Sana, Yemen, 2011.png',
+        title: 'Sana, Yemen, 2011'
     },
     {
-        src: 'images-for-journey/Screenshot-2025-04-19-at-19.48.03.png',
-        title: 'Project Screenshot 1'
+        src: 'images-for-journey/Petra, 2012 .png',
+        title: 'Petra, Jordan, 2012'
     },
     {
-        src: 'images-for-journey/Screenshot-2025-04-19-at-19.46.17.png',
-        title: 'Project Screenshot 2'
+        src: 'images-for-journey/Pennine 100, Ultramarathon, 2006.png',
+        title: 'Pennine 100, Ultramarathon, 2006'
     },
     {
-        src: 'images-for-journey/Screenshot-2025-04-19-at-19.45.54.png',
-        title: 'Project Screenshot 3'
+        src: 'images-for-journey/Getting lost in Guatmalua, 2005.png',
+        title: 'Getting lost in Guatemala, 2005'
     },
     {
-        src: 'images-for-journey/Screenshot-2025-04-19-at-19.45.09.png',
-        title: 'Project Screenshot 4'
+        src: 'images-for-journey/Madain Salih, Saudi Arabia 2012.png',
+        title: 'Madain Salih, Saudi Arabia 2012'
     },
     {
-        src: 'images-for-journey/Screenshot-2025-04-19-at-19.45.00.png',
-        title: 'Project Screenshot 5'
+        src: 'images-for-journey/UK Ironman Sherbourne, 2006.png',
+        title: 'UK Ironman Sherbourne, 2006'
     },
     {
-        src: 'images-for-journey/Screenshot-2025-04-19-at-19.44.35.png',
-        title: 'Project Screenshot 6'
+        src: 'images-for-journey/Solo hike : climb to summit of Sajama, Bolivia, 2006.png',
+        title: 'Solo hike / climb to summit of Sajama, Bolivia, 2006'
     },
     {
-        src: 'images-for-journey/Screenshot-2025-04-19-at-19.44.19.png',
-        title: 'Project Screenshot 7'
+        src: 'images-for-journey/Papillon, London, 2004.png',
+        title: 'Papillon, London, 2004'
     },
     {
-        src: 'images-for-journey/Screenshot-2025-04-19-at-19.44.04.png',
-        title: 'Project Screenshot 8'
+        src: 'images-for-journey/The Dead Sea, 2012.png',
+        title: 'The Dead Sea, 2012'
     },
     {
-        src: 'images-for-journey/Screenshot-2025-04-19-at-19.43.44.png',
-        title: 'Project Screenshot 9'
+        src: 'images-for-journey/London to Istanbul by Motorbike, 2011.png',
+        title: 'London to Istanbul by Motorbike, 2011'
     },
     {
-        src: 'images-for-journey/Screenshot-2025-04-19-at-19.43.31.png',
-        title: 'Project Screenshot 10'
+        src: 'images-for-journey/Saudi Arabia Marathon, 2012.jpeg',
+        title: 'Saudi Arabia Marathon, 2012'
     },
     {
-        src: 'images-for-journey/Screenshot-2025-04-19-at-19.42.58.png',
-        title: 'Project Screenshot 11'
+        src: 'images-for-journey/Journey across the desert, Saudi Arabia, 2012.jpeg',
+        title: 'Journey across the desert, Saudi Arabia, 2012'
     },
     {
-        src: 'images-for-journey/Screenshot-2025-04-19-at-19.42.14.png',
-        title: 'Project Screenshot 12'
-    },
-    {
-        src: 'images-for-journey/Screenshot-2025-04-19-at-19.38.35.png',
-        title: 'Project Screenshot 13'
+        src: 'images-for-journey/Qualifying as a Chartered Surveyor, 2003.png',
+        title: 'Qualifying as a Chartered Surveyor, 2003'
     }
 ];
+
+// Sort images by year (descending, most recent first)
+function extractYear(str) {
+    const match = str.match(/(20\d{2}|19\d{2})/);
+    return match ? parseInt(match[0], 10) : 0;
+}
+images.sort((a, b) => extractYear(b.src) - extractYear(a.src));
 
 let currentIndex = 0;
 const imagesPerView = 3;
@@ -125,9 +128,45 @@ function initGallery() {
             const img = document.createElement('img');
             img.src = image.src;
             img.alt = image.title;
+            img.title = image.title;
             img.loading = 'lazy';
-            img.style.objectFit = 'cover';
-            img.style.objectPosition = 'center 30%';
+            // Per-image zoom/position/orientation
+            if (image.title === 'Yemen wedding, 2011') {
+                img.style.objectFit = 'contain';
+                img.style.objectPosition = 'center center';
+                img.style.transform = 'scale(0.8)';
+            } else if (image.title === 'UK Ironman Sherbourne, 2006') {
+                img.style.objectFit = 'contain';
+                img.style.objectPosition = 'center center';
+                img.style.transform = 'scale(0.8)';
+            } else if (image.title === 'Summit of Potosi, Bolivia, 2006') {
+                img.style.objectFit = 'contain';
+                img.style.objectPosition = 'center center';
+                img.style.transform = 'scale(0.8)';
+            } else if (image.title === 'Qualifying as a Chartered Surveyor, 2003') {
+                img.style.objectFit = 'contain';
+                img.style.objectPosition = 'center center';
+                img.style.transform = 'scale(0.8)';
+            } else if (image.title === 'London to Istanbul by Motorbike, 2011') {
+                img.style.objectFit = 'contain';
+                img.style.objectPosition = 'center center';
+                img.style.transform = 'scale(0.8)';
+            } else if (image.title === 'Saudi Arabia Marathon, 2012') {
+                img.style.objectFit = 'contain';
+                img.style.objectPosition = 'center center';
+                img.style.transform = 'scale(0.8)';
+            } else if (image.title === 'Amsterdam Marathon, 2019 - breaking sub3') {
+                img.style.objectFit = 'contain';
+                img.style.objectPosition = 'center center';
+                img.style.transform = 'scale(0.8)';
+            } else if (image.title === 'Summit of Cerro Chirripo, Costa Rica, 2005') {
+                img.style.objectFit = 'contain';
+                img.style.objectPosition = 'center center';
+                img.style.transform = 'scale(0.8)';
+            } else {
+                img.style.objectFit = 'cover';
+                img.style.objectPosition = 'center 30%';
+            }
             
             const caption = document.createElement('div');
             caption.className = 'gallery-caption';

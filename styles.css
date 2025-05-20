@@ -670,20 +670,29 @@ img {
 }
 
 .profile-image {
-    position: relative;
-    overflow: hidden;
-    border-radius: 12px;
+    min-height: unset;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 0;
+    background: none;
+    overflow: visible;
+    padding: 0;
 }
 
+.profile-image img,
 .profile-pic {
     width: 100%;
-    border-radius: 12px;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-    transition: transform 0.3s ease;
-}
-
-.profile-image:hover .profile-pic {
-    transform: scale(1.02);
+    max-width: 100%;
+    max-height: 600px;
+    object-fit: contain;
+    object-position: center center;
+    border: none;
+    border-radius: 0;
+    background: none;
+    display: block;
+    margin: 0 auto;
 }
 
 .about-text p {
