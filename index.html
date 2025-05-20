@@ -81,35 +81,34 @@
             <nav role="navigation" aria-label="Main navigation">
                 <ul class="nav-links">
                     <li><a href="#about">About</a></li>
-                    <li><a href="#projects-work">Work</a></li>
-                    <li><a href="#projects-personal">Gallery</a></li>
-                    <li><a href="#fitness">Fitness</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#training">Training</a></li>
                 </ul>
             </nav>
         </div>
     </header>
 
     <main id="main-content" role="main">
-        <!-- Hero Section: visually engaging intro with fallback color for accessibility -->
+        <!-- Hero Section -->
         <section class="hero section-transition">
-            <div class="hero-background" style="background: url('images-for-journey/Hyrox Berlin, 2025.jpg') center center / cover no-repeat, #222; position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;">
-                <div class="gradient-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(135deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.7) 100%); z-index: 2;"></div>
+            <div class="hero-background" style="background: url('images-for-journey/hyrox berlin running.jpg') center center / cover no-repeat, #000;">
+                <div class="gradient-overlay" style="background: linear-gradient(135deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.5) 100%);"></div>
             </div>
-            <div class="hero-content container" style="position: relative; z-index: 3; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; min-height: 60vh;">
-                <h1 class="hero-title">Vibe Coder & Athlete</h1>
-                <p class="hero-subtitle">Building useful tools and chasing PRs</p>
-                <div class="hero-cta">
-                    <a href="#projects" class="cta-button" aria-label="View Projects">View Projects</a>
+            <div class="hero-content container">
+                <p class="hero-subtitle" style="font-size:1.5rem; margin-bottom:2rem;">Passionate about training for Hyrox <br>and building useful Hyrox related projects.</p>
+                <div class="race-countdown-container">
+                    <div class="race-label">Next Race: <span class="race-name">Hyrox Maastricht</span> <span class="race-date">19th September, 2025</span></div>
+                    <div id="race-countdown" class="race-countdown"></div>
                 </div>
             </div>
-            <div class="scroll-indicator" aria-hidden="true">
-                <div class="scroll-progress"></div>
-            </div>
         </section>
-        <!-- End Hero Section -->
 
         <section id="about" class="section section-transition">
             <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-user"></i>
+                    About
+                </h2>
                 <div class="about-content" style="display: flex; flex-wrap: wrap; align-items: center; gap: 2rem;">
                     <div class="profile-image" style="flex: 1 1 350px; min-width: 300px; display: flex; align-items: center; justify-content: center;">
                         <img src="images-for-journey/Hyrox Berlin, 2025.jpg" alt="Hyrox Berlin, 2025" style="max-width: 100%; max-height: 420px; object-fit: contain; display: block; margin: 0 auto;">
@@ -126,12 +125,58 @@
             </div>
         </section>
 
+        <!-- HYROX Section -->
+        <section id="hyrox" class="section section-transition">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-laptop-code"></i>
+                    Projects
+                </h2>
+                <p class="section-subtitle" style="margin-top: -1rem; margin-bottom: 2rem; color: var(--text-secondary);">These are my current Hyrox related projects. I hope you like them.</p>
+                <div class="projects-grid">
+                    <div class="project-card">
+                        <div class="project-status">In Development</div>
+                        <h3>HYROX Training AI</h3>
+                        <p>AI-powered training program generator for HYROX athletes</p>
+                        <div class="project-features">
+                            <span>Personalized Programs</span>
+                            <span>Progress Tracking</span>
+                            <span>Movement Analysis</span>
+                        </div>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-status">Coming Soon</div>
+                        <h3>HYROX Community Platform</h3>
+                        <p>Connect, train, and compete with other HYROX athletes</p>
+                        <div class="project-features">
+                            <span>Community Forums</span>
+                            <span>Event Planning</span>
+                            <span>Training Groups</span>
+                        </div>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-status">Planning</div>
+                        <h3>HYROX Performance Analytics</h3>
+                        <p>Advanced analytics and insights for HYROX training</p>
+                        <div class="project-features">
+                            <span>Performance Metrics</span>
+                            <span>Competition Analysis</span>
+                            <span>Progress Tracking</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Training Dashboard -->
+        <!-- HYROX Training Progress section removed as requested -->
+
         <!-- Projects - Work Section -->
         <section id="projects-work" class="section section-transition">
             <div class="container">
                 <h2 class="section-title">
                     <i class="fas fa-briefcase"></i>
-                    projects - work
+                    Projects - Work
                 </h2>
                 <div class="projects-grid">
                     <div class="project-card">
@@ -176,7 +221,7 @@
             <div class="container">
                 <h2 class="section-title">
                     <i class="fas fa-camera"></i>
-                    projects - personal
+                    Projects - Personal
                 </h2>
                 <div id="journey-gallery" class="gallery-container">
                     <button class="gallery-nav prev" aria-label="Previous image">
@@ -197,7 +242,7 @@
             <div class="container">
                 <h2 class="section-title">
                     <i class="fas fa-dumbbell"></i>
-                    fitness
+                    Fitness
                 </h2>
                 <div class="training-content">
                     <div class="training-schedule">
@@ -501,90 +546,99 @@
         let currentLine = 0;
         const codeElement = document.querySelector('.code-animation');
         
-        function animateCode() {
-            codeElement.textContent = codeLines[currentLine];
-            currentLine = (currentLine + 1) % codeLines.length;
+        if (codeElement) {
+            function animateCode() {
+                codeElement.textContent = codeLines[currentLine];
+                currentLine = (currentLine + 1) % codeLines.length;
+            }
+            
+            animateCode();
+            setInterval(animateCode, 3000);
         }
-        
-        setInterval(animateCode, 3000);
-        
+
         // Scroll progress indicator
         window.addEventListener('scroll', () => {
             const scrollProgress = document.querySelector('.scroll-progress');
-            const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const scrolled = (window.scrollY / scrollHeight) * 100;
-            scrollProgress.style.width = scrolled + '%';
+            if (scrollProgress) {
+                const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const scrolled = (window.scrollY / scrollHeight) * 100;
+                scrollProgress.style.width = scrolled + '%';
+            }
         });
     </script>
 
     <!-- Interactive metric cards -->
     <script>
         document.querySelectorAll('.metric-card.interactive').forEach(card => {
-            card.addEventListener('mouseenter', function() {
-                const history = this.querySelector('.metric-history');
-                if (history) {
-                    history.style.display = 'block';
-                    // Initialize chart if not already initialized
-                    if (!history.dataset.initialized) {
-                        const canvas = history.querySelector('canvas');
-                        if (canvas) {
-                            const ctx = canvas.getContext('2d');
-                            new Chart(ctx, {
-                                type: 'line',
-                                data: {
-                                    labels: ['Jan', 'Feb', 'Mar', 'Apr'],
-                                    datasets: [{
-                                        label: canvas.id === 'vo2maxChart' ? 'VO2Max' : 'Pull-ups',
-                                        data: [55, 57, 58, 60],
-                                        borderColor: 'var(--accent-color)',
-                                        tension: 0.1
-                                    }]
-                                },
-                                options: {
-                                    responsive: true,
-                                    maintainAspectRatio: false
-                                }
-                            });
-                            history.dataset.initialized = true;
+            if (card) {
+                card.addEventListener('mouseenter', function() {
+                    const history = this.querySelector('.metric-history');
+                    if (history) {
+                        history.style.display = 'block';
+                        if (!history.dataset.initialized) {
+                            const canvas = history.querySelector('canvas');
+                            if (canvas) {
+                                const ctx = canvas.getContext('2d');
+                                new Chart(ctx, {
+                                    type: 'line',
+                                    data: {
+                                        labels: ['Jan', 'Feb', 'Mar', 'Apr'],
+                                        datasets: [{
+                                            label: canvas.id === 'vo2maxChart' ? 'VO2Max' : 'Pull-ups',
+                                            data: [55, 57, 58, 60],
+                                            borderColor: 'var(--accent-color)',
+                                            tension: 0.1
+                                        }]
+                                    },
+                                    options: {
+                                        responsive: true,
+                                        maintainAspectRatio: false
+                                    }
+                                });
+                                history.dataset.initialized = true;
+                            }
                         }
                     }
-                }
-            });
+                });
 
-            card.addEventListener('mouseleave', function() {
-                const history = this.querySelector('.metric-history');
-                if (history) {
-                    history.style.display = 'none';
-                }
-            });
+                card.addEventListener('mouseleave', function() {
+                    const history = this.querySelector('.metric-history');
+                    if (history) {
+                        history.style.display = 'none';
+                    }
+                });
+            }
         });
     </script>
 
     <!-- Mobile Share Script -->
     <script>
-        document.getElementById('mobile-share').addEventListener('click', async () => {
-            try {
-                if (navigator.share) {
-                    await navigator.share({
-                        title: 'Mark Trewren | Developer & Athlete',
-                        text: 'Check out my personal website',
-                        url: window.location.href
-                    });
-                } else {
-                    // Fallback for browsers that don't support Web Share API
-                    const shareUrl = window.location.href;
-                    const tempInput = document.createElement('input');
-                    document.body.appendChild(tempInput);
-                    tempInput.value = shareUrl;
-                    tempInput.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(tempInput);
-                    alert('Link copied to clipboard!');
+        const mobileShareButton = document.getElementById('mobile-share');
+        if (mobileShareButton) {
+             mobileShareButton.addEventListener('click', async () => {
+                try {
+                    if (navigator.share) {
+                        await navigator.share({
+                            title: 'Mark Trewren | Developer & Athlete',
+                            text: 'Check out my personal website',
+                            url: window.location.href
+                        });
+                    } else {
+                        // Fallback for browsers that don't support Web Share API
+                        const shareUrl = window.location.href;
+                        const tempInput = document.createElement('input');
+                        document.body.appendChild(tempInput);
+                        tempInput.value = shareUrl;
+                        tempInput.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(tempInput);
+                        alert('Link copied to clipboard!');
+                    }
+                } catch (err) {
+                    console.error('Error sharing:', err);
                 }
-            } catch (err) {
-                console.error('Error sharing:', err);
-            }
-        });
+            });
+        }
     </script>
 
     <!-- Mobile Navigation Script -->
@@ -593,46 +647,46 @@
             const mobileNav = document.querySelector('.mobile-nav');
             const mobileLinks = document.querySelectorAll('.mobile-nav-link');
             
-            // Smooth scroll for mobile navigation
-            mobileLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const targetId = link.getAttribute('href');
-                    const targetElement = document.querySelector(targetId);
-                    
-                    if (targetElement) {
-                        targetElement.scrollIntoView({
-                            behavior: 'smooth',
-                            block: 'start'
-                        });
-                    }
+            if (mobileNav) {
+                mobileLinks.forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const targetId = link.getAttribute('href');
+                        const targetElement = document.querySelector(targetId);
+                        
+                        if (targetElement) {
+                            targetElement.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                        }
+                    });
                 });
-            });
-            
-            // Handle mobile navigation visibility
-            let lastScrollTop = 0;
-            window.addEventListener('scroll', () => {
-                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
                 
-                if (scrollTop > lastScrollTop) {
-                    // Scrolling down
-                    mobileNav.style.transform = 'translateY(100%)';
-                } else {
-                    // Scrolling up
-                    mobileNav.style.transform = 'translateY(0)';
-                }
-                
-                lastScrollTop = scrollTop;
-            });
+                let lastScrollTop = 0;
+                window.addEventListener('scroll', () => {
+                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                    
+                    if (scrollTop > lastScrollTop) {
+                        mobileNav.style.transform = 'translateY(100%)';
+                    } else {
+                        mobileNav.style.transform = 'translateY(0)';
+                    }
+                    
+                    lastScrollTop = scrollTop;
+                });
+            }
         });
     </script>
 
     <!-- Update current month -->
     <script>
-        // Update current month
         const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
         const currentMonth = new Date().getMonth();
-        document.getElementById('current-month').textContent = months[currentMonth];
+        const monthElement = document.getElementById('current-month');
+        if (monthElement) {
+            monthElement.textContent = months[currentMonth];
+        }
     </script>
 </body>
 </html>

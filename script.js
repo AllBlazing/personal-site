@@ -36,63 +36,6 @@ function initializeUI() {
     initializeSmoothScroll();
     initializeShare();
     handleSectionTransitions();
-    initializeHero();
-}
-
-// Hero Section Animations
-function initializeHero() {
-    // Background slideshow
-    const slides = document.querySelectorAll('.background-slideshow .slide');
-    if (!slides.length) {
-        console.warn('No slideshow slides found');
-        return;
-    }
-
-    // Set image centering for hero background slides
-    slides.forEach(slide => {
-        slide.style.objectFit = 'cover';
-        slide.style.objectPosition = 'center 30%';
-    });
-
-    let currentSlide = 0;
-    let currentStat = 0;
-    const stats = ['Fitness', 'Productivity'];
-    const statValues = [85, 82];
-
-    function nextSlide() {
-        slides[currentSlide].classList.remove('active');
-        currentSlide = (currentSlide + 1) % slides.length;
-        slides[currentSlide].classList.add('active');
-    }
-
-    function updateStats() {
-        const statLoaders = document.querySelectorAll('.stat-loader');
-        statLoaders.forEach((loader, index) => {
-            const progressBar = loader.querySelector('.progress-fill');
-            const progressText = loader.querySelector('.progress-text');
-            const statLabel = loader.querySelector('.loader-label');
-            
-            if (progressBar && progressText && statLabel) {
-                progressBar.style.width = '0%';
-                progressText.textContent = 'Loading...';
-                statLabel.textContent = stats[index];
-                
-                setTimeout(() => {
-                    progressBar.style.width = `${statValues[index]}%`;
-                    progressText.textContent = `${statValues[index]}%`;
-                }, 100);
-            }
-        });
-    }
-
-    // Initialize first slide
-    slides[0].classList.add('active');
-
-    // Start slideshow
-    setInterval(nextSlide, 5000);
-
-    // Initialize stats
-    updateStats();
 }
 
 // Header scroll effect
@@ -177,25 +120,39 @@ function initializeShare() {
 
 // Handle section transitions
 function handleSectionTransitions() {
-    const sections = document.querySelectorAll('.section');
+    const sections = document.querySelectorAll('.section-transition'); // Target elements with this class
     const options = {
         root: null,
         rootMargin: '0px',
-        threshold: 0.1
+        threshold: 0.1 // Trigger when 10% of the element is visible
     };
 
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
                 entry.target.classList.add('active');
-                observer.unobserve(entry.target);
+                observer.unobserve(entry.target); // Stop observing once it's visible
             }
         });
     }, options);
 
     sections.forEach(section => {
-        section.classList.add('section-transition');
+        // Observe the section for future scrolling into view
         observer.observe(section);
+
+        // Also check if the section is already in the viewport on load
+        const rect = section.getBoundingClientRect();
+        const isAlreadyVisible = (
+            rect.top <= (window.innerHeight || document.documentElement.clientHeight) &&
+            rect.left <= (window.innerWidth || document.documentElement.clientWidth) &&
+            rect.bottom >= 0 &&
+            rect.right >= 0
+        );
+
+        if (isAlreadyVisible) {
+            section.classList.add('active');
+            observer.unobserve(section); // Stop observing if already visible
+        }
     });
 }
 
@@ -222,6 +179,19 @@ const STRAVA_CONFIG = {
 };
 
 async function initializeStrava() {
+    // Guard execution if Strava elements are not present
+    const activitiesContainer = document.getElementById('activities-list');
+    const distanceEl = document.getElementById('total-distance');
+    const timeEl = document.getElementById('total-time');
+    const elevationEl = document.getElementById('elevation-gain');
+    const countEl = document.getElementById('activity-count');
+    const statsContainer = document.querySelector('#stats .training-schedule'); // Assuming stats are in this container structure
+
+    if (!activitiesContainer && !distanceEl && !timeEl && !elevationEl && !countEl && !statsContainer) {
+        console.warn('Strava related DOM elements not found. Skipping Strava initialization.');
+        return;
+    }
+
     try {
         const accessToken = await getStravaAccessToken();
         if (accessToken) {
@@ -229,7 +199,9 @@ async function initializeStrava() {
         }
     } catch (error) {
         console.error('Strava initialization failed:', error);
-        updateStravaUI('Failed to initialize Strava');
+        // Update UI only if elements exist
+        if (activitiesContainer) updateActivityUI('Failed to load activities');
+        if (distanceEl) updateStatsUI('0');
     }
 }
 
@@ -398,6 +370,17 @@ function updateActivityUI(message) {
 const GITHUB_USERNAME = 'AllBlazing';
 
 async function initializeGitHub() {
+    // Guard execution if GitHub elements are not present
+    const reposEl = document.getElementById('github-repos');
+    const commitsEl = document.getElementById('github-commits');
+    const streakEl = document.getElementById('github-streak');
+    const contributionsContainer = document.querySelector('.github-contributions');
+
+    if (!reposEl && !commitsEl && !streakEl && !contributionsContainer) {
+        console.warn('GitHub related DOM elements not found. Skipping GitHub initialization.');
+        return;
+    }
+
     try {
         await Promise.all([
             fetchGitHubStats(),
@@ -405,7 +388,11 @@ async function initializeGitHub() {
         ]);
     } catch (error) {
         console.error('GitHub initialization failed:', error);
-        updateGitHubUI('Failed to initialize GitHub');
+        // Update UI only if elements exist
+        if (reposEl) reposEl.textContent = '0';
+        if (commitsEl) commitsEl.textContent = '0';
+        if (streakEl) streakEl.textContent = '0';
+        if (contributionsContainer) contributionsContainer.innerHTML = '<p class="error-message">Failed to load GitHub contributions</p>';
     }
 }
 
@@ -709,8 +696,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Remove any loading states
     const loadingElements = document.querySelectorAll('.loading');
     loadingElements.forEach(el => {
-        el.textContent = 'Data unavailable';
-        el.classList.remove('loading');
+        if (el) { // Add a check here too
+            el.textContent = 'Data unavailable';
+            el.classList.remove('loading');
+        }
     });
 
     const lazyLoader = new LazyLoader();
@@ -732,17 +721,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const header = document.querySelector('.header');
     let lastScroll = 0;
 
-    window.addEventListener('scroll', () => {
-        const currentScroll = window.pageYOffset;
-        
-        if (currentScroll > lastScroll && currentScroll > 100) {
-            header.classList.add('scrolled');
-        } else {
-            header.classList.remove('scrolled');
-        }
-        
-        lastScroll = currentScroll;
-    });
+    // Add check before adding event listener
+    if (header) {
+        window.addEventListener('scroll', () => {
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > lastScroll && currentScroll > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+            
+            lastScroll = currentScroll;
+        });
+    }
 
     // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -750,7 +742,7 @@ document.addEventListener('DOMContentLoaded', () => {
             e.preventDefault();
             const target = document.querySelector(this.getAttribute('href'));
             if (target) {
-                const headerOffset = header.offsetHeight;
+                const headerOffset = header ? header.offsetHeight : 0;
                 const elementPosition = target.getBoundingClientRect().top;
                 const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
@@ -778,27 +770,36 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }, observerOptions);
 
+    // Add check before observing sections
     document.querySelectorAll('.section').forEach(section => {
-        section.classList.add('fade-in');
-        observer.observe(section);
+        if (section) { // Add a check here
+            section.classList.add('fade-in');
+            observer.observe(section);
+        }
     });
 
     // Add reveal class to sections
     document.querySelectorAll('.section').forEach(section => {
-        section.classList.add('reveal');
+        if (section) { // Add a check here
+            section.classList.add('reveal');
+        }
     });
     
     // Add floating class to specific elements
     document.querySelectorAll('.cta-button, .metric-card').forEach(element => {
-        element.classList.add('floating');
+        if (element) { // Add a check here
+            element.classList.add('floating');
+        }
     });
 
     // Check if the messages feature/container exists before calling loadMessages
     const messagesContainerElement = document.getElementById('messages-container'); // Or the relevant container ID
-    if (messagesContainerElement) {
+    if (messagesContainerElement && typeof loadMessages === 'function') { // Also check if loadMessages function exists
         loadMessages(); 
-    } else {
+    } else if (!messagesContainerElement) {
         console.warn('Messages container not found. Skipping loadMessages().');
+    } else {
+         console.warn('loadMessages function not found. Skipping loadMessages().');
     }
 });
 
@@ -818,4 +819,117 @@ document.addEventListener('DOMContentLoaded', () => {
 // });
 
 // --- End of script.js ---
+
+// HYROX Training Dashboard
+function initializeHyroxDashboard() {
+    const movementStats = {
+        'Wall Balls': { target: 100, current: 85 },
+        'Sled Push': { target: 100, current: 75 },
+        'Burpee Broad Jumps': { target: 100, current: 90 }
+    };
+
+    // Update progress bars
+    Object.entries(movementStats).forEach(([movement, stats]) => {
+        // Fix: Use a supported method to find the stat-card and progress bar
+        // The :has and :contains selectors are not universally supported in querySelector
+        const statCards = document.querySelectorAll('.stat-card');
+        statCards.forEach(card => {
+            const heading = card.querySelector('h3');
+            if (heading && heading.textContent.includes(movement)) {
+                const progressBar = card.querySelector('.progress');
+                const statText = card.querySelector('.stat');
+                
+                if (progressBar && statText) {
+                    const percentage = (stats.current / stats.target) * 100;
+                    progressBar.style.width = `${percentage}%`;
+                    statText.textContent = `${percentage}% of target`;
+                }
+            }
+        });
+    });
+}
+
+// HYROX Project Cards Animation
+function initializeProjectCards() {
+    const projectCards = document.querySelectorAll('.project-card');
+    
+    projectCards.forEach(card => {
+        card.addEventListener('mouseenter', () => {
+            card.style.transform = 'translateY(-5px)';
+            card.style.boxShadow = '0 10px 20px rgba(0,0,0,0.2)';
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'translateY(0)';
+            card.style.boxShadow = 'none';
+        });
+    });
+}
+
+// Initialize HYROX components
+document.addEventListener('DOMContentLoaded', () => {
+    initializeHyroxDashboard();
+    initializeProjectCards();
+    
+    // ... existing initialization code ...
+});
+
+// --- HYROX Race Countdown Timer ---
+document.addEventListener('DOMContentLoaded', function() {
+    const countdownEl = document.getElementById('race-countdown');
+    if (!countdownEl) return;
+    const targetDate = new Date('2025-09-19T00:00:00+02:00'); // Maastricht is CEST
+
+    function pad(n) { return n < 10 ? '0' + n : n; }
+
+    function getTimeLeft() {
+        const now = new Date();
+        let diff = targetDate - now;
+        if (diff < 0) diff = 0;
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        // const hours = Math.floor((diff / (1000 * 60 * 60)) % 24); // Removed
+        // const minutes = Math.floor((diff / (1000 * 60)) % 60); // Removed
+        // const seconds = Math.floor((diff / 1000) % 60); // Removed
+        return { days /*, hours, minutes, seconds*/ }; // Only return days
+    }
+
+    // Initial render to create elements (only for days)
+    let last = {};
+    const initialTime = getTimeLeft();
+    countdownEl.innerHTML = `
+        <div class="countdown-segment"><span class="countdown-value">${pad(initialTime.days)}</span><span class="countdown-label">Days Left</span></div>
+        <!-- Removed segments for Hours, Minutes, Seconds -->
+    `;
+
+    // Get references to the spans after initial render (only for days)
+    const daysSpan = countdownEl.querySelector('.countdown-segment:nth-child(1) .countdown-value');
+    // const hoursSpan = countdownEl.querySelector('.countdown-segment:nth-child(2) .countdown-value'); // Removed
+    // const minutesSpan = countdownEl.querySelector('.countdown-segment:nth-child(3) .countdown-value'); // Removed
+    // const secondsSpan = countdownEl.querySelector('.countdown-segment:nth-child(4) .countdown-value'); // Removed
+
+    function renderCountdown() {
+        const { days /*, hours, minutes, seconds*/ } = getTimeLeft();
+        const values = [days /*, hours, minutes, seconds*/ ];
+        const spans = [daysSpan /*, hoursSpan, minutesSpan, secondsSpan*/ ];
+        const labels = ['Days Left' /*, 'Hours', 'Minutes', 'Seconds'*/ ];
+
+        values.forEach((val, i) => {
+            const paddedVal = pad(val);
+            // Check if value has actually changed
+            if (spans[i] && spans[i].textContent !== paddedVal) { // Added check for span existence
+                spans[i].textContent = paddedVal;
+                // Apply animation
+                spans[i].classList.remove('countdown-animate');
+                // Force reflow
+                void spans[i].offsetWidth;
+                spans[i].classList.add('countdown-animate');
+            }
+        });
+    }
+
+    // Initial call to set up spans and values
+    renderCountdown(); 
+    // Set interval for subsequent updates
+    setInterval(renderCountdown, 1000);
+});
 
