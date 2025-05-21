@@ -872,4 +872,173 @@ body {
     display: none;
 }
 
+/* --- Notes Tab Styles --- */
+.notes-container {
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    border: 1px solid var(--border-color);
+}
+
+.notes-textarea {
+    width: 100%;
+    min-height: 150px;
+    padding: var(--spacing-sm);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-primary);
+    font-size: var(--font-size-base);
+    resize: vertical;
+}
+
+.notes-textarea::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+.notes-timestamp {
+    margin-top: var(--spacing-sm);
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    text-align: right;
+}
+
+/* --- GitHub Contribution Graph Styles --- */
+.activity-github-graph svg {
+    width: 100%;
+    height: auto;
+    max-width: 800px;
+    margin: 20px auto;
+    display: block;
+    /* Add background for contrast */
+    background-color: #1a1a1a; /* Use a dark grey background */
+    padding: 10px;
+    border-radius: var(--border-radius);
+}
+
+.activity-github-graph .contribution-label {
+    font-size: 12px; /* Increased font size */
+    fill: var(--text-primary); /* Use primary text color (white) for clarity */
+}
+
+.activity-github-graph .day-label {
+    text-anchor: end;
+    alignment-baseline: middle;
+}
+
+.activity-github-graph .month-label {
+    text-anchor: start;
+    alignment-baseline: bottom;
+}
+
+.activity-github-graph .ContributionCalendar-day {
+    /* Add a subtle border */
+    stroke: rgba(255, 255, 255, 0.1);
+    stroke-width: 0.5px;
+}
+
+/* Define fill colors for different contribution levels (Dark grey -> Green gradient) */
+.activity-github-graph .ContributionCalendar-day[data-level="0"] {
+    fill: #161b22; /* Dark grey, similar to default GitHub */
+}
+
+.activity-github-graph .ContributionCalendar-day[data-level="1"] {
+    fill: #0e4429; /* Dark green */
+}
+
+.activity-github-graph .ContributionCalendar-day[data-level="2"] {
+    fill: #006d32; /* Medium green */
+}
+
+.activity-github-graph .ContributionCalendar-day[data-level="3"] {
+    fill: #26a641; /* Brighter green */
+}
+
+.activity-github-graph .ContributionCalendar-day[data-level="4"] {
+    fill: #39d353; /* Brightest green */
+}
+
+.activity-github-graph .ContributionCalendar-day title {
+    /* Styles for the tooltip - limited CSS control for native tooltips */
+    font-size: 12px;
+}
+
+/* --- Strava Stats and Activities Styles --- */
+.activity-stats .schedule-grid {
+    display: flex; /* Use flexbox */
+    flex-wrap: wrap; /* Allow items to wrap */
+    justify-content: space-around; /* Distribute space around items */
+    gap: 1.5rem; /* Slightly larger gap for better separation */
+}
+
+.activity-stats .stat-card {
+    flex: 1 1 auto; /* Allow cards to grow and shrink */
+    min-width: 150px; /* Minimum width for cards */
+    background: var(--bg-secondary); /* Consistent background */
+    border-radius: var(--border-radius-lg); /* More rounded corners */
+    padding: 1.5rem; /* Consistent padding */
+    border: none; /* Remove default border */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Add hover transition */
+    text-align: center; /* Center text within cards */
+}
+
+.activity-recent .schedule-grid {
+    gap: 1.5rem; /* Slightly larger gap for better separation */
+}
+
+.activity-stats .stat-card:hover, 
+.activity-recent .schedule-day:hover {
+    transform: translateY(-5px); /* Lift card on hover */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Increase shadow on hover */
+}
+
+.activity-stats h4, 
+.activity-recent h4 {
+    color: var(--accent-color); /* Highlight titles */
+    font-size: var(--font-size-xl); /* Larger font size for titles */
+    margin-bottom: 1rem; /* More space below title */
+}
+
+.activity-stats .training-cardio, 
+.activity-recent .activity-details {
+    color: var(--text-primary); /* Ensure text is visible */
+    font-size: var(--font-size-lg); /* Larger font size for stats/details */
+}
+
+.activity-recent .activity-details {
+    display: flex;
+    flex-direction: column; /* Stack details */
+    gap: 0.5rem; /* Space between detail lines */
+}
+
+.activity-recent .activity-type,
+.activity-recent .activity-stat {
+     font-size: var(--font-size-base); /* Adjust font size */
+     color: var(--text-primary); /* Use primary text color (white) for clarity */
+}
+
+.activity-recent .activity-stat i {
+    margin-right: 5px; /* Space between icon and text */
+    color: var(--accent-color); /* Color for icons */
+}
+
+/* Add specific colors for activity types if desired */
+.activity-recent .cardio-day .activity-type { color: var(--text-primary); }
+.activity-recent .strength-day .activity-type { color: var(--text-primary); }
+.activity-recent .hiit-day .activity-type { color: var(--text-primary); }
+.activity-recent .mixed-day .activity-type { color: var(--text-primary); }
+
+/* Style for the loading/error messages */
+.activity-stats .schedule-day .error-message, 
+.activity-recent .schedule-day .error-message {
+    color: var(--text-secondary); /* Ensure error messages are visible */
+    font-style: italic;
+    text-align: center;
+    padding: 1rem;
+}
+
 /* --- End of Styles --- */

@@ -9,11 +9,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Initialize core UI components
         initializeUI();
         
-        // Initialize Strava integration
+        // Initialize Strava integration (Called regardless of tab due to async loading)
         await initializeStrava();
         
-        // Initialize GitHub integration
+        // Initialize GitHub integration (Called regardless of tab due to async loading)
         await initializeGitHub();
+
+        // Initialize Activity tabs
+        initializeActivityTabs();
 
     } catch (error) {
         console.error('Initialization error:', error);
@@ -246,7 +249,7 @@ async function getActivities(accessToken) {
         startOfMonth.setHours(0, 0, 0, 0);
         
         const response = await fetch(
-            `https://www.strava.com/api/v3/athlete/activities?after=${Math.floor(startOfMonth.getTime() / 1000)}&per_page=30`,
+            `https://www.strava.com/api/v3/athlete/activities?after=${Math.floor(startOfMonth.getTime() / 1000)}&per_page=200`,
             {
                 headers: {
                     'Authorization': `Bearer ${accessToken}`
@@ -302,7 +305,12 @@ function displayActivities(activities) {
         return;
     }
     
-    const recentActivities = activities.slice(0, 4); // Show only 4 most recent activities
+    // Sort activities by date (most recent first)
+    const sortedActivities = [...activities].sort((a, b) => 
+        new Date(b.start_date) - new Date(a.start_date)
+    );
+    
+    const recentActivities = sortedActivities.slice(0, 4); // Show only 4 most recent activities
     container.innerHTML = recentActivities.map(activity => {
         const date = new Date(activity.start_date).toLocaleDateString('en-US', {
             month: 'short',
@@ -403,8 +411,9 @@ async function fetchGitHubStats() {
         if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
         const data = await response.json();
         
-        // Update repos count
-        document.getElementById('github-repos').textContent = data.public_repos;
+        // Update repos count - Add null check
+        const reposEl = document.getElementById('github-repos');
+        if (reposEl) reposEl.textContent = data.public_repos;
         
         // Fetch recent commits (last 30 days)
         const thirtyDaysAgo = new Date();
@@ -419,7 +428,9 @@ async function fetchGitHubStats() {
             .filter(event => event.type === 'PushEvent')
             .reduce((acc, event) => acc + event.payload.commits.length, 0);
         
-        document.getElementById('github-commits').textContent = commitCount;
+        // Update commits count - Add null check
+        const commitsEl = document.getElementById('github-commits');
+        if (commitsEl) commitsEl.textContent = commitCount;
         
         // Calculate current streak from events
         let currentStreak = 0;
@@ -449,13 +460,19 @@ async function fetchGitHubStats() {
             }
         }
         
-        document.getElementById('github-streak').textContent = currentStreak;
+        // Update streak count - Add null check
+        const streakEl = document.getElementById('github-streak');
+        if (streakEl) streakEl.textContent = currentStreak;
         
     } catch (error) {
         console.error('Error fetching GitHub stats:', error);
-        document.getElementById('github-repos').textContent = '0';
-        document.getElementById('github-commits').textContent = '0';
-        document.getElementById('github-streak').textContent = '0';
+        // Update UI only if elements exist
+        const reposEl = document.getElementById('github-repos');
+        if (reposEl) reposEl.textContent = '0';
+        const commitsEl = document.getElementById('github-commits');
+        if (commitsEl) commitsEl.textContent = '0';
+        const streakEl = document.getElementById('github-streak');
+        if (streakEl) streakEl.textContent = '0';
     }
 }
 
@@ -489,10 +506,12 @@ async function fetchGitHubContributions() {
         // Add day labels (only Mon/Wed/Fri)
         const days = ['', 'Mon', '', 'Wed', '', 'Fri', ''];
         days.forEach((day, index) => {
-            if (day) { // Only create labels for Mon/Wed/Fri
+            // Create labels only for specified days
+            if (day) {
                 const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
                 text.setAttribute('x', '0');
-                text.setAttribute('y', monthLabelHeight + (index * (cellSize + cellGap)) + cellSize);
+                // Adjust y position to align with the correct row
+                text.setAttribute('y', monthLabelHeight + index * (cellSize + cellGap) + (cellSize / 2) + 5); // Center text vertically with adjustment
                 text.setAttribute('class', 'contribution-label day-label');
                 text.textContent = day;
                 svg.appendChild(text);
@@ -552,19 +571,82 @@ async function fetchGitHubContributions() {
         container.innerHTML = '';
         container.appendChild(svg);
         
-        // Fetch contribution data from GitHub API
-        const eventsResponse = await fetch(`https://api.github.com/users/${GITHUB_USERNAME}/events/public`);
-        if (!eventsResponse.ok) throw new Error(`HTTP error! status: ${eventsResponse.status}`);
-        const events = await eventsResponse.json();
+        // Fetch contribution data from GitHub API with pagination
+        let allEvents = [];
+        let url = `https://api.github.com/users/${GITHUB_USERNAME}/events/public?per_page=100`; // Fetch max per page
+        let page = 1;
+        const maxPages = 10; // Limit to avoid infinite loops in case of API issues
+
+        while (url && page <= maxPages) {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+            const events = await response.json();
+            if (events.length === 0) break; // No more events
+
+            allEvents = allEvents.concat(events);
+
+            // Check if the last event is older than one year
+            const lastEventDate = new Date(events[events.length - 1].created_at);
+            if (lastEventDate < oneYearAgo) {
+                 break; // Stop fetching if we've gone back more than a year
+            }
+
+            // Check for the 'next' link in the Link header
+            const linkHeader = response.headers.get('Link');
+            if (linkHeader) {
+                const nextLinkMatch = linkHeader.match(/<([^>]+)>;\s*rel="next"/);
+                if (nextLinkMatch) {
+                    url = nextLinkMatch[1];
+                    page++;
+                } else {
+                    url = null; // No more pages
+                }
+            } else {
+                url = null; // No Link header, assume no more pages
+            }
+        }
         
         // Process events and update contribution cells
         const contributionMap = new Map();
-        events.forEach(event => {
-            if (event.type === 'PushEvent') {
-                const date = new Date(event.created_at).toDateString();
-                const currentCount = contributionMap.get(date) || 0;
-                contributionMap.set(date, currentCount + event.payload.commits.length);
+        allEvents.forEach(event => {
+            const date = new Date(event.created_at).toDateString();
+            let count = contributionMap.get(date) || 0;
+
+            // Count contributions based on event type
+            switch (event.type) {
+                case 'PushEvent':
+                    // Count commits in a push
+                    count += event.payload.commits.length;
+                    break;
+                case 'CreateEvent':
+                    // Count repository creation
+                    if (event.payload.ref_type === 'repository') {
+                        count += 1;
+                    }
+                    break;
+                case 'IssuesEvent':
+                    // Count opening issues
+                    if (event.payload.action === 'opened') {
+                        count += 1;
+                    }
+                    break;
+                case 'PullRequestEvent':
+                    // Count opening pull requests
+                    if (event.payload.action === 'opened') {
+                        count += 1;
+                    }
+                    break;
+                case 'IssueCommentEvent':
+                case 'PullRequestReviewEvent':
+                case 'PullRequestReviewCommentEvent':
+                    // Count comments and reviews
+                    count += 1;
+                    break;
+                // Add other relevant public event types here if needed
             }
+
+            contributionMap.set(date, count);
         });
         
         // Update cell colors and tooltips based on contribution count
@@ -575,8 +657,11 @@ async function fetchGitHubContributions() {
                 const weekIndex = Math.floor(daysSinceStart / 7);
                 const dayIndex = date.getDay();
                 
-                const cellIndex = weekIndex * 7 + dayIndex + months.length + days.length;
-                const cell = svg.children[cellIndex];
+                // Adjust dayIndex because getDay() returns 0 for Sunday, but the graph starts Monday
+                const adjustedDayIndex = (dayIndex === 0) ? 6 : dayIndex - 1;
+
+                const cell = svg.querySelector(`rect[x='${dayLabelWidth + weekIndex * (cellSize + cellGap)}'][y='${monthLabelHeight + adjustedDayIndex * (cellSize + cellGap)}']`);
+
                 if (cell) {
                     const level = count === 0 ? '0' : 
                                 count <= 2 ? '1' : 
@@ -589,6 +674,8 @@ async function fetchGitHubContributions() {
                     if (title) {
                         title.textContent = `${date.toLocaleDateString()} - ${count} contribution${count !== 1 ? 's' : ''}`;
                     }
+                } else {
+                    console.warn(`Could not find cell for date: ${date.toLocaleDateString()}`);
                 }
             }
         });
@@ -970,4 +1057,60 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+// --- Activity Tab Functionality ---
+function initializeActivityTabs() {
+    const activityTabsContainer = document.querySelector('#activity .tabs-container');
+    if (!activityTabsContainer) return;
+
+    const buttons = activityTabsContainer.querySelectorAll('.tab-button');
+    const panes = activityTabsContainer.querySelectorAll('.tab-pane');
+
+    buttons.forEach(button => {
+        button.addEventListener('click', () => {
+            // Remove active class from all buttons and panes in this container
+            buttons.forEach(btn => btn.classList.remove('active'));
+            panes.forEach(pane => pane.classList.remove('active'));
+
+            // Add active class to the clicked button
+            button.classList.add('active');
+
+            // Get the target tab pane ID from the data attribute
+            const targetTabId = button.dataset.tab;
+            const targetPane = activityTabsContainer.querySelector(`#${targetTabId}`);
+
+            // Add active class to the target pane
+            if (targetPane) {
+                targetPane.classList.add('active');
+
+                // Update timestamp if Notes tab is activated
+                if (targetTabId === 'notes') {
+                    updateNotesTimestamp();
+                }
+            }
+        });
+    });
+
+    // Activate the first tab by default if none are active
+    if (activityTabsContainer.querySelector('.tab-button.active') === null) {
+        const firstButton = activityTabsContainer.querySelector('.tab-button');
+        const firstPane = activityTabsContainer.querySelector('.tab-pane');
+        if (firstButton) firstButton.classList.add('active');
+        if (firstPane) firstPane.classList.add('active');
+        // If the first tab is 'notes', update timestamp on load
+        if (firstButton && firstButton.dataset.tab === 'notes') {
+             updateNotesTimestamp();
+        }
+    }
+}
+
+// Update timestamp for Notes tab
+function updateNotesTimestamp() {
+    const timestampSpan = document.getElementById('notes-last-updated');
+    if (timestampSpan) {
+        const now = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+        timestampSpan.textContent = now.toLocaleDateString('en-US', options);
+    }
+}
 

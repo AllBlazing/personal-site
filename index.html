@@ -368,63 +368,70 @@
                     Activity
                 </h2>
                 
-                <!-- Strava Monthly Stats -->
-                <div class="activity-stats training-schedule">
-                    <h3 class="section-subtitle">Strava Monthly Stats</h3>
-                    <div class="schedule-grid">
-                        <div class="schedule-day stat-card">
-                            <h4>Distance</h4>
-                            <div class="training-cardio" id="total-distance">Loading...</div>
-                        </div>
-                        <div class="schedule-day stat-card">
-                            <h4>Time</h4>
-                            <div class="training-cardio" id="total-time">Loading...</div>
-                        </div>
-                        <div class="schedule-day stat-card">
-                            <h4>Elevation</h4>
-                            <div class="training-cardio" id="elevation-gain">Loading...</div>
-                        </div>
-                        <div class="schedule-day stat-card">
-                            <h4>Activities</h4>
-                            <div class="training-cardio" id="activity-count">Loading...</div>
-                        </div>
+                <!-- Tabs -->
+                <div class="tabs-container">
+                    <div class="tabs-nav">
+                        <button class="tab-button active" data-tab="productivity">Productivity</button>
+                        <button class="tab-button" data-tab="fitness">Fitness</button>
+                        <button class="tab-button" data-tab="notes">Notes</button>
                     </div>
-                </div>
 
-                <!-- Recent Strava Activities -->
-                <div class="activity-recent training-schedule">
-                    <h3 class="section-subtitle">Recent Strava Activities</h3>
-                    <div class="schedule-grid" id="activities-list">
-                        <!-- Activities will be loaded here by script.js -->
-                        <div class="schedule-day">Loading activities...</div>
-                    </div>
-                </div>
+                    <!-- Tab Content -->
+                    <div class="tabs-content">
+                        <!-- Productivity Tab (GitHub) -->
+                        <div id="productivity" class="tab-pane active">
+                            <!-- GitHub Contribution Graph -->
+                            <div class="activity-github-graph">
+                                <h3 class="section-subtitle">GitHub Contributions (Last Year)</h3>
+                                <div class="github-contributions">
+                                    <!-- GitHub graph will be loaded here by script.js -->
+                                    <p>Loading contribution graph...</p>
+                                </div>
+                            </div>
+                        </div>
 
-                <!-- GitHub Stats -->
-                <div class="activity-stats training-schedule">
-                    <h3 class="section-subtitle">GitHub Stats</h3>
-                    <div class="schedule-grid">
-                        <div class="schedule-day stat-card">
-                            <h4>Public Repos</h4>
-                            <div class="training-strength" id="github-repos">Loading...</div>
-                        </div>
-                        <div class="schedule-day stat-card">
-                            <h4>Last 30 Days Commits</h4>
-                            <div class="training-strength" id="github-commits">Loading...</div>
-                        </div>
-                        <div class="schedule-day stat-card">
-                            <h4>Current Streak</h4>
-                            <div class="training-strength" id="github-streak">Loading...</div>
-                        </div>
-                    </div>
-                </div>
+                        <!-- Fitness Tab (Strava) -->
+                        <div id="fitness" class="tab-pane">
+                            <h3 class="section-subtitle">Strava Monthly Stats</h3>
+                            <div class="activity-stats training-schedule">
+                                <div class="schedule-grid">
+                                    <div class="schedule-day stat-card">
+                                        <h4>Distance</h4>
+                                        <div class="training-cardio" id="total-distance">Loading...</div>
+                                    </div>
+                                    <div class="schedule-day stat-card">
+                                        <h4>Time</h4>
+                                        <div class="training-cardio" id="total-time">Loading...</div>
+                                    </div>
+                                    <div class="schedule-day stat-card">
+                                        <h4>Elevation</h4>
+                                        <div class="training-cardio" id="elevation-gain">Loading...</div>
+                                    </div>
+                                    <div class="schedule-day stat-card">
+                                        <h4>Activities</h4>
+                                        <div class="training-cardio" id="activity-count">Loading...</div>
+                                    </div>
+                                </div>
+                            </div>
 
-                <!-- GitHub Contribution Graph -->
-                <div class="activity-github-graph">
-                    <h3 class="section-subtitle">GitHub Contributions (Last Year)</h3>
-                    <div class="github-contributions">
-                        <!-- GitHub graph will be loaded here by script.js -->
-                        <p>Loading contribution graph...</p>
+                            <!-- Recent Strava Activities -->
+                            <div class="activity-recent training-schedule">
+                                <h3 class="section-subtitle">Recent Strava Activities</h3>
+                                <div class="schedule-grid" id="activities-list">
+                                    <!-- Activities will be loaded here by script.js -->
+                                    <div class="schedule-day">Loading activities...</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Notes Tab -->
+                        <div id="notes" class="tab-pane">
+                            <h3 class="section-subtitle">Notes</h3>
+                            <div class="notes-container">
+                                <textarea class="notes-textarea" placeholder="Add your notes here...">Regarding Hyrox weaknesses, focusing on wall balls, BBJs and lunges. Regarding the endurance side, adding in more threshold work.</textarea>
+                                <div class="notes-timestamp">Last updated: <span id="notes-last-updated"></span></div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
