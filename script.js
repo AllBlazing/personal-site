@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         // Initialize GitHub integration
         await initializeGitHub();
-        
+
     } catch (error) {
         console.error('Initialization error:', error);
     }
