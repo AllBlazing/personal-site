@@ -72,6 +72,12 @@
             opacity: 1;
             transform: translateY(0);
         }
+
+        .activity-github-graph .day-label {
+            fill: #fff;
+            font-size: 16px;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -97,7 +103,7 @@
             </div>
             <div class="hero-content container">
                 <h2 class="hero-title">Developer & Athlete</h2>
-                <p class="hero-subtitle" style="font-size:1.5rem; margin-bottom:2rem;">Passionate about training for Hyrox <br>and <a href="#hyrox" style="color: inherit; text-decoration: underline;">building useful Hyrox related projects.</a></p>
+                <p class="hero-subtitle" style="font-size:1.5rem; margin-bottom:2rem;">Passionate about training for Hyrox <br>and <a href="#hyrox" style="color: inherit; text-decoration: underline;">building useful fitness related projects.</a></p>
                 <div class="race-countdown-container">
                     <div class="race-label">Next Race: <span class="race-name">Hyrox Maastricht</span> <span class="race-date">19th September, 2025</span></div>
                     <div id="race-countdown" class="race-countdown"></div>
@@ -202,7 +208,7 @@
                     <!-- Tab Content -->
                     <div class="tabs-content">
                         <div id="biomarkers" class="tab-pane active">
-                            <h3 class="section-subtitle">Current fitness and strength metrics:</h3>
+                            <h3 class="section-subtitle">Current metrics</h3>
                             <div class="biomarkers-content training-schedule">
                                 <div class="schedule-grid">
                                     <div class="schedule-day">
@@ -381,12 +387,9 @@
                         <!-- Productivity Tab (GitHub) -->
                         <div id="productivity" class="tab-pane active">
                             <!-- GitHub Contribution Graph -->
-                            <div class="activity-github-graph">
+                            <div class="activity-github-graph" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
                                 <h3 class="section-subtitle">GitHub Contributions (Last Year)</h3>
-                                <div class="github-contributions">
-                                    <!-- GitHub graph will be loaded here by script.js -->
-                                    <p>Loading contribution graph...</p>
-                                </div>
+                                <img src="https://ghchart.rshah.org/AllBlazing" alt="GitHub Contributions Chart" style="width:100%;max-width:800px;background:#222;border-radius:8px;display:block;margin:0 auto;">
                             </div>
                         </div>
 
@@ -415,9 +418,9 @@
                             </div>
 
                             <!-- Recent Strava Activities -->
-                            <div class="activity-recent training-schedule">
-                                <h3 class="section-subtitle">Recent Strava Activities</h3>
-                                <div class="schedule-grid" id="activities-list">
+                            <h3 class="section-subtitle" style="text-align: left; margin-left: 0;">Recent Strava Activities</h3>
+                            <div class="activity-recent training-schedule" style="display: block;">
+                                <div class="schedule-grid" id="activities-list" style="justify-content: flex-start;">
                                     <!-- Activities will be loaded here by script.js -->
                                     <div class="schedule-day">Loading activities...</div>
                                 </div>

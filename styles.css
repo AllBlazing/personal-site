@@ -920,18 +920,21 @@ body {
 }
 
 .activity-github-graph .contribution-label {
-    font-size: 12px; /* Increased font size */
+    font-size: 12px;
     fill: var(--text-primary); /* Use primary text color (white) for clarity */
+    font-weight: 500; /* Make text slightly bolder */
 }
 
 .activity-github-graph .day-label {
     text-anchor: end;
     alignment-baseline: middle;
+    fill: var(--accent-color); /* Use accent color for better visibility */
 }
 
 .activity-github-graph .month-label {
     text-anchor: start;
     alignment-baseline: bottom;
+    fill: var(--text-primary); /* Use primary text color for consistency */
 }
 
 .activity-github-graph .ContributionCalendar-day {
@@ -1041,4 +1044,73 @@ body {
     padding: 1rem;
 }
 
+/* --- Improved Recent Strava Activities Styles --- */
+.activity-recent.training-schedule {
+    display: block;
+    flex-direction: unset;
+    align-items: unset;
+    justify-content: unset;
+}
+
+#activities-list.schedule-grid {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    gap: 2rem;
+}
+
+#activities-list .schedule-day {
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    padding: 2rem 1.5rem;
+    min-width: 260px;
+    max-width: 320px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border: 1px solid var(--border-color);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+#activities-list .schedule-day:hover {
+    transform: translateY(-4px) scale(1.03);
+    box-shadow: 0 8px 24px rgba(226,254,56,0.10);
+}
+#activities-list h4 {
+    color: var(--accent-color);
+    font-size: 1.2rem;
+    margin-bottom: 0.7rem;
+    text-align: center;
+}
+#activities-list .activity-details {
+    gap: 0.3rem;
+    align-items: center;
+    text-align: center;
+}
+#activities-list .activity-type {
+    font-size: 1rem;
+    color: var(--text-primary);
+    font-weight: 500;
+}
+#activities-list .activity-date {
+    font-size: 1.1rem;
+    color: #fff;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-left: 0.3em;
+}
+#activities-list .activity-stat {
+    font-size: 0.95rem;
+    color: #fff;
+    font-weight: 600;
+}
+
 /* --- End of Styles --- */
+
+.biomarkers-content .schedule-grid {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 2rem;
+}

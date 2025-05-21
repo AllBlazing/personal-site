@@ -339,7 +339,7 @@ function displayActivities(activities) {
                 <h4>${activityIcon} ${activity.name}</h4>
                 <div class="training-${activityClass.replace('-day', '')}">
                     <div class="activity-details">
-                        <span class="activity-type">${activity.type} · ${date}</span>
+                        <span class="activity-type"><span class='activity-date'>${date}</span> · ${activity.type}</span>
                         <span class="activity-stat">${(activity.distance / 1000).toFixed(1)}km · ${formatDuration(activity.moving_time)}</span>
                         ${activity.total_elevation_gain ? `<span class="activity-stat">⛰️ ${Math.round(activity.total_elevation_gain)}m</span>` : ''}
                     </div>
@@ -506,12 +506,10 @@ async function fetchGitHubContributions() {
         // Add day labels (only Mon/Wed/Fri)
         const days = ['', 'Mon', '', 'Wed', '', 'Fri', ''];
         days.forEach((day, index) => {
-            // Create labels only for specified days
             if (day) {
                 const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
                 text.setAttribute('x', '0');
-                // Adjust y position to align with the correct row
-                text.setAttribute('y', monthLabelHeight + index * (cellSize + cellGap) + (cellSize / 2) + 5); // Center text vertically with adjustment
+                text.setAttribute('y', monthLabelHeight + index * (cellSize + cellGap) + (cellSize / 2) + 5);
                 text.setAttribute('class', 'contribution-label day-label');
                 text.textContent = day;
                 svg.appendChild(text);
@@ -547,7 +545,6 @@ async function fetchGitHubContributions() {
                 const cellDate = new Date(oneYearAgo);
                 cellDate.setDate(cellDate.getDate() + (week * 7) + day);
                 
-                // Only create cells up to today
                 if (cellDate <= today) {
                     const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
                     rect.setAttribute('x', dayLabelWidth + week * (cellSize + cellGap));
@@ -558,7 +555,6 @@ async function fetchGitHubContributions() {
                     rect.setAttribute('class', 'ContributionCalendar-day');
                     rect.setAttribute('data-level', '0');
                     
-                    // Add title for tooltip
                     const title = document.createElementNS('http://www.w3.org/2000/svg', 'title');
                     title.textContent = `${cellDate.toLocaleDateString()} - No contributions`;
                     rect.appendChild(title);
@@ -571,68 +567,61 @@ async function fetchGitHubContributions() {
         container.innerHTML = '';
         container.appendChild(svg);
         
-        // Fetch contribution data from GitHub API with pagination
+        // Fetch contribution data from GitHub API with improved pagination
         let allEvents = [];
-        let url = `https://api.github.com/users/${GITHUB_USERNAME}/events/public?per_page=100`; // Fetch max per page
         let page = 1;
-        const maxPages = 10; // Limit to avoid infinite loops in case of API issues
-
-        while (url && page <= maxPages) {
-            const response = await fetch(url);
-            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-
-            const events = await response.json();
-            if (events.length === 0) break; // No more events
-
-            allEvents = allEvents.concat(events);
-
-            // Check if the last event is older than one year
-            const lastEventDate = new Date(events[events.length - 1].created_at);
-            if (lastEventDate < oneYearAgo) {
-                 break; // Stop fetching if we've gone back more than a year
-            }
-
-            // Check for the 'next' link in the Link header
-            const linkHeader = response.headers.get('Link');
-            if (linkHeader) {
-                const nextLinkMatch = linkHeader.match(/<([^>]+)>;\s*rel="next"/);
-                if (nextLinkMatch) {
-                    url = nextLinkMatch[1];
-                    page++;
-                } else {
-                    url = null; // No more pages
+        const maxPages = 20; // Increased max pages to ensure we get all events
+        
+        while (page <= maxPages) {
+            const response = await fetch(
+                `https://api.github.com/users/${GITHUB_USERNAME}/events/public?per_page=100&page=${page}`,
+                {
+                    headers: {
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
                 }
-            } else {
-                url = null; // No Link header, assume no more pages
-            }
+            );
+            
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            
+            const events = await response.json();
+            if (events.length === 0) break;
+            
+            allEvents = allEvents.concat(events);
+            
+            // Check if we've gone back far enough
+            const lastEventDate = new Date(events[events.length - 1].created_at);
+            if (lastEventDate < oneYearAgo) break;
+            
+            page++;
         }
         
         // Process events and update contribution cells
         const contributionMap = new Map();
+        
+        // Sort events by date to ensure proper counting
+        allEvents.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
+        
         allEvents.forEach(event => {
             const date = new Date(event.created_at).toDateString();
             let count = contributionMap.get(date) || 0;
-
+            
             // Count contributions based on event type
             switch (event.type) {
                 case 'PushEvent':
-                    // Count commits in a push
                     count += event.payload.commits.length;
                     break;
                 case 'CreateEvent':
-                    // Count repository creation
                     if (event.payload.ref_type === 'repository') {
                         count += 1;
                     }
                     break;
                 case 'IssuesEvent':
-                    // Count opening issues
                     if (event.payload.action === 'opened') {
                         count += 1;
                     }
                     break;
                 case 'PullRequestEvent':
-                    // Count opening pull requests
                     if (event.payload.action === 'opened') {
                         count += 1;
                     }
@@ -640,12 +629,10 @@ async function fetchGitHubContributions() {
                 case 'IssueCommentEvent':
                 case 'PullRequestReviewEvent':
                 case 'PullRequestReviewCommentEvent':
-                    // Count comments and reviews
                     count += 1;
                     break;
-                // Add other relevant public event types here if needed
             }
-
+            
             contributionMap.set(date, count);
         });
         
@@ -659,9 +646,9 @@ async function fetchGitHubContributions() {
                 
                 // Adjust dayIndex because getDay() returns 0 for Sunday, but the graph starts Monday
                 const adjustedDayIndex = (dayIndex === 0) ? 6 : dayIndex - 1;
-
+                
                 const cell = svg.querySelector(`rect[x='${dayLabelWidth + weekIndex * (cellSize + cellGap)}'][y='${monthLabelHeight + adjustedDayIndex * (cellSize + cellGap)}']`);
-
+                
                 if (cell) {
                     const level = count === 0 ? '0' : 
                                 count <= 2 ? '1' : 
@@ -669,13 +656,10 @@ async function fetchGitHubContributions() {
                                 count <= 6 ? '3' : '4';
                     cell.setAttribute('data-level', level);
                     
-                    // Update tooltip
                     const title = cell.querySelector('title');
                     if (title) {
                         title.textContent = `${date.toLocaleDateString()} - ${count} contribution${count !== 1 ? 's' : ''}`;
                     }
-                } else {
-                    console.warn(`Could not find cell for date: ${date.toLocaleDateString()}`);
                 }
             }
         });
