@@ -1098,3 +1098,33 @@ function updateNotesTimestamp() {
     }
 }
 
+document.addEventListener('DOMContentLoaded', () => {
+    const heroBg = document.querySelector('.hero-background');
+    if (heroBg) {
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            heroBg.style.transform = `translateY(${scrolled * 0.5}px)`;
+        });
+    }
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const newsletterForm = document.querySelector('.newsletter-form');
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', function(e) {
+            setTimeout(() => {
+                const confirmation = document.createElement('div');
+                confirmation.textContent = 'Thank you for subscribing!';
+                confirmation.style.background = 'var(--accent-color)';
+                confirmation.style.color = '#000';
+                confirmation.style.padding = '1rem 2rem';
+                confirmation.style.borderRadius = '8px';
+                confirmation.style.marginTop = '1rem';
+                confirmation.style.textAlign = 'center';
+                confirmation.style.fontWeight = 'bold';
+                newsletterForm.parentNode.insertBefore(confirmation, newsletterForm.nextSibling);
+            }, 500);
+        });
+    }
+});
+
