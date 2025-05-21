@@ -634,6 +634,7 @@ body {
     position: relative;
     border: 1px solid var(--border-color);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
+    padding-top: 3rem;
 }
 
 .project-card:hover {
@@ -661,11 +662,11 @@ body {
 }
 
 .project-features span {
-    background: var(--secondary-color-transparent);
-    color: var(--secondary-color);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
     padding: 0.25rem 0.75rem;
     border-radius: 20px;
-    font-size: 0.875rem;
+    font-size: 0.8rem;
 }
 
 /* --- Training Dashboard --- */
@@ -716,6 +717,7 @@ body {
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none; /* Hide scrollbar for Firefox */
     -ms-overflow-style: none;  /* Hide scrollbar for IE and Edge */
+    justify-content: center; /* Center the tabs */
 }
 
 .tabs-nav::-webkit-scrollbar {
@@ -799,6 +801,75 @@ body {
 .training-hiit .timestamp {
     font-size: 0.9em; /* Slightly smaller than parent font size */
     opacity: 0.8;
+}
+
+/* --- Newsletter Section --- */
+.newsletter-section {
+    background-color: var(--bg-secondary); /* Or another background color */
+    padding: var(--section-padding) 0;
+    text-align: center;
+}
+
+.newsletter-section h2 {
+    color: var(--accent-color);
+    margin-bottom: var(--spacing-sm);
+}
+
+.newsletter-section p {
+    color: var(--text-primary);
+    margin-bottom: var(--spacing-md);
+}
+
+.newsletter-form {
+    max-width: 500px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+}
+
+.newsletter-input-group {
+    display: flex;
+    width: 100%;
+    gap: var(--spacing-sm);
+}
+
+.newsletter-input-group input[type="email"] {
+    flex-grow: 1;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-sm);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-size: var(--font-size-base);
+}
+
+.newsletter-input-group input[type="email"]::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+.subscribe-btn {
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: var(--accent-color);
+    color: var(--bg-primary);
+    border: none;
+    border-radius: var(--border-radius-sm);
+    cursor: pointer;
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    transition: background-color var(--transition-fast) ease;
+}
+
+.subscribe-btn:hover {
+    background-color: var(--secondary-color);
+    color: var(--text-primary);
+}
+
+/* Style for the hidden honeypot field */
+.newsletter-form .hidden {
+    display: none;
 }
 
 /* --- End of Styles --- */
