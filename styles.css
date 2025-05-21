@@ -703,4 +703,102 @@ body {
     transition: width 0.3s ease;
 }
 
+/* --- Tab Styles --- */
+.tabs-container {
+    margin-top: var(--spacing-xl);
+}
+
+.tabs-nav {
+    display: flex;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: var(--spacing-md);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Hide scrollbar for Firefox */
+    -ms-overflow-style: none;  /* Hide scrollbar for IE and Edge */
+}
+
+.tabs-nav::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+}
+
+.tab-button {
+    background: none;
+    border: none;
+    padding: var(--spacing-sm) var(--spacing-md);
+    color: var(--text-secondary);
+    font-size: var(--font-size-base);
+    cursor: pointer;
+    transition: color var(--transition-base), border-bottom-color var(--transition-base);
+    border-bottom: 2px solid transparent;
+    flex-shrink: 0;
+}
+
+.tab-button:hover {
+    color: var(--text-primary);
+}
+
+.tab-button.active {
+    color: var(--accent-color);
+    border-bottom-color: var(--accent-color);
+}
+
+.tabs-content .tab-pane {
+    display: none;
+    padding-top: var(--spacing-md);
+}
+
+.tabs-content .tab-pane.active {
+    display: block;
+}
+
+/* Responsive adjustments for tabs */
+@media (max-width: 480px) {
+    .tab-button {
+        font-size: var(--font-size-sm);
+        padding: var(--spacing-sm);
+    }
+    .tabs-nav {
+        gap: var(--spacing-sm);
+    }
+}
+
+/* --- Training Schedule Grid Adjustments --- */
+.training-schedule .schedule-grid {
+    gap: var(--spacing-md);
+}
+
+.training-schedule .schedule-day {
+    padding: var(--spacing-md);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+}
+
+.training-schedule .schedule-day h4 {
+    margin-top: 0;
+    margin-bottom: var(--spacing-sm);
+    color: var(--accent-color);
+    font-size: var(--font-size-lg);
+}
+
+.supplement-item {
+    margin-bottom: var(--spacing-sm);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px dashed rgba(255,255,255,0.1);
+}
+
+.supplement-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+/* Style for timestamps within training info */
+.training-cardio .timestamp,
+.training-strength .timestamp,
+.training-hiit .timestamp {
+    font-size: 0.9em; /* Slightly smaller than parent font size */
+    opacity: 0.8;
+}
+
 /* --- End of Styles --- */

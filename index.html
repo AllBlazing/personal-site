@@ -167,10 +167,182 @@
                 </div>
             </div>
         </section>
+ <!-- Training Section with Tabs -->
+ <section id="training" class="section section-transition">
+    <div class="container">
+        <h2 class="section-title">
+            <i class="fas fa-dumbbell"></i>
+            Training
+        </h2>
 
-        <!-- Training Dashboard -->
-        <!-- HYROX Training Progress section removed as requested -->
+        <!-- Tabs -->
+        <div class="tabs-container">
+            <div class="tabs-nav">
+                <button class="tab-button active" data-tab="biomarkers">Biomarkers</button>
+                <button class="tab-button" data-tab="schedule">Schedule</button>
+                <button class="tab-button" data-tab="supplements">Supplements</button>
+            </div>
 
+            <!-- Tab Content -->
+            <div class="tabs-content">
+                <div id="biomarkers" class="tab-pane active">
+                    <h3 class="section-subtitle">Current fitness and strength metrics:</h3>
+                    <div class="biomarkers-content training-schedule">
+                        <div class="schedule-grid">
+                            <div class="schedule-day">
+                                <h4>VO2 Max</h4>
+                                <div class="training-cardio">63 ml/kg/min <span class="timestamp">(7th May, 2025)</span></div>
+                            </div>
+                            <div class="schedule-day">
+                                <h4>Resting Heart Rate (RHR)</h4>
+                                <div class="training-cardio">42 BPM <span class="timestamp">(7th May, 2025)</span></div>
+                            </div>
+                            <div class="schedule-day">
+                                <h4>Deadlift</h4>
+                                <div class="training-cardio">?kg @77kg BW</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="schedule" class="tab-pane">
+                    <h3 class="section-subtitle">Training Schedule</h3>
+                    <div class="training-content">
+                        <div class="training-schedule">
+                            <div class="schedule-grid">
+                                <div class="schedule-day strength-day">
+                                    <h4>Monday</h4>
+                                    <div class="training-strength">Strength + HIIT (with wall ball focus)</div>
+                                </div>
+                                <div class="schedule-day cardio-day">
+                                    <h4>Tuesday</h4>
+                                    <div class="training-cardio">Running - 45' (threshold work)</div>
+                                </div>
+                                <div class="schedule-day hiit-day">
+                                    <h4>Wednesday</h4>
+                                    <div class="training-hiit">HIIT + Core or Hyrox- 45'</div>
+                                </div>
+                                <div class="schedule-day cardio-day">
+                                    <h4>Thursday</h4>
+                                    <div class="training-cardio">Running - 1h (threshold work)</div>
+                                    <div class="training-cardio">Rowing - 40' (threshold)</div>
+                                </div>
+                                <div class="schedule-day strength-day">
+                                    <h4>Friday</h4>
+                                    <div class="training-strength">Strength + HIIT</div>
+                                    <div class="schedule-note">*skip double if tired</div>
+                                </div>
+                                <div class="schedule-day cardio-day">
+                                    <h4>Saturday</h4>
+                                    <div class="training-cardio">AM Tennis - 1h</div>
+                                </div>
+                                <div class="schedule-day hyrox-day">
+                                    <h4>Sunday</h4>
+                                    <div class="training-hyrox">Hyrox - 90'</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="supplements" class="tab-pane">
+                     <h3 class="section-subtitle">Supplements 💊</h3>
+                     <div class="training-schedule">
+                         <div class="schedule-grid">
+                             <!-- Morning Stack -->
+                             <div class="schedule-day strength-day">
+                                 <h4>
+                                     <i class="fas fa-sun"></i>
+                                     Morning Stack 🌅
+                                 </h4>
+                                 <div class="training-strength">
+                                     <div class="supplement-item">
+                                         <span class="supplement-name">🌿 Turmeric (w/ Ginger & Black Pepper)</span>
+                                         <span class="supplement-dosage">1340mg</span>
+                                     </div>
+                                     <div class="supplement-item">
+                                         <span class="supplement-name">🥤 Beetroot Extract</span>
+                                         <span class="supplement-dosage">3000mg</span>
+                                     </div>
+                                 </div>
+                             </div>
+
+                             <!-- Post-Workout -->
+                             <div class="schedule-day cardio-day">
+                                 <h4>
+                                     <i class="fas fa-blender"></i>
+                                     Post-Workout 🥤
+                                 </h4>
+                                 <div class="training-cardio">
+                                     <div class="supplement-item">
+                                         <span class="supplement-name">🥛 Whey Protein (Grass-Fed) - unflavoured</span>
+                                         <span class="supplement-dosage">30g</span>
+                                     </div>
+                                     <div class="supplement-item">
+                                         <span class="supplement-name">💪 Creatine Monohydrate - unflavoured</span>
+                                         <span class="supplement-dosage">5g</span>
+                                     </div>
+                                     <div class="supplement-item">
+                                         <span class="supplement-name">🧂 Himalayan Pink Salt</span>
+                                         <span class="supplement-dosage">1/4 tsp</span>
+                                     </div>
+                                     <div class="supplement-item">
+                                         <span class="supplement-name">🥥 Coconut Water - bio</span>
+                                         <span class="supplement-dosage">1/2 cup</span>
+                                     </div>
+                                     <div class="supplement-item">
+                                         <span class="supplement-name">🍯 Honey</span>
+                                         <span class="supplement-dosage">1 tbsp</span>
+                                     </div>
+                                     <div class="supplement-item">
+                                         <span class="supplement-name">🍋 Lemon Juice</span>
+                                         <span class="supplement-dosage">Half a lemon</span>
+                                     </div>
+                                     <div class="supplement-item">
+                                         <span class="supplement-name">🥬 Kale / Spinach leaves</span>
+                                         <span class="supplement-dosage">Handful</span>
+                                     </div>
+                                     <div class="supplement-item">
+                                         <span class="supplement-name">🍍 Pineapple Chunks</span>
+                                         <span class="supplement-dosage">1/2 cup</span>
+                                     </div>
+                                     <div class="supplement-item">
+                                         <span class="supplement-name">💧 Water</span>
+                                         <span class="supplement-dosage">1/2 cup (or more)</span>
+                                     </div>
+                                 </div>
+                             </div>
+
+                             <!-- Sleep Stack -->
+                             <div class="schedule-day hiit-day">
+                                 <h4>
+                                     <i class="fas fa-moon"></i>
+                                     Sleep Stack 😴
+                                 </h4>
+                                 <div class="training-hiit">
+                                     <div class="supplement-item">
+                                         <span class="supplement-name">🍒 Montmorency Cherry</span>
+                                         <span class="supplement-dosage">1000mg</span>
+                                     </div>
+                                     <div class="supplement-item">
+                                         <span class="supplement-name">🌺 Saffron</span>
+                                         <span class="supplement-dosage">28mg</span>
+                                     </div>
+                                     <div class="supplement-item">
+                                         <span class="supplement-name">🧠 L-Theanine</span>
+                                         <span class="supplement-dosage">200mg</span>
+                                     </div>
+                                     <div class="supplement-item">
+                                         <span class="supplement-name">🧂 Magnesium Glycinate</span>
+                                         <span class="supplement-dosage">300mg</span>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
         <!-- Projects - Personal Section -->
         <section id="projects-personal" class="section section-transition">
             <div class="container">
@@ -220,203 +392,7 @@
             </div>
         </section>
 
-        <!-- Fitness Section -->
-        <section id="fitness" class="section section-transition">
-            <div class="container">
-                <h2 class="section-title">
-                    <i class="fas fa-dumbbell"></i>
-                    Fitness
-                </h2>
-                <div class="training-content">
-                    <div class="training-schedule">
-                        <h3 class="section-subtitle">Training Schedule</h3>
-                        <div class="schedule-grid">
-                            <div class="schedule-day strength-day">
-                                <h4>Monday</h4>
-                                <div class="training-strength">Strength - 1h (with wall ball focus)</div>
-                            </div>
-                            <div class="schedule-day cardio-day">
-                                <h4>Tuesday</h4>
-                                <div class="training-cardio">Running - 45' (vo2 work)</div>
-                            </div>
-                            <div class="schedule-day hiit-day">
-                                <h4>Wednesday</h4>
-                                <div class="training-hiit">HIIT + Core - 45'</div>
-                            </div>
-                            <div class="schedule-day strength-day">
-                                <h4>Thursday</h4>
-                                <div class="training-strength">Strength - 1h (with wall ball focus)</div>
-                            </div>
-                            <div class="schedule-day cardio-day">
-                                <h4>Friday</h4>
-                                <div class="training-cardio">AM Running - 1h (threshold)</div>
-                                <div class="training-cardio">PM Rowing - 40' (threshold)</div>
-                                <div class="schedule-note">*skip double if tired</div>
-                            </div>
-                            <div class="schedule-day mixed-day">
-                                <h4>Saturday</h4>
-                                <div class="training-hiit">AM HIIT + Core - 45'</div>
-                                <div class="training-cardio">AM Tennis - 1h</div>
-                            </div>
-                            <div class="schedule-day hyrox-day">
-                                <h4>Sunday</h4>
-                                <div class="training-hyrox">Hyrox - 90'</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
         <!-- Stats Section -->
-        <section id="stats" class="section">
-            <div class="container">
-                <h2 class="section-title">
-                    <i class="fas fa-chart-line"></i>
-                    Current Stats 📊
-                </h2>
-                
-                <!-- Monthly Activity Summary -->
-                <div class="training-schedule">
-                    <h3 class="section-subtitle">
-                        <i class="fab fa-strava"></i>
-                        Monthly Activity Summary 📅
-                    </h3>
-                    <div class="schedule-grid">
-                        <div class="schedule-day cardio-day">
-                            <h4>Distance 📏</h4>
-                            <div class="training-cardio" id="total-distance">0 km</div>
-                        </div>
-                        <div class="schedule-day strength-day">
-                            <h4>Time ⏱️</h4>
-                            <div class="training-strength" id="total-time">0h</div>
-                        </div>
-                        <div class="schedule-day hiit-day">
-                            <h4>Elevation ⛰️</h4>
-                            <div class="training-hiit" id="elevation-gain">0m</div>
-                        </div>
-                        <div class="schedule-day mixed-day">
-                            <h4>Activities 🎯</h4>
-                            <div class="training-hyrox" id="activity-count">0</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Latest Activities -->
-                <div class="training-schedule">
-                    <h3 class="section-subtitle">
-                        <i class="fas fa-history"></i>
-                        Latest Activities 🏃‍♂️
-                    </h3>
-                    <div id="activities-list" class="schedule-grid">
-                        <!-- Activities will be dynamically added here -->
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Supplements Section -->
-        <section id="supplements" class="section">
-            <div class="container">
-                <h2 class="section-title">
-                    <i class="fas fa-pills"></i>
-                    Supplements 💊
-                </h2>
-                <div class="training-schedule">
-                    <div class="schedule-grid">
-                        <!-- Morning Stack -->
-                        <div class="schedule-day strength-day">
-                            <h4>
-                                <i class="fas fa-sun"></i>
-                                Morning Stack 🌅
-                            </h4>
-                            <div class="training-strength">
-                                <div class="supplement-item">
-                                    <span class="supplement-name">🌿 Turmeric (w/ Ginger & Black Pepper)</span>
-                                    <span class="supplement-dosage">1340mg</span>
-                                </div>
-                                <div class="supplement-item">
-                                    <span class="supplement-name">🥤 Beetroot Extract</span>
-                                    <span class="supplement-dosage">3000mg</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Post-Workout -->
-                        <div class="schedule-day cardio-day">
-                            <h4>
-                                <i class="fas fa-blender"></i>
-                                Post-Workout 🥤
-                            </h4>
-                            <div class="training-cardio">
-                                <div class="supplement-item">
-                                    <span class="supplement-name">🥛 Whey Protein (Grass-Fed) - unflavoured</span>
-                                    <span class="supplement-dosage">30g</span>
-                                </div>
-                                <div class="supplement-item">
-                                    <span class="supplement-name">💪 Creatine Monohydrate - unflavoured</span>
-                                    <span class="supplement-dosage">5g</span>
-                                </div>
-                                <div class="supplement-item">
-                                    <span class="supplement-name">🧂 Himalayan Pink Salt</span>
-                                    <span class="supplement-dosage">1/4 tsp</span>
-                                </div>
-                                <div class="supplement-item">
-                                    <span class="supplement-name">🥥 Coconut Water - bio</span>
-                                    <span class="supplement-dosage">1/2 cup</span>
-                                </div>
-                                <div class="supplement-item">
-                                    <span class="supplement-name">🍯 Honey</span>
-                                    <span class="supplement-dosage">1 tbsp</span>
-                                </div>
-                                <div class="supplement-item">
-                                    <span class="supplement-name">🍋 Lemon Juice</span>
-                                    <span class="supplement-dosage">Half a lemon</span>
-                                </div>
-                                <div class="supplement-item">
-                                    <span class="supplement-name">🥬 Kale / Spinach leaves</span>
-                                    <span class="supplement-dosage">Handful</span>
-                                </div>
-                                <div class="supplement-item">
-                                    <span class="supplement-name">🍍 Pineapple Chunks</span>
-                                    <span class="supplement-dosage">1/2 cup</span>
-                                </div>
-                                <div class="supplement-item">
-                                    <span class="supplement-name">💧 Water</span>
-                                    <span class="supplement-dosage">1/2 cup (or more)</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Sleep Stack -->
-                        <div class="schedule-day hiit-day">
-                            <h4>
-                                <i class="fas fa-moon"></i>
-                                Sleep Stack 😴
-                            </h4>
-                            <div class="training-hiit">
-                                <div class="supplement-item">
-                                    <span class="supplement-name">🍒 Montmorency Cherry</span>
-                                    <span class="supplement-dosage">1000mg</span>
-                                </div>
-                                <div class="supplement-item">
-                                    <span class="supplement-name">🌺 Saffron</span>
-                                    <span class="supplement-dosage">28mg</span>
-                                </div>
-                                <div class="supplement-item">
-                                    <span class="supplement-name">🧠 L-Theanine</span>
-                                    <span class="supplement-dosage">200mg</span>
-                                </div>
-                                <div class="supplement-item">
-                                    <span class="supplement-name">🧂 Magnesium Glycinate</span>
-                                    <span class="supplement-dosage">300mg</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
     </main>
 
     <!-- Footer -->

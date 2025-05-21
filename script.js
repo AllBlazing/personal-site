@@ -933,3 +933,41 @@ document.addEventListener('DOMContentLoaded', function() {
     setInterval(renderCountdown, 1000);
 });
 
+// Tab Functionality
+document.addEventListener('DOMContentLoaded', () => {
+    const tabsContainers = document.querySelectorAll('.tabs-container');
+
+    tabsContainers.forEach(container => {
+        const buttons = container.querySelectorAll('.tab-button');
+        const panes = container.querySelectorAll('.tab-pane');
+
+        buttons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active class from all buttons and panes in this container
+                buttons.forEach(btn => btn.classList.remove('active'));
+                panes.forEach(pane => pane.classList.remove('active'));
+
+                // Add active class to the clicked button
+                button.classList.add('active');
+
+                // Get the target tab pane ID from the data attribute
+                const targetTab = button.dataset.tab;
+                const targetPane = container.querySelector(`#${targetTab}`);
+
+                // Add active class to the target pane
+                if (targetPane) {
+                    targetPane.classList.add('active');
+                }
+            });
+        });
+
+        // Activate the first tab by default if none are active
+        if (container.querySelector('.tab-button.active') === null) {
+             const firstButton = container.querySelector('.tab-button');
+             const firstPane = container.querySelector('.tab-pane');
+             if (firstButton) firstButton.classList.add('active');
+             if (firstPane) firstPane.classList.add('active');
+        }
+    });
+});
+
