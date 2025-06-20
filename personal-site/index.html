@@ -1,0 +1,373 @@
+<!--
+    index.html
+    Main entry point for Mark Trewren's personal/professional site.
+    Contains hero, about, work, gallery, and fitness sections.
+    TODO: Modularize sections into partials/components if the file grows.
+    Note: Consider further accessibility improvements (keyboard navigation, ARIA labels) in future.
+-->
+<!DOCTYPE html>
+<!-- Last deployment check: 2024-03-19 -->
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#000000">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Mark Trewren | Developer & Athlete</title>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9MHS7QS2VQ"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-9MHS7QS2VQ');
+    </script>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgdmlld0JveD0iMCAwIDUxMiA1MTIiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIGZpbGw9IiMwMDAwMDAiLz48dGV4dCB4PSIyNTYiIHk9IjMyMCIgZm9udC1mYW1pbHk9IkFyaWFsLCBzYW5zLXNlcmlmIiBmb250LXNpemU9IjI0MCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZpbGw9IiNCQkYzNEMiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGRvbWluYW50LWJhc2VsaW5lPSJtaWRkbGUiPk1UPC90ZXh0Pjwvc3ZnPg==">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#000000">
+    <meta name="msapplication-TileColor" content="#000000">
+    
+    <!-- Enhanced SEO Meta Tags -->
+    <meta name="description" content="Mark Trewren - Developer and athlete specializing in web development and endurance sports.">
+    <meta name="keywords" content="Mark Trewren, developer, athlete, HYROX, web development">
+    <meta name="author" content="Mark Trewren">
+    
+    <!-- Open Graph / Social Media -->
+    <meta property="og:title" content="Mark Trewren | Developer & Athlete">
+    <meta property="og:description" content="Developer and athlete specializing in web development and endurance sports.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://marktrewren.com">
+    
+    <!-- Styles -->
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .loading-placeholder {
+            min-height: 200px;
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+            border-radius: 8px;
+        }
+        
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        .section-transition {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+        
+        .section-transition.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .activity-github-graph .day-label {
+            fill: #fff;
+            font-size: 16px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <header class="header" role="banner">
+        <div class="header-content">
+            <a href="#" class="site-title">Mark Trewren</a>
+            <nav role="navigation" aria-label="Main navigation">
+                <ul class="nav-links">
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#training">Training</a></li>
+                    <li><a href="#activity-timeline">Timeline</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main id="main-content" role="main">
+        <!-- Hero Section -->
+        <section class="hero section-transition">
+            <div class="hero-background" style="background: url('images-for-journey/hyrox berlin running.jpg') center center / cover no-repeat, #000;">
+                <div class="gradient-overlay" style="background: linear-gradient(135deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.5) 100%);"></div>
+            </div>
+            <div class="hero-content container">
+                <h2 class="hero-title"><span id="typewriter">AI Developer & Athlete</span></h2>
+                <p class="hero-subtitle" style="font-size:1.5rem; margin-bottom:2rem;">Passionate about training for Hyrox <br>and <a href="#hyrox" style="color: inherit; text-decoration: underline;">building useful fitness related projects.</a></p>
+                <div class="race-countdown-container">
+                    <div class="race-label">Next Race: <span class="race-name">Hyrox Maastricht</span> <span class="race-date">19th September, 2025</span></div>
+                    <div id="race-countdown" class="race-countdown"></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="about" class="section section-transition">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-user"></i>
+                    About
+                </h2>
+                <div class="about-content" style="display: flex; flex-wrap: wrap; align-items: center; gap: 2rem;">
+                    <div class="profile-image" style="flex: 1 1 350px; min-width: 300px; display: flex; align-items: center; justify-content: center;">
+                        <img src="images-for-journey/Hyrox Berlin, 2025.jpg" alt="Hyrox Berlin, 2025" style="max-width: 100%; max-height: 420px; object-fit: contain; display: block; margin: 0 auto;">
+                    </div>
+                    <div class="about-text" style="flex: 2 1 400px; min-width: 300px;">
+                        <p>👋 Mark here -- dad-in-training, code-curious, always trying to move forward.</p>
+                        <p>Dabbled in several endurance races and wandered to some far-flung places from Yemen to Japan to Nicaragua. Always curious, always trying to move forward.</p>
+                        <p>Worked as a chartered surveyor, teacher and now taking a swing at startup life. Recently, I learned to code with AI, and now I ship Hyrox products I need - maybe you do too.</p>
+                        <p>Inspired by quiet builders and laptop freedom: Levels, Friks, and Lou 💻.</p>
+                        <p>When I'm not coding, I'm training for Hyrox or knee-deep in a LEGO mission with the kids.</p>
+                        <p>👇 Take a peek at what I've built - or say hello here: mark@stellarapp.ai</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- HYROX Section -->
+        <section id="hyrox" class="section section-transition">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-laptop-code"></i>
+                    Projects
+                </h2>
+                <p class="section-subtitle" style="margin-top: -1rem; margin-bottom: 2rem; color: var(--text-secondary);">These are my current projects. I hope you like them.</p>
+                <div class="projects-grid">
+                    <div class="project-card">
+                        <div class="project-status">Live in the App Store</div>
+                        <h3>Longevity Tracker</h3>
+                        <p><a href="https://stellarapp.ai" target="_blank" style="color: var(--accent-color); text-decoration: none; font-weight: 600;">stellarapp.ai</a></p>
+                        <p>An AI-powered longevity tracker</p>
+                        <div class="project-features">
+                            <span>Activity tracking</span>
+                            <span>Sleep tracking</span>
+                            <span>Nutrition tracking</span>
+                            <span>Powerful AI insights</span>
+                        </div>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-status">In development</div>
+                        <h3>Daily Stack</h3>
+                        <p>Stack wins daily: auto post to Insta when you've hit the gym, coded, and slept well.</p>
+                        <div class="project-features">
+                            <span>Earned Sharing</span>
+                            <span>Social Proof</span>
+                            <span>Habit Reinforcement</span>
+                        </div>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-status">In development</div>
+                        <h3>Magic Shopping List AI</h3>
+                        <p><a href="https://hybridgearai.com" target="_blank" style="color: var(--accent-color); text-decoration: none; font-weight: 600;">hybridgearai.com</a></p>
+                        <p>Add Hyrox products to your shopping list and then let the AI bot search the web, notifying you when it finds a cheaper price!</p>
+                        <div class="project-features">
+                            <span>Location-based optimisation</span>
+                            <span>One click set up</span>
+                        </div>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-status">In development</div>
+                        <h3>Sleep Scanner AI</h3>
+                        <p><a href="https://sleepscanai.com" target="_blank" style="color: var(--accent-color); text-decoration: none; font-weight: 600;">sleepscanai.com</a></p>
+                        <p>Upload a short video of your sleeping environment and optimise your sleep with AI recommendations</p>
+                        <div class="project-features">
+                            <span>Light Pollution</span>
+                            <span>Feng Shui</span>
+                            <span>Noise Pollution</span>
+                        </div>
+                    </div>
+                    <div class="project-card">
+                        <div class="project-status">In development</div>
+                        <h3>Hyrox game</h3>
+                        <p><a href="https://hygame.com" target="_blank" style="color: var(--accent-color); text-decoration: none; font-weight: 600;">hygame.com</a></p>
+                        <p>A multiplay game where you take on the Hyrox stations against your friends.</p>
+                        <div class="project-features">
+                            <span>Multiplayer</span>
+                            <span>Hyrox stations</span>
+                            <span>Fun to play when not training!</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Training Section with Tabs -->
+        <section id="training" class="section section-transition">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-dumbbell"></i>
+                    Training
+                </h2>
+
+                <!-- Tabs -->
+                <div class="tabs-container">
+                    <div class="tabs-nav">
+                        <button class="tab-button active" data-tab="biomarkers">Metrics</button>
+                        <button class="tab-button" data-tab="schedule">Schedule</button>
+                        <button class="tab-button" data-tab="supplements">Supplements</button>
+                    </div>
+
+                    <!-- Tab Content -->
+                    <div class="tabs-content">
+                        <div id="biomarkers" class="tab-pane active">
+                            <h3 class="section-subtitle">Current metrics 📊</h3>
+                            <div class="biomarkers-content training-schedule">
+                                <div class="schedule-grid">
+                                    <div class="schedule-day">
+                                        <h4>VO2 Max</h4>
+                                        <div class="training-cardio">63 ml/kg/min <span class="timestamp">(4/5)</span></div>
+                                        <div class="progress-bar"><div class="progress" style="width: 80%" aria-valuenow="4" aria-valuemax="5" aria-label="VO2 Max"></div></div>
+                                    </div>
+                                    <div class="schedule-day">
+                                        <h4>Resting Heart Rate (RHR)</h4>
+                                        <div class="training-cardio">42 BPM <span class="timestamp">(4/5)</span></div>
+                                        <div class="progress-bar"><div class="progress" style="width: 80%" aria-valuenow="4" aria-valuemax="5" aria-label="RHR"></div></div>
+                                    </div>
+                                    <div class="schedule-day">
+                                        <h4>Trap bar deadlift</h4>
+                                        <div class="training-cardio">110kg @77kg BW <span class="timestamp">(2/5)</span></div>
+                                        <div class="progress-bar"><div class="progress" style="width: 40%" aria-valuenow="2" aria-valuemax="5" aria-label="Trap bar deadlift"></div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="schedule" class="tab-pane">
+                            <h3 class="section-subtitle">Training Schedule 🏋️‍♂️</h3>
+                            <div class="training-content">
+                                <div class="training-schedule">
+                                    <div class="schedule-grid">
+                                        <div class="schedule-day strength-day">
+                                            <h4>Monday</h4>
+                                            <div class="training-strength">Strength, core and wall ball finisher - 60' + rowing - 30'</div>
+                                        </div>
+                                        <div class="schedule-day cardio-day">
+                                            <h4>Tuesday</h4>
+                                            <div class="training-cardio">Threshold intervals - 40' + cycling - 30'</div>
+                                        </div>
+                                        <div class="schedule-day rest-day">
+                                            <h4>Wednesday</h4>
+                                            <div class="training-rest">Active recovery / rest</div>
+                                        </div>
+                                        <div class="schedule-day strength-day">
+                                            <h4>Thursday</h4>
+                                            <div class="training-strength">Full body strength - 60'</div>
+                                        </div>
+                                        <div class="schedule-day cardio-day">
+                                            <h4>Friday</h4>
+                                            <div class="training-cardio">Long slow run - 75'</div>
+                                        </div>
+                                        <div class="schedule-day cardio-day">
+                                            <h4>Saturday</h4>
+                                            <div class="training-cardio">Hyrox simulation</div>
+                                        </div>
+                                        <div class="schedule-day rest-day">
+                                            <h4>Sunday</h4>
+                                            <div class="training-rest">Rest</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="supplements" class="tab-pane">
+                            <h3 class="section-subtitle">Daily Supplements 💊</h3>
+                            <div class="supplements-content">
+                                <ul>
+                                    <li>Magnesium</li>
+                                    <li>Vitamin D</li>
+                                    <li>L-Theanine</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="activity-timeline" class="section section-transition">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-history"></i>
+                    Activity Timeline
+                </h2>
+                <div class="timeline-container">
+                    <div class="timeline-filters">
+                        <button class="timeline-filter-btn active" data-source="all">All</button>
+                        <button class="timeline-filter-btn" data-source="strava">Strava</button>
+                        <button class="timeline-filter-btn" data-source="github">GitHub</button>
+                    </div>
+                    <div id="github-overview" style="display: none;">
+                        <h3 class="section-subtitle">GitHub Contributions</h3>
+                        <div class="github-stats">
+                            <div class="stat-card">
+                                <h4>Current Streak</h4>
+                                <p id="github-streak" class="loading-placeholder">Loading...</p>
+                            </div>
+                            <div class="stat-card">
+                                <h4>Total Contributions</h4>
+                                <p id="github-contributions" class="loading-placeholder">Loading...</p>
+                            </div>
+                        </div>
+                        <div class="activity-github-graph">
+                            <h4 class="section-subtitle">Contribution Graph</h4>
+                            <div id="github-graph-container" class="loading-placeholder"></div>
+                        </div>
+                    </div>
+                    <div id="strava-overview" style="display: block;">
+                        <div id="strava-stats-container" class="stats-grid">
+                            <!-- Monthly stats will be injected here by script.js -->
+                        </div>
+                    </div>
+                    <ul id="timeline-list" class="timeline-list">
+                        <!-- Timeline entries will be injected here -->
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section id="gallery" class="section section-transition">
+            <div class="container">
+                <h2 class="section-title">
+                    <i class="fas fa-camera-retro"></i>
+                    Gallery
+                </h2>
+                <p class="section-subtitle">A few snaps from my travels and races.</p>
+                <div class="gallery-grid">
+                    <div class="gallery-item">
+                        <img class="lazy-image" src="images-for-journey/Amsterdam Marathon, 2019 - breaking sub3.png" data-src="images-for-journey/Amsterdam Marathon, 2019 - breaking sub3.png" alt="Amsterdam Marathon, 2019 - breaking sub3" loading="lazy">
+                        <div class="gallery-caption">Amsterdam Marathon, 2019 - breaking sub3</div>
+                    </div>
+                    <div class="gallery-item">
+                        <img class="lazy-image" src="images-for-journey/Petra, 2012 .png" data-src="images-for-journey/Petra, 2012 .png" alt="Petra, 2012" loading="lazy">
+                        <div class="gallery-caption">Petra, 2012</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="container">
+                <p>&copy; 2024 Mark Trewren. All Rights Reserved.</p>
+                <div class="footer-links">
+                    <a href="#about">About</a>
+                    <a href="#projects">Projects</a>
+                    <a href="#training">Training</a>
+                    <a href="#activity-timeline">Timeline</a>
+                </div>
+            </div>
+        </footer>
+    </main>
+    <script src="script.js" defer></script>
+</body>
+</html>
+<!-- End of index.html -->
