@@ -522,6 +522,73 @@
                 text-align: center;
             }
         }
+
+        .supplements-content {
+            background: var(--background-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .supplements-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .supplement-category h4 {
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0 0 1.5rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+        }
+
+        .supplement-category ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .supplement-category li {
+            background: var(--background-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .supplement-category li:hover {
+            transform: translateX(5px);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        /* Metrics Styling */
+        .biomarkers-content {
+            background: var(--background-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .schedule-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .supplements-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .stat-content {
+            grid-template-columns: 1fr;
+        }
     </style>
 </head>
 <body>
@@ -724,32 +791,38 @@
                         <div id="supplements" class="tab-pane">
                             <h3 class="section-subtitle">Daily Supplements 💊</h3>
                             <div class="supplements-content">
-                                <h4>🌅 Breakfast supplements</h4>
-                                <ul>
-                                    <li>1. Beetroot Extract - 3000mg 🍃</li>
-                                </ul>
-                                
-                                <h4>🥤 Post-Workout Smoothie (Recovery, Electrolyte & Hydration)</h4>
-                                <ul>
-                                    <li>2. Whey Protein (Grass-Fed) - unflavoured - 30g 🥛</li>
-                                    <li>3. Creatine Monohydrate - unflavoured - 5g 💪</li>
-                                    <li>4. Himalayan Pink Salt - 1/4 tsp 🧂 (Only for heavy sessions)</li>
-                                    <li>5. Coconut Water - 1/2 cup 🥥</li>
-                                    <li>6. Honey - 1 tbsp 🍯</li>
-                                    <li>7. Lemon Juice - Half a lemon 🍋</li>
-                                    <li>8. Kale / Spinach leaves - Handful 🥬</li>
-                                    <li>9. Pineapple Chunks - 1/2 cup 🍍</li>
-                                    <li>10. Water - 1/2 cup (or more) 💧</li>
-                                </ul>
-                                
-                                <h4>😴 Sleep optimisation</h4>
-                                <ul>
-                                    <li>11. Montmorency Cherry - 1000mg 🍒</li>
-                                    <li>12. Saffron - 28mg 🌺 (Every other day)</li>
-                                    <li>13. L-Theanine - 200mg 🍵</li>
-                                    <li>14. Magnesium Glycinate - 300mg 💊 (Every other day)</li>
-                                </ul>
-                            </div>
+                                <div class="supplements-grid">
+                                    <div class="supplement-category">
+                                        <h4>🌅 Breakfast</h4>
+                                        <ul>
+                                            <li>1. Beetroot Extract - 3000mg 🍃</li>
+                                        </ul>
+                                    </div>
+                                    <div class="supplement-category">
+                                        <h4>🥤 Post-Workout</h4>
+                                        <ul>
+                                            <li>2. Whey Protein (Grass-Fed) - 30g 🥛</li>
+                                            <li>3. Creatine Monohydrate - 5g 💪</li>
+                                            <li>4. Himalayan Pink Salt - 1/4 tsp 🧂</li>
+                                            <li>5. Coconut Water - 1/2 cup 🥥</li>
+                                            <li>6. Honey - 1 tbsp 🍯</li>
+                                            <li>7. Lemon Juice - Half a lemon 🍋</li>
+                                            <li>8. Kale / Spinach leaves - Handful 🥬</li>
+                                            <li>9. Pineapple Chunks - 1/2 cup 🍍</li>
+                                            <li>10. Water - 1/2 cup (or more) 💧</li>
+                                        </ul>
+                                    </div>
+                                    <div class="supplement-category">
+                                        <h4>😴 Sleep</h4>
+                                        <ul>
+                                            <li>11. Montmorency Cherry - 1000mg 🍒</li>
+                                            <li>12. Saffron - 28mg 🌺</li>
+                                            <li>13. L-Theanine - 200mg 🍵</li>
+                                            <li>14. Magnesium Glycinate - 300mg 💊</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                             </div>
                         </div>
                     </div>
                 </div>
