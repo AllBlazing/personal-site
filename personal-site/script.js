@@ -43,16 +43,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 const source = btn.dataset.source;
                 const githubOverview = document.getElementById('github-overview');
                 const stravaOverview = document.getElementById('strava-overview');
+
                 if (githubOverview && stravaOverview) {
-                    githubOverview.style.display = source === 'github' ? 'block' : 'none';
-                    stravaOverview.style.display = source === 'strava' ? 'block' : 'none';
+                    if (source === 'all') {
+                        githubOverview.style.display = 'block';
+                        stravaOverview.style.display = 'block';
+                    } else if (source === 'github') {
+                        githubOverview.style.display = 'block';
+                        stravaOverview.style.display = 'none';
+                    } else if (source === 'strava') {
+                        githubOverview.style.display = 'none';
+                        stravaOverview.style.display = 'block';
+                    }
                 }
+
                 if (typeof updateTimeline === 'function') updateTimeline(source);
             });
         });
     } catch (e) { console.error('Timeline tabs error:', e); }
     try { if (typeof updateTimeline === 'function') updateTimeline(); } catch (e) { console.error('Timeline update error:', e); }
     try { if (typeof initializeStrava === 'function') initializeStrava(); } catch (e) { console.error('Strava error:', e); }
+    try { initializeGitHubGraph(); } catch (e) { console.error('GitHub Graph error:', e); }
     // Other DOMContentLoaded code blocks can be added here as needed
 });
 
@@ -223,6 +234,13 @@ function formatDuration(seconds) {
 
 async function fetchStravaTimeline() {
     try {
+        // Note: This fetch will only succeed on the deployed Netlify site.
+        // On a local server, it will fail, and the timeline will show GitHub data only.
+        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        if (isLocalhost) {
+            return []; // Return empty array on local dev to prevent errors
+        }
+
         const response = await fetch('/.netlify/functions/strava');
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
@@ -248,13 +266,12 @@ async function fetchStravaTimeline() {
 
 async function fetchGitHubTimeline() {
     try {
-        const response = await fetch('https://api.github.com/users/mark-trewren/events/public');
+        const response = await fetch('https://api.github.com/users/AllBlazing/events/public');
         if (!response.ok) throw new Error('Network response was not ok.');
         const events = await response.json();
         
         return events
             .filter(e => e.type === 'PushEvent' && e.payload.commits)
-            .slice(0, 10) // Limit to 10 events
             .map(e => ({
                 type: 'github',
                 icon: '💻',
@@ -306,14 +323,25 @@ function renderTimeline(entries) {
     // Sort entries chronologically, most recent first
     entries.sort((a, b) => b.date - a.date);
 
+    if (entries.length === 0) {
+        timeline.innerHTML = '<li class="timeline-item-empty">No recent activity to display.</li>';
+        return;
+    }
+
     timeline.innerHTML = entries.map(entry => `
         <li class="timeline-item">
-            <div class="timeline-icon">${entry.icon}</div>
-            <div class="timeline-content">
-                <span class="timeline-date">${timeAgo(entry.date)}</span>
-                <h5>${entry.title}</h5>
-                <p>${entry.desc}</p>
-                <span class="badge ${entry.badgeClass}">${entry.badge}</span>
+            <div class="timeline-marker">
+                <div class="timeline-icon">${entry.icon}</div>
+            </div>
+            <div class="timeline-card">
+                <div class="timeline-header">
+                    <span class="badge ${entry.badgeClass}">${entry.badge}</span>
+                    <span class="timeline-date">${timeAgo(entry.date)}</span>
+                </div>
+                <div class="timeline-content">
+                    <h5>${entry.title}</h5>
+                    <p>${entry.desc}</p>
+                </div>
             </div>
         </li>
     `).join('');
@@ -340,27 +368,35 @@ async function updateTimeline(filter = 'all') {
     
     timelineList.innerHTML = '<li class="loading">Loading timeline...</li>';
     
-    let allEntries = [];
+    let stravaEntries = [];
+    let githubEntries = [];
     
     try {
+        // Fetch all data first
         if (filter === 'all' || filter === 'strava') {
-            const stravaEntries = await fetchStravaTimeline();
-            if (stravaEntries.length > 0) {
-                displayStravaStats(stravaEntries);
-                allEntries.push(...stravaEntries);
-            }
+            stravaEntries = await fetchStravaTimeline();
         }
-        
         if (filter === 'all' || filter === 'github') {
-            const githubEntries = await fetchGitHubTimeline();
-            allEntries.push(...githubEntries);
+            githubEntries = await fetchGitHubTimeline();
         }
 
-        if (allEntries.length > 0) {
-            renderTimeline(allEntries);
+        // Display Strava monthly stats using the full dataset
+        if (stravaEntries.length > 0) {
+            displayStravaStats(stravaEntries);
         } else {
-            timelineList.innerHTML = '<li class="loading">No activities found.</li>';
+             const statsContainer = document.getElementById('strava-stats-container');
+             if (statsContainer) statsContainer.innerHTML = ''; // Clear stats if no data
         }
+
+        // Take the most recent 5 from each for the timeline
+        const timelineStrava = stravaEntries.slice(0, 5);
+        const timelineGitHub = githubEntries.slice(0, 5);
+        
+        // Combine for rendering
+        let allEntries = [...timelineStrava, ...timelineGitHub];
+
+        renderTimeline(allEntries);
+
     } catch (error) {
         console.error('Failed to update timeline:', error);
         timelineList.innerHTML = '<li class="error">Could not load timeline.</li>';
@@ -411,17 +447,17 @@ document.addEventListener('DOMContentLoaded', () => {
 // Wrap all Hyrox-related logic in a single initialization function
 // This keeps the global scope clean and logic organized
 function initializeHyroxDashboard() {
-    const countdownElement = document.getElementById('hyrox-countdown');
-    const raceDate = new Date('2025-11-29T09:00:00Z'); // Store race date here
+    const countdownElement = document.getElementById('race-countdown');
+    const raceDate = new Date('2025-09-19T09:00:00Z'); // Store race date here
 
     if (!countdownElement) {
-        // console.warn("Countdown element 'hyrox-countdown' not found. Skipping.");
+        // console.warn("Countdown element 'race-countdown' not found. Skipping.");
         return; // Exit if the dashboard isn't on the current page
     }
 
     // --- Core Countdown Logic ---
     // Moved the countdown logic inside the dashboard initializer
-    // This ensures it only runs when the #hyrox-countdown element is present
+    // This ensures it only runs when the #race-countdown element is present
     function renderCountdown() {
         const now = new Date();
         const timeLeft = raceDate - now;
@@ -515,6 +551,9 @@ function renderCountdown() {
 // This function encapsulates all Strava-related API calls and DOM updates.
 // It is called once on page load.
 async function initializeStrava() {
+    // Note: The Strava integration relies on a Netlify Function to securely handle API keys.
+    // This function is only available on the deployed Netlify site.
+    // On a local test server, this section will display a fallback message.
     const container = document.getElementById('strava-overview');
     if (!container) {
         // console.warn("Strava container not found. Skipping initialization.");
@@ -525,6 +564,15 @@ async function initializeStrava() {
     container.innerHTML = '<div class="loading-state"><div class="spinner"></div><p>Loading Strava data...</p></div>';
 
     try {
+        // Check if we're in local development
+        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        
+        if (isLocalhost) {
+            // Show fallback message for local development
+            container.innerHTML = '<div class="error-state"><p>Strava data is only available on the live site.</p></div>';
+            return;
+        }
+        
         const response = await fetch('/.netlify/functions/strava');
         if (!response.ok) {
             throw new Error(`API call failed with status: ${response.status}`);
@@ -762,7 +810,7 @@ async function updateCommitFeed() {
 
     try {
         // Using a public repo for demonstration
-        const response = await fetch('https://api.github.com/repos/mark-trewren/personalsite-v2/commits');
+        const response = await fetch('https://api.github.com/repos/AllBlazing/personal-site/commits');
         const commits = await response.json();
         
         const commitList = commits.slice(0, 5).map(commit => `
@@ -841,4 +889,66 @@ function launchConfetti() {
 }
 // Example Usage: Attach to a button
 // document.getElementById('my-button').addEventListener('click', launchConfetti);
+
+// --- Gallery Navigation ---
+let currentImageSet = 0;
+const imagesPerSet = 3;
+const totalImages = 18; // Total number of images in the gallery
+const totalSets = Math.ceil(totalImages / imagesPerSet);
+
+function changeGalleryImage(direction) {
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    
+    // Calculate new set index
+    currentImageSet += direction;
+    
+    // Handle wrapping around
+    if (currentImageSet >= totalSets) {
+        currentImageSet = 0;
+    } else if (currentImageSet < 0) {
+        currentImageSet = totalSets - 1;
+    }
+    
+    // Hide all images first
+    galleryItems.forEach(item => {
+        item.style.display = 'none';
+    });
+    
+    // Show images for current set
+    const startIndex = currentImageSet * imagesPerSet;
+    const endIndex = Math.min(startIndex + imagesPerSet, totalImages);
+    
+    for (let i = startIndex; i < endIndex; i++) {
+        if (galleryItems[i]) {
+            galleryItems[i].style.display = 'block';
+        }
+    }
+}
+
+// Initialize gallery on page load
+document.addEventListener('DOMContentLoaded', () => {
+    // Show first 3 images
+    const galleryItems = document.querySelectorAll('.gallery-item');
+    galleryItems.forEach((item, index) => {
+        if (index < 3) {
+            item.style.display = 'block';
+        } else {
+            item.style.display = 'none';
+        }
+    });
+    currentImageSet = 0;
+});
+
+function initializeGitHubGraph() {
+    const container = document.getElementById('github-graph-container');
+    if (!container) return;
+
+    container.classList.remove('loading-placeholder');
+    const graphImage = document.createElement('img');
+    graphImage.src = 'https://ghchart.rshah.org/AllBlazing';
+    graphImage.alt = 'GitHub contribution graph for AllBlazing';
+    graphImage.style.width = '100%';
+    container.innerHTML = ''; // Clear the "Loading..." text
+    container.appendChild(graphImage);
+}
 

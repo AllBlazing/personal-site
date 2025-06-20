@@ -12,7 +12,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#000000">
-    <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <title>Mark Trewren | Developer & Athlete</title>
     
@@ -77,6 +76,115 @@
             fill: #fff;
             font-size: 16px;
             font-weight: bold;
+        }
+
+        /* GitHub Section Styling */
+        #github-overview .activity-github-graph {
+            background-color: var(--background-secondary);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid var(--border-color);
+            margin-top: 1rem;
+        }
+
+        #github-overview .activity-github-graph h4 {
+            margin-top: 0;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            color: var(--text-primary);
+        }
+
+        #github-graph-container img {
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        /* Timeline Styling */
+        .timeline-list {
+            list-style: none;
+            padding-left: 20px;
+            position: relative;
+            border-left: 2px solid var(--border-color);
+            margin-top: 2rem;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .timeline-item-empty {
+            padding: 1rem;
+            color: var(--text-secondary);
+            list-style: none;
+        }
+
+        .timeline-marker {
+            position: absolute;
+            top: 0;
+            left: -42px; /* Adjust to center on the border */
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--background-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--border-color);
+        }
+
+        .timeline-icon {
+            font-size: 1.5rem;
+        }
+
+        .timeline-card {
+            background: var(--background-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-left: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .timeline-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .timeline-date {
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+        }
+
+        .timeline-content h5 {
+            margin: 0 0 0.5rem 0;
+            font-size: 1.1rem;
+            color: var(--text-primary);
+        }
+
+        .timeline-content p {
+            margin: 0;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .badge.strava {
+            background-color: #FC5200;
+            color: white;
+        }
+
+        .badge.github {
+            background-color: #6e5494;
+            color: white;
         }
     </style>
 </head>
@@ -247,31 +355,31 @@
                                     <div class="schedule-grid">
                                         <div class="schedule-day strength-day">
                                             <h4>Monday</h4>
-                                            <div class="training-strength">Strength, core and wall ball finisher - 60' + rowing - 30'</div>
+                                            <div class="training-strength">Strength, core and wall ball finisher</div>
                                         </div>
                                         <div class="schedule-day cardio-day">
                                             <h4>Tuesday</h4>
-                                            <div class="training-cardio">Threshold intervals - 40' + cycling - 30'</div>
+                                            <div class="training-cardio">Doubles tennis or rest day</div>
                                         </div>
                                         <div class="schedule-day rest-day">
                                             <h4>Wednesday</h4>
-                                            <div class="training-rest">Active recovery / rest</div>
+                                            <div class="training-rest">Track</div>
                                         </div>
                                         <div class="schedule-day strength-day">
                                             <h4>Thursday</h4>
-                                            <div class="training-strength">Full body strength - 60'</div>
+                                            <div class="training-strength">Strength and wall ball finisher</div>
                                         </div>
                                         <div class="schedule-day cardio-day">
                                             <h4>Friday</h4>
-                                            <div class="training-cardio">Long slow run - 75'</div>
+                                            <div class="training-cardio">Run with some speed work</div>
                                         </div>
                                         <div class="schedule-day cardio-day">
                                             <h4>Saturday</h4>
-                                            <div class="training-cardio">Hyrox simulation</div>
+                                            <div class="training-cardio">Tennis practice</div>
                                         </div>
                                         <div class="schedule-day rest-day">
                                             <h4>Sunday</h4>
-                                            <div class="training-rest">Rest</div>
+                                            <div class="training-rest">Hyrox or alternating long run</div>
                                         </div>
                                     </div>
                                 </div>
@@ -280,10 +388,30 @@
                         <div id="supplements" class="tab-pane">
                             <h3 class="section-subtitle">Daily Supplements 💊</h3>
                             <div class="supplements-content">
+                                <h4>🌅 Breakfast supplements</h4>
                                 <ul>
-                                    <li>Magnesium</li>
-                                    <li>Vitamin D</li>
-                                    <li>L-Theanine</li>
+                                    <li>1. Beetroot Extract - 3000mg 🍃</li>
+                                </ul>
+                                
+                                <h4>🥤 Post-Workout Smoothie (Recovery, Electrolyte & Hydration)</h4>
+                                <ul>
+                                    <li>2. Whey Protein (Grass-Fed) - unflavoured - 30g 🥛</li>
+                                    <li>3. Creatine Monohydrate - unflavoured - 5g 💪</li>
+                                    <li>4. Himalayan Pink Salt - 1/4 tsp 🧂 (Only for heavy sessions)</li>
+                                    <li>5. Coconut Water - 1/2 cup 🥥</li>
+                                    <li>6. Honey - 1 tbsp 🍯</li>
+                                    <li>7. Lemon Juice - Half a lemon 🍋</li>
+                                    <li>8. Kale / Spinach leaves - Handful 🥬</li>
+                                    <li>9. Pineapple Chunks - 1/2 cup 🍍</li>
+                                    <li>10. Water - 1/2 cup (or more) 💧</li>
+                                </ul>
+                                
+                                <h4>😴 Sleep optimisation</h4>
+                                <ul>
+                                    <li>11. Montmorency Cherry - 1000mg 🍒</li>
+                                    <li>12. Saffron - 28mg 🌺 (Every other day)</li>
+                                    <li>13. L-Theanine - 200mg 🍵</li>
+                                    <li>14. Magnesium Glycinate - 300mg 💊 (Every other day)</li>
                                 </ul>
                             </div>
                         </div>
@@ -296,7 +424,7 @@
             <div class="container">
                 <h2 class="section-title">
                     <i class="fas fa-history"></i>
-                    Activity Timeline
+                    Timeline
                 </h2>
                 <div class="timeline-container">
                     <div class="timeline-filters">
@@ -306,16 +434,6 @@
                     </div>
                     <div id="github-overview" style="display: none;">
                         <h3 class="section-subtitle">GitHub Contributions</h3>
-                        <div class="github-stats">
-                            <div class="stat-card">
-                                <h4>Current Streak</h4>
-                                <p id="github-streak" class="loading-placeholder">Loading...</p>
-                            </div>
-                            <div class="stat-card">
-                                <h4>Total Contributions</h4>
-                                <p id="github-contributions" class="loading-placeholder">Loading...</p>
-                            </div>
-                        </div>
                         <div class="activity-github-graph">
                             <h4 class="section-subtitle">Contribution Graph</h4>
                             <div id="github-graph-container" class="loading-placeholder"></div>
@@ -341,15 +459,91 @@
                     Gallery
                 </h2>
                 <p class="section-subtitle">A few snaps from my travels and races.</p>
-                <div class="gallery-grid">
-                    <div class="gallery-item">
-                        <img class="lazy-image" src="images-for-journey/Amsterdam Marathon, 2019 - breaking sub3.png" data-src="images-for-journey/Amsterdam Marathon, 2019 - breaking sub3.png" alt="Amsterdam Marathon, 2019 - breaking sub3" loading="lazy">
-                        <div class="gallery-caption">Amsterdam Marathon, 2019 - breaking sub3</div>
+                <div class="gallery-container">
+                    <button class="gallery-nav prev" onclick="changeGalleryImage(-1)">‹</button>
+                    <div class="gallery-grid">
+                        <div class="gallery-item active">
+                            <img class="lazy-image" src="images-for-journey/Amsterdam Marathon, 2019 - breaking sub3.png" data-src="images-for-journey/Amsterdam Marathon, 2019 - breaking sub3.png" alt="Amsterdam Marathon, 2019 - breaking sub3" loading="lazy">
+                            <div class="gallery-caption">Amsterdam Marathon, 2019 - breaking sub3</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img class="lazy-image" src="images-for-journey/Petra, 2012 .png" data-src="images-for-journey/Petra, 2012 .png" alt="Petra, 2012" loading="lazy">
+                            <div class="gallery-caption">Petra, 2012</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img class="lazy-image" src="images-for-journey/Hyrox Berlin, 2025.jpg" data-src="images-for-journey/Hyrox Berlin, 2025.jpg" alt="Hyrox Berlin, 2025" loading="lazy">
+                            <div class="gallery-caption">Hyrox Berlin, 2025</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img class="lazy-image" src="images-for-journey/hyrox berlin running.jpg" data-src="images-for-journey/hyrox berlin running.jpg" alt="Hyrox Berlin Running" loading="lazy">
+                            <div class="gallery-caption">Hyrox Berlin Running</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img class="lazy-image" src="images-for-journey/Yemen wedding, 2011, 20.jpeg" data-src="images-for-journey/Yemen wedding, 2011, 20.jpeg" alt="Yemen wedding, 2011" loading="lazy">
+                            <div class="gallery-caption">Yemen wedding, 2011</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img class="lazy-image" src="images-for-journey/UK Ironman Sherbourne, 2006.png" data-src="images-for-journey/UK Ironman Sherbourne, 2006.png" alt="UK Ironman Sherbourne, 2006" loading="lazy">
+                            <div class="gallery-caption">UK Ironman Sherbourne, 2006</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img class="lazy-image" src="images-for-journey/The Dead Sea, 2012.png" data-src="images-for-journey/The Dead Sea, 2012.png" alt="The Dead Sea, 2012" loading="lazy">
+                            <div class="gallery-caption">The Dead Sea, 2012</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img class="lazy-image" src="images-for-journey/Teaching in Saudi, 2012.jpg" data-src="images-for-journey/Teaching in Saudi, 2012.jpg" alt="Teaching in Saudi, 2012" loading="lazy">
+                            <div class="gallery-caption">Teaching in Saudi, 2012</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img class="lazy-image" src="images-for-journey/Summit-of-potosi,-bolivia, 2006.jpeg" data-src="images-for-journey/Summit-of-potosi,-bolivia, 2006.jpeg" alt="Summit of Potosi, Bolivia, 2006" loading="lazy">
+                            <div class="gallery-caption">Summit of Potosi, Bolivia, 2006</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img class="lazy-image" src="images-for-journey/Summit of Cerro Chirripo, Costa Rica, 2005.png" data-src="images-for-journey/Summit of Cerro Chirripo, Costa Rica, 2005.png" alt="Summit of Cerro Chirripo, Costa Rica, 2005" loading="lazy">
+                            <div class="gallery-caption">Summit of Cerro Chirripo, Costa Rica, 2005</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img class="lazy-image" src="images-for-journey/Solo hike : climb to summit of Sajama, Bolivia, 2006.png" data-src="images-for-journey/Solo hike : climb to summit of Sajama, Bolivia, 2006.png" alt="Solo hike to summit of Sajama, Bolivia, 2006" loading="lazy">
+                            <div class="gallery-caption">Solo hike to summit of Sajama, Bolivia, 2006</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img class="lazy-image" src="images-for-journey/Saudi Arabia Marathon, 2012.jpeg" data-src="images-for-journey/Saudi Arabia Marathon, 2012.jpeg" alt="Saudi Arabia Marathon, 2012" loading="lazy">
+                            <div class="gallery-caption">Saudi Arabia Marathon, 2012</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img class="lazy-image" src="images-for-journey/Sana, Yemen, 2011.png" data-src="images-for-journey/Sana, Yemen, 2011.png" alt="Sana, Yemen, 2011" loading="lazy">
+                            <div class="gallery-caption">Sana, Yemen, 2011</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img class="lazy-image" src="images-for-journey/Qualifying as a Chartered Surveyor, 2003.png" data-src="images-for-journey/Qualifying as a Chartered Surveyor, 2003.png" alt="Qualifying as a Chartered Surveyor, 2003" loading="lazy">
+                            <div class="gallery-caption">Qualifying as a Chartered Surveyor, 2003</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img class="lazy-image" src="images-for-journey/Pennine 100, Ultramarathon, 2006.png" data-src="images-for-journey/Pennine 100, Ultramarathon, 2006.png" alt="Pennine 100, Ultramarathon, 2006" loading="lazy">
+                            <div class="gallery-caption">Pennine 100, Ultramarathon, 2006</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img class="lazy-image" src="images-for-journey/Papillon, London, 2004.png" data-src="images-for-journey/Papillon, London, 2004.png" alt="Papillon, London, 2004" loading="lazy">
+                            <div class="gallery-caption">Papillon, London, 2004</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img class="lazy-image" src="images-for-journey/Madain Salih, Saudi Arabia 2012.png" data-src="images-for-journey/Madain Salih, Saudi Arabia 2012.png" alt="Madain Salih, Saudi Arabia 2012" loading="lazy">
+                            <div class="gallery-caption">Madain Salih, Saudi Arabia 2012</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img class="lazy-image" src="images-for-journey/London to Istanbul by Motorbike, 2011.png" data-src="images-for-journey/London to Istanbul by Motorbike, 2011.png" alt="London to Istanbul by Motorbike, 2011" loading="lazy">
+                            <div class="gallery-caption">London to Istanbul by Motorbike, 2011</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img class="lazy-image" src="images-for-journey/Journey across the desert, Saudi Arabia, 2012.jpeg" data-src="images-for-journey/Journey across the desert, Saudi Arabia, 2012.jpeg" alt="Journey across the desert, Saudi Arabia, 2012" loading="lazy">
+                            <div class="gallery-caption">Journey across the desert, Saudi Arabia, 2012</div>
+                        </div>
+                        <div class="gallery-item">
+                            <img class="lazy-image" src="images-for-journey/Getting lost in Guatmalua, 2005.png" data-src="images-for-journey/Getting lost in Guatmalua, 2005.png" alt="Getting lost in Guatemala, 2005" loading="lazy">
+                            <div class="gallery-caption">Getting lost in Guatemala, 2005</div>
+                        </div>
                     </div>
-                    <div class="gallery-item">
-                        <img class="lazy-image" src="images-for-journey/Petra, 2012 .png" data-src="images-for-journey/Petra, 2012 .png" alt="Petra, 2012" loading="lazy">
-                        <div class="gallery-caption">Petra, 2012</div>
-                    </div>
+                    <button class="gallery-nav next" onclick="changeGalleryImage(1)">›</button>
                 </div>
             </div>
         </section>
@@ -357,7 +551,7 @@
         <!-- Footer -->
         <footer class="footer">
             <div class="container">
-                <p>&copy; 2024 Mark Trewren. All Rights Reserved.</p>
+                <p>&copy; 2025 Mark Trewren. All Rights Reserved.</p>
                 <div class="footer-links">
                     <a href="#about">About</a>
                     <a href="#projects">Projects</a>
