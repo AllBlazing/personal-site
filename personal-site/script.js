@@ -46,8 +46,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (githubOverview && stravaOverview) {
                     if (source === 'all') {
-                        githubOverview.style.display = 'block';
-                        stravaOverview.style.display = 'block';
+                        // Hide both overviews on All tab - only show timeline
+                        githubOverview.style.display = 'none';
+                        stravaOverview.style.display = 'none';
                     } else if (source === 'github') {
                         githubOverview.style.display = 'block';
                         stravaOverview.style.display = 'none';
@@ -307,11 +308,27 @@ function displayStravaStats(activities) {
     
     statsContainer.innerHTML = Object.entries(monthlyStats).map(([month, stats]) => `
         <div class="stat-card">
-            <h4>${new Date(month).toLocaleString('default', { month: 'long', year: 'numeric' })}</h4>
-            <p><strong>Activities:</strong> ${stats.count}</p>
-            <p><strong>Distance:</strong> ${(stats.distance / 1000).toFixed(1)} km</p>
-            <p><strong>Time:</strong> ${formatDuration(stats.moving_time)}</p>
-            <p><strong>Elevation:</strong> ${Math.round(stats.elevation_gain)} m</p>
+            <div class="stat-header">
+                <h4>${new Date(month).toLocaleString('default', { month: 'long', year: 'numeric' })}</h4>
+            </div>
+            <div class="stat-content">
+                <div class="stat-item">
+                    <span class="stat-label">Activities</span>
+                    <span class="stat-value">${stats.count}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Distance</span>
+                    <span class="stat-value">${(stats.distance / 1000).toFixed(1)} km</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Time</span>
+                    <span class="stat-value">${formatDuration(stats.moving_time)}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Elevation</span>
+                    <span class="stat-value">${Math.round(stats.elevation_gain)} m</span>
+                </div>
+            </div>
         </div>
     `).join('');
 }
@@ -380,22 +397,39 @@ async function updateTimeline(filter = 'all') {
             githubEntries = await fetchGitHubTimeline();
         }
 
-        // Display Strava monthly stats using the full dataset
-        if (stravaEntries.length > 0) {
-            displayStravaStats(stravaEntries);
+        // Handle different tab content
+        if (filter === 'strava') {
+            // Show Strava monthly stats and only 5 recent activities
+            if (stravaEntries.length > 0) {
+                displayStravaStats(stravaEntries);
+                const recentStrava = stravaEntries.slice(0, 5);
+                renderTimeline(recentStrava);
+            } else {
+                const statsContainer = document.getElementById('strava-stats-container');
+                if (statsContainer) statsContainer.innerHTML = '<p class="no-data">No Strava data available.</p>';
+                timelineList.innerHTML = '<li class="timeline-item-empty">No Strava activities found.</li>';
+            }
+        } else if (filter === 'github') {
+            // GitHub tab shows contribution graph and timeline
+            if (githubEntries.length > 0) {
+                renderTimeline(githubEntries);
+            } else {
+                timelineList.innerHTML = '<li class="timeline-item-empty">No GitHub activity found.</li>';
+            }
         } else {
-             const statsContainer = document.getElementById('strava-stats-container');
-             if (statsContainer) statsContainer.innerHTML = ''; // Clear stats if no data
+            // All tab: combine and show mixed timeline only
+            const timelineStrava = stravaEntries.slice(0, 5);
+            const timelineGitHub = githubEntries.slice(0, 5);
+            
+            // Combine for rendering
+            let allEntries = [...timelineStrava, ...timelineGitHub];
+            
+            if (allEntries.length > 0) {
+                renderTimeline(allEntries);
+            } else {
+                timelineList.innerHTML = '<li class="timeline-item-empty">No recent activity to display.</li>';
+            }
         }
-
-        // Take the most recent 5 from each for the timeline
-        const timelineStrava = stravaEntries.slice(0, 5);
-        const timelineGitHub = githubEntries.slice(0, 5);
-        
-        // Combine for rendering
-        let allEntries = [...timelineStrava, ...timelineGitHub];
-
-        renderTimeline(allEntries);
 
     } catch (error) {
         console.error('Failed to update timeline:', error);
