@@ -1,0 +1,9 @@
+{
+    "visionFile": "00_README.md",
+    "rules": [
+      "Use minimal, well-commented code",
+      "Never modify existing files without asking",
+      "Avoid unnecessary dependencies"
+    ]
+  }
+  
