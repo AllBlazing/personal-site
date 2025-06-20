@@ -248,39 +248,22 @@ async function fetchStravaTimeline() {
 
 async function fetchGitHubTimeline() {
     try {
-        const res = await fetch('https://api.github.com/users/AllBlazing/events/public?per_page=30');
-        if (!res.ok) {
-            console.error('GitHub API response not OK:', await res.text());
-            return [];
-        }
-        const events = await res.json();
+        const response = await fetch('https://api.github.com/users/mark-trewren/events/public');
+        if (!response.ok) throw new Error('Network response was not ok.');
+        const events = await response.json();
+        
         return events
-            .filter(e => ['PushEvent', 'PullRequestEvent', 'IssuesEvent'].includes(e.type))
-            .slice(0, 5)
-            .map(e => {
-                let icon = '💻', title = '', desc = '';
-                if (e.type === 'PushEvent') {
-                    icon = '⬆️';
-                    title = `Committed to ${e.repo.name}`;
-                    desc = e.payload.commits ? e.payload.commits.map(c => c.message).join(' | ') : '';
-                } else if (e.type === 'PullRequestEvent') {
-                    icon = '🔀';
-                    title = `PR: ${e.repo.name}`;
-                    desc = e.payload.pull_request?.title || '';
-                } else if (e.type === 'IssuesEvent') {
-                    icon = '❗';
-                    title = `Issue: ${e.repo.name}`;
-                    desc = e.payload.issue?.title || '';
-                }
-                return {
-                    type: 'github',
-                    icon, title, desc,
-                    date: new Date(e.created_at),
-                    badge: 'GitHub',
-                    badgeClass: 'github',
-                    raw: e
-                };
-            });
+            .filter(e => e.type === 'PushEvent' && e.payload.commits)
+            .slice(0, 10) // Limit to 10 events
+            .map(e => ({
+                type: 'github',
+                icon: '💻',
+                title: `Pushed to ${e.repo.name.split('/')[1]}`,
+                desc: `${e.payload.commits.length} commit${e.payload.commits.length > 1 ? 's' : ''}. Last: "${e.payload.commits[0].message}"`,
+                date: new Date(e.created_at),
+                badge: 'GitHub',
+                badgeClass: 'github'
+            }));
     } catch (error) {
         console.error('Error fetching GitHub timeline:', error);
         return [];
@@ -288,684 +271,574 @@ async function fetchGitHubTimeline() {
 }
 
 function displayStravaStats(activities) {
-    const distanceEl = document.getElementById('total-distance');
-    const timeEl = document.getElementById('total-time');
-    const elevationEl = document.getElementById('elevation-gain');
-    const countEl = document.getElementById('activity-count');
-
-    if (!distanceEl || !timeEl || !elevationEl || !countEl) {
-        console.warn('One or more Strava stat elements are missing.');
-        return;
-    }
-
-    if (!activities || !activities.length) {
-        distanceEl.textContent = '0 km';
-        timeEl.textContent = '0h 0m';
-        elevationEl.textContent = '0m';
-        countEl.textContent = '0';
-        return;
-    }
-
-    const stats = activities.reduce((acc, activity) => {
-        const rawActivity = activity.raw || activity;
-        return {
-            distance: acc.distance + (rawActivity.distance || 0),
-            time: acc.time + (rawActivity.moving_time || 0),
-            elevation: acc.elevation + (rawActivity.total_elevation_gain || 0)
-        };
-    }, { distance: 0, time: 0, elevation: 0 });
-
-    distanceEl.textContent = `${(stats.distance / 1000).toFixed(1)} km`;
-    timeEl.textContent = formatDuration(stats.time);
-    elevationEl.textContent = `${Math.round(stats.elevation)}m`;
-    countEl.textContent = activities.length.toString();
-}
-
-function renderTimeline(entries) {
-    const feed = document.getElementById('activity-timeline-feed');
-    if (!feed) {
-        console.error('Timeline feed element not found');
-        return;
-    }
+    if (!activities || activities.length === 0) return;
     
-    if (!entries || entries.length === 0) {
-        feed.innerHTML = '<div style="color:#fff;text-align:center;padding:2rem;">No recent activity found.</div>';
-        return;
-    }
+    const monthlyStats = activities.reduce((acc, activity) => {
+        const month = activity.raw.start_date.substring(0, 7); // YYYY-MM
+        if (!acc[month]) {
+            acc[month] = { distance: 0, moving_time: 0, elevation_gain: 0, count: 0 };
+        }
+        acc[month].distance += activity.raw.distance;
+        acc[month].moving_time += activity.raw.moving_time;
+        acc[month].elevation_gain += activity.raw.total_elevation_gain;
+        acc[month].count++;
+        return acc;
+    }, {});
     
-    feed.innerHTML = entries.map((e, i) => `
-        <div class="timeline-entry ${e.type}" style="animation-delay:${i*0.07}s">
-            <div class="timeline-dot">${e.icon}</div>
-            <div class="timeline-content">
-                <div class="timeline-title">${e.title}</div>
-                <div class="timeline-desc">${e.desc}</div>
-                <div class="timeline-meta">
-                    <span class="timeline-time">${timeAgo(e.date)}</span>
-                    <span class="timeline-badge ${e.badgeClass}">${e.badge}</span>
-                </div>
-            </div>
+    const statsContainer = document.getElementById('strava-stats-container');
+    if (!statsContainer) return;
+    
+    statsContainer.innerHTML = Object.entries(monthlyStats).map(([month, stats]) => `
+        <div class="stat-card">
+            <h4>${new Date(month).toLocaleString('default', { month: 'long', year: 'numeric' })}</h4>
+            <p><strong>Activities:</strong> ${stats.count}</p>
+            <p><strong>Distance:</strong> ${(stats.distance / 1000).toFixed(1)} km</p>
+            <p><strong>Time:</strong> ${formatDuration(stats.moving_time)}</p>
+            <p><strong>Elevation:</strong> ${Math.round(stats.elevation_gain)} m</p>
         </div>
     `).join('');
 }
 
+function renderTimeline(entries) {
+    const timeline = document.getElementById('timeline-list');
+    if (!timeline) return;
+
+    // Sort entries chronologically, most recent first
+    entries.sort((a, b) => b.date - a.date);
+
+    timeline.innerHTML = entries.map(entry => `
+        <li class="timeline-item">
+            <div class="timeline-icon">${entry.icon}</div>
+            <div class="timeline-content">
+                <span class="timeline-date">${timeAgo(entry.date)}</span>
+                <h5>${entry.title}</h5>
+                <p>${entry.desc}</p>
+                <span class="badge ${entry.badgeClass}">${entry.badge}</span>
+            </div>
+        </li>
+    `).join('');
+}
+
 function timeAgo(date) {
-    const now = new Date();
-    const diff = Math.floor((now - date) / 1000);
-    if (diff < 60) return `${diff}s ago`;
-    if (diff < 3600) return `${Math.floor(diff/60)}m ago`;
-    if (diff < 86400) return `${Math.floor(diff/3600)}h ago`;
-    return `${Math.floor(diff/86400)}d ago`;
+    const seconds = Math.floor((new Date() - date) / 1000);
+    let interval = seconds / 31536000;
+    if (interval > 1) return Math.floor(interval) + " years ago";
+    interval = seconds / 2592000;
+    if (interval > 1) return Math.floor(interval) + " months ago";
+    interval = seconds / 86400;
+    if (interval > 1) return Math.floor(interval) + " days ago";
+    interval = seconds / 3600;
+    if (interval > 1) return Math.floor(interval) + " hours ago";
+    interval = seconds / 60;
+    if (interval > 1) return Math.floor(interval) + " minutes ago";
+    return "Just now";
 }
 
 async function updateTimeline(filter = 'all') {
-    const feed = document.getElementById('activity-timeline-feed');
-    if (!feed) return;
-
+    const timelineList = document.getElementById('timeline-list');
+    if (!timelineList) return;
+    
+    timelineList.innerHTML = '<li class="loading">Loading timeline...</li>';
+    
+    let allEntries = [];
+    
     try {
-        feed.innerHTML = '<div style="color:#fff;text-align:center;padding:2rem;">Loading activities...</div>';
-        
-        const [stravaData, github] = await Promise.all([fetchStravaTimeline(), fetchGitHubTimeline()]);
-        console.log('Fetched activities:', { strava: stravaData.length, github: github.length });
-
-        // Sort the Strava data to ensure it's in the correct order
-        const strava = stravaData.sort((a, b) => b.date - a.date);
-
-        // Calculate and display monthly stats using the full strava array
-        displayStravaStats(strava);
-        
-        // Slice the strava activities for the timeline view
-        const stravaForTimeline = strava.slice(0, 5);
-        
-        let all = [...stravaForTimeline, ...github].sort((a, b) => b.date - a.date);
-        
-        if (filter === 'strava') {
-            all = stravaForTimeline;
-        } else if (filter === 'github') {
-            all = github;
+        if (filter === 'all' || filter === 'strava') {
+            const stravaEntries = await fetchStravaTimeline();
+            if (stravaEntries.length > 0) {
+                displayStravaStats(stravaEntries);
+                allEntries.push(...stravaEntries);
+            }
         }
         
-        renderTimeline(all);
+        if (filter === 'all' || filter === 'github') {
+            const githubEntries = await fetchGitHubTimeline();
+            allEntries.push(...githubEntries);
+        }
+
+        if (allEntries.length > 0) {
+            renderTimeline(allEntries);
+        } else {
+            timelineList.innerHTML = '<li class="loading">No activities found.</li>';
+        }
     } catch (error) {
-        console.error('Error updating timeline:', error);
-        feed.innerHTML = '<div style="color:#fff;text-align:center;padding:2rem;">Error loading activities. Please try again later.</div>';
+        console.error('Failed to update timeline:', error);
+        timelineList.innerHTML = '<li class="error">Could not load timeline.</li>';
     }
 }
 
-// Lazy Loading Implementation
+
+// --- Lazy Loading for Images & Videos ---
 class LazyLoader {
     constructor() {
         this.observer = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
-                    const img = entry.target;
-                    img.src = img.dataset.src;
-                    img.classList.add('loaded');
-                    observer.unobserve(img);
+                    this.loadMedia(entry.target);
+                    observer.unobserve(entry.target);
                 }
             });
-        });
+        }, { rootMargin: '0px 0px 100px 0px' });
     }
 
     observeImages() {
-        document.querySelectorAll('img.lazy-image').forEach(img => {
-            this.observer.observe(img);
-        });
+        document.querySelectorAll('img[data-src]').forEach(img => this.observer.observe(img));
+    }
+
+    observeVideos() {
+        document.querySelectorAll('video[data-src]').forEach(video => this.observer.observe(video));
+    }
+
+    loadMedia(element) {
+        if (element.tagName === 'IMG') {
+            element.src = element.dataset.src;
+        } else if (element.tagName === 'VIDEO') {
+            const source = document.createElement('source');
+            source.src = element.dataset.src;
+            source.type = 'video/mp4';
+            element.appendChild(source);
+            element.load();
+        }
     }
 }
-
-// Parallax Effect
 document.addEventListener('DOMContentLoaded', () => {
-    const parallaxWrapper = document.querySelector('.parallax-wrapper');
-    const parallaxBg = document.querySelector('.parallax-bg');
-    
-    if (parallaxWrapper && parallaxBg) {
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            const speed = parallaxWrapper.dataset.speed || 0.5;
-            const yPos = scrolled * speed;
-            parallaxBg.style.transform = `translateY(${yPos}px) translateZ(-1px) scale(2)`;
-        });
-    }
-
-    // Scroll Reveal
-    const revealElements = document.querySelectorAll('.reveal');
-    
-    const revealOnScroll = () => {
-        revealElements.forEach(element => {
-            const elementTop = element.getBoundingClientRect().top;
-            const elementVisible = 150;
-            
-            if (elementTop < window.innerHeight - elementVisible) {
-                element.classList.add('active');
-            }
-        });
-    };
-
-    window.addEventListener('scroll', revealOnScroll);
-    revealOnScroll(); // Initial check
-});
-
-// 3D Card Effect
-document.querySelectorAll('.metric-card').forEach(card => {
-    card.addEventListener('mousemove', (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        const centerX = rect.width / 2;
-        const centerY = rect.height / 2;
-        
-        const rotateX = (y - centerY) / 20;
-        const rotateY = (centerX - x) / 20;
-        
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-    });
-    
-    card.addEventListener('mouseleave', () => {
-        card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0)';
-    });
-});
-
-// Initialize components
-document.addEventListener('DOMContentLoaded', () => {
-    // Remove any loading states
-    const loadingElements = document.querySelectorAll('.loading');
-    loadingElements.forEach(el => {
-        if (el) { // Add a check here too
-            el.textContent = 'Data unavailable';
-            el.classList.remove('loading');
-        }
-    });
-
     const lazyLoader = new LazyLoader();
-
-    // Load initial content
     lazyLoader.observeImages();
-
-    // Initialize mobile navigation
-    const mobileNavToggle = document.querySelector('.mobile-nav-toggle');
-    const mobileNav = document.querySelector('.mobile-nav');
-
-    if (mobileNavToggle && mobileNav) {
-        mobileNavToggle.addEventListener('click', () => {
-            mobileNav.classList.toggle('active');
-        });
-    }
-
-    // Header scroll effect
-    const header = document.querySelector('.header');
-    let lastScroll = 0;
-
-    // Add check before adding event listener
-    if (header) {
-        window.addEventListener('scroll', () => {
-            const currentScroll = window.pageYOffset;
-            
-            if (currentScroll > lastScroll && currentScroll > 100) {
-                header.classList.add('scrolled');
-            } else {
-                header.classList.remove('scrolled');
-            }
-            
-            lastScroll = currentScroll;
-        });
-    }
-
-    // Smooth scroll for anchor links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                const headerOffset = header ? header.offsetHeight : 0;
-                const elementPosition = target.getBoundingClientRect().top;
-                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-                window.scrollTo({
-                    top: offsetPosition,
-                    behavior: 'smooth'
-                });
-            }
-        });
-    });
-
-    // Intersection Observer for fade-in animations
-    const observerOptions = {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.1
-    };
-
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-                observer.unobserve(entry.target);
-            }
-        });
-    }, observerOptions);
-
-    // Add check before observing sections
-    document.querySelectorAll('.section').forEach(section => {
-        if (section) { // Add a check here
-            section.classList.add('fade-in');
-            observer.observe(section);
-        }
-    });
-
-    // Add reveal class to sections
-    document.querySelectorAll('.section').forEach(section => {
-        if (section) { // Add a check here
-            section.classList.add('reveal');
-        }
-    });
-    
-    // Add floating class to specific elements
-    document.querySelectorAll('.cta-button, .metric-card').forEach(element => {
-        if (element) { // Add a check here
-            element.classList.add('floating');
-        }
-    });
-
-    // Check if the messages feature/container exists before calling loadMessages
-    const messagesContainerElement = document.getElementById('messages-container'); // Or the relevant container ID
-    if (messagesContainerElement && typeof loadMessages === 'function') { // Also check if loadMessages function exists
-        loadMessages(); 
-    } else if (!messagesContainerElement) {
-        console.warn('Messages container not found. Skipping loadMessages().');
-    } else {
-         console.warn('loadMessages function not found. Skipping loadMessages().');
-    }
+    lazyLoader.observeVideos();
 });
 
-// --- Section reveal/intersection observer ---
-// ... existing code ...
-
-// --- Gallery navigation improvements ---
-// ... existing code ...
-
-// --- Touch improvements for mobile ---
-// ... existing code ...
-
-// --- Remove legacy messages feature (if not used) ---
-// (Commented out for now, can be deleted if confirmed unused)
-// document.addEventListener('DOMContentLoaded', function() {
-//     ...
-// });
-
-// --- End of script.js ---
-
-// HYROX Training Dashboard
+// --- Hyrox Race Countdown & Training Dashboard ---
+// Wrap all Hyrox-related logic in a single initialization function
+// This keeps the global scope clean and logic organized
 function initializeHyroxDashboard() {
-    const movementStats = {
-        'Wall Balls': { target: 100, current: 85 },
-        'Sled Push': { target: 100, current: 75 },
-        'Burpee Broad Jumps': { target: 100, current: 90 }
-    };
+    const countdownElement = document.getElementById('hyrox-countdown');
+    const raceDate = new Date('2025-11-29T09:00:00Z'); // Store race date here
 
-    // Update progress bars
-    Object.entries(movementStats).forEach(([movement, stats]) => {
-        // Fix: Use a supported method to find the stat-card and progress bar
-        // The :has and :contains selectors are not universally supported in querySelector
-        const statCards = document.querySelectorAll('.stat-card');
-        statCards.forEach(card => {
-            const heading = card.querySelector('h3');
-            if (heading && heading.textContent.includes(movement)) {
-                const progressBar = card.querySelector('.progress');
-                const statText = card.querySelector('.stat');
-                
-                if (progressBar && statText) {
-                    const percentage = (stats.current / stats.target) * 100;
-                    progressBar.style.width = `${percentage}%`;
-                    statText.textContent = `${percentage}% of target`;
-                }
-            }
-        });
-    });
-}
-
-// HYROX Project Cards Animation
-function initializeProjectCards() {
-    const projectCards = document.querySelectorAll('.project-card');
-    
-    projectCards.forEach(card => {
-        card.addEventListener('mouseenter', () => {
-            card.style.transform = 'translateY(-5px)';
-            card.style.boxShadow = '0 10px 20px rgba(0,0,0,0.2)';
-        });
-        
-        card.addEventListener('mouseleave', () => {
-            card.style.transform = 'translateY(0)';
-            card.style.boxShadow = 'none';
-        });
-    });
-}
-
-// Initialize HYROX components
-document.addEventListener('DOMContentLoaded', () => {
-    initializeHyroxDashboard();
-    initializeProjectCards();
-    
-    // ... existing initialization code ...
-});
-
-// --- HYROX Race Countdown Timer ---
-document.addEventListener('DOMContentLoaded', function() {
-    const countdownEl = document.getElementById('race-countdown');
-    if (!countdownEl) return;
-    const targetDate = new Date('2025-09-19T00:00:00+02:00'); // Maastricht is CEST
-
-    function pad(n) { return n < 10 ? '0' + n : n; }
-
-    function getTimeLeft() {
-        const now = new Date();
-        let diff = targetDate - now;
-        if (diff < 0) diff = 0;
-        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-        const hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
-        const minutes = Math.floor((diff / (1000 * 60)) % 60);
-        const seconds = Math.floor((diff / 1000) % 60);
-        return { days, hours, minutes, seconds };
+    if (!countdownElement) {
+        // console.warn("Countdown element 'hyrox-countdown' not found. Skipping.");
+        return; // Exit if the dashboard isn't on the current page
     }
 
-    // Initial render to create elements
-    let last = {};
-    const initialTime = getTimeLeft();
-    countdownEl.innerHTML = `
-        <div class="countdown-segment"><span class="countdown-value">${pad(initialTime.days)}</span><span class="countdown-label">Days</span></div>
-        <div class="countdown-segment"><span class="countdown-value">${pad(initialTime.hours)}</span><span class="countdown-label">Hours</span></div>
-        <div class="countdown-segment"><span class="countdown-value">${pad(initialTime.minutes)}</span><span class="countdown-label">Minutes</span></div>
-        <div class="countdown-segment"><span class="countdown-value">${pad(initialTime.seconds)}</span><span class="countdown-label">Seconds</span></div>
-    `;
-
-    // Get references to the spans after initial render
-    const daysSpan = countdownEl.querySelector('.countdown-segment:nth-child(1) .countdown-value');
-    const hoursSpan = countdownEl.querySelector('.countdown-segment:nth-child(2) .countdown-value');
-    const minutesSpan = countdownEl.querySelector('.countdown-segment:nth-child(3) .countdown-value');
-    const secondsSpan = countdownEl.querySelector('.countdown-segment:nth-child(4) .countdown-value');
-
+    // --- Core Countdown Logic ---
+    // Moved the countdown logic inside the dashboard initializer
+    // This ensures it only runs when the #hyrox-countdown element is present
     function renderCountdown() {
-        const { days, hours, minutes, seconds } = getTimeLeft();
-        const values = [days, hours, minutes, seconds];
-        const spans = [daysSpan, hoursSpan, minutesSpan, secondsSpan];
-
-        values.forEach((val, i) => {
-            const paddedVal = pad(val);
-            // Check if value has actually changed
-            if (spans[i] && spans[i].textContent !== paddedVal) {
-                spans[i].textContent = paddedVal;
-                // Apply animation
-                spans[i].classList.remove('countdown-animate');
-                // Force reflow
-                void spans[i].offsetWidth;
-                spans[i].classList.add('countdown-animate');
-            }
-        });
-    }
-
-    // Initial call to set up spans and values
-    renderCountdown(); 
-    // Set interval for subsequent updates
-    setInterval(renderCountdown, 1000);
-});
-
-// Tab Functionality
-document.addEventListener('DOMContentLoaded', () => {
-    const tabsContainers = document.querySelectorAll('.tabs-container');
-
-    tabsContainers.forEach(container => {
-        const buttons = container.querySelectorAll('.tab-button');
-        const panes = container.querySelectorAll('.tab-pane');
-
-        buttons.forEach(button => {
-            button.addEventListener('click', () => {
-                // Remove active class from all buttons and panes in this container
-                buttons.forEach(btn => btn.classList.remove('active'));
-                panes.forEach(pane => pane.classList.remove('active'));
-
-                // Add active class to the clicked button
-                button.classList.add('active');
-
-                // Get the target tab pane ID from the data attribute
-                const targetTab = button.dataset.tab;
-                const targetPane = container.querySelector(`#${targetTab}`);
-
-                // Add active class to the target pane
-                if (targetPane) {
-                    targetPane.classList.add('active');
-                }
-            });
-        });
-
-        // Activate the first tab by default if none are active
-        if (container.querySelector('.tab-button.active') === null) {
-             const firstButton = container.querySelector('.tab-button');
-             const firstPane = container.querySelector('.tab-pane');
-             if (firstButton) firstButton.classList.add('active');
-             if (firstPane) firstPane.classList.add('active');
-        }
-    });
-});
-
-// --- Activity Tab Functionality ---
-function initializeActivityTabs() {
-    const activityTabsContainer = document.querySelector('#activity .tabs-container');
-    if (!activityTabsContainer) return;
-
-    const buttons = activityTabsContainer.querySelectorAll('.tab-button');
-    const panes = activityTabsContainer.querySelectorAll('.tab-pane');
-
-    buttons.forEach(button => {
-        button.addEventListener('click', () => {
-            // Remove active class from all buttons and panes in this container
-            buttons.forEach(btn => btn.classList.remove('active'));
-            panes.forEach(pane => pane.classList.remove('active'));
-
-            // Add active class to the clicked button
-            button.classList.add('active');
-
-            // Get the target tab pane ID from the data attribute
-            const targetTabId = button.dataset.tab;
-            const targetPane = activityTabsContainer.querySelector(`#${targetTabId}`);
-
-            // Add active class to the target pane
-            if (targetPane) {
-                targetPane.classList.add('active');
-
-                // Update timestamp if Notes tab is activated
-                if (targetTabId === 'notes') {
-                    updateNotesTimestamp();
-                }
-            }
-        });
-    });
-
-    // Activate the first tab by default if none are active
-    if (activityTabsContainer.querySelector('.tab-button.active') === null) {
-        const firstButton = activityTabsContainer.querySelector('.tab-button');
-        const firstPane = activityTabsContainer.querySelector('.tab-pane');
-        if (firstButton) firstButton.classList.add('active');
-        if (firstPane) firstPane.classList.add('active');
-        // If the first tab is 'notes', update timestamp on load
-        if (firstButton && firstButton.dataset.tab === 'notes') {
-             updateNotesTimestamp();
-        }
-    }
-}
-
-// Update timestamp for Notes tab
-function updateNotesTimestamp() {
-    const timestampSpan = document.getElementById('notes-last-updated');
-    if (timestampSpan) {
         const now = new Date();
-        const options = { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
-        timestampSpan.textContent = now.toLocaleDateString('en-US', options);
+        const timeLeft = raceDate - now;
+
+        if (timeLeft <= 0) {
+            countdownElement.innerHTML = `<div class="race-finished">Good luck, Mark!</div>`;
+            return; // Stop the countdown
+        }
+
+        const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+        countdownElement.innerHTML = `
+            <div class="countdown-item"><span>${days}</span>Days</div>
+            <div class="countdown-item"><span>${hours}</span>Hours</div>
+            <div class="countdown-item"><span>${minutes}</span>Mins</div>
+            <div class="countdown-item"><span>${seconds}</span>Secs</div>
+        `;
+    }
+
+    // Initial render and set interval to update every second
+    renderCountdown();
+    setInterval(renderCountdown, 1000);
+}
+
+// --- Project Cards Hover Effect ---
+// This function adds a 3D-like hover effect to project cards
+function initializeProjectCards() {
+    const cards = document.querySelectorAll('.project-card, .stat-card, .training-card');
+
+    cards.forEach(card => {
+        card.addEventListener('mousemove', e => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const rotateX = (y / rect.height - 0.5) * -15; // Invert for natural feel
+            const rotateY = (x / rect.width - 0.5) * 15;
+
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.05)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale(1)';
+        });
+    });
+}
+// Utility to pad numbers for the clock
+function pad(n) { return n < 10 ? '0' + n : n; }
+
+// Combined clock and date function
+function getTimeLeft() {
+    const now = new Date();
+    
+    // Time
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const displayHours = hours % 12 || 12; // Convert 24hr to 12hr format
+    const timeString = `${pad(displayHours)}:${pad(minutes)} ${ampm}`;
+    
+    // Date
+    const day = now.toLocaleDateString('en-US', { weekday: 'long' });
+    const date = now.getDate();
+    const month = now.toLocaleDateString('en-US', { month: 'long' });
+    const year = now.getFullYear();
+    const dateString = `${day}, ${month} ${date}, ${year}`;
+
+    return { timeString, dateString };
+}
+
+// Render clock and date
+function renderCountdown() {
+    const { timeString, dateString } = getTimeLeft();
+    
+    const timeEl = document.getElementById('live-time');
+    const dateEl = document.getElementById('live-date');
+    
+    if (timeEl) timeEl.textContent = timeString;
+    if (dateEl) dateEl.textContent = dateString;
+}
+
+// Initial call and update every minute
+// renderCountdown();
+// setInterval(renderCountdown, 60 * 1000); // No need for seconds-level precision
+
+
+// --- Strava Data Fetching & Rendering ---
+// This function encapsulates all Strava-related API calls and DOM updates.
+// It is called once on page load.
+async function initializeStrava() {
+    const container = document.getElementById('strava-overview');
+    if (!container) {
+        // console.warn("Strava container not found. Skipping initialization.");
+        return;
+    }
+    
+    // Set initial loading state
+    container.innerHTML = '<div class="loading-state"><div class="spinner"></div><p>Loading Strava data...</p></div>';
+
+    try {
+        const response = await fetch('/.netlify/functions/strava');
+        if (!response.ok) {
+            throw new Error(`API call failed with status: ${response.status}`);
+        }
+        const activities = await response.json();
+        
+        // Check for empty or invalid data
+        if (!activities || activities.length === 0) {
+            container.innerHTML = '<p class="text-center">No recent Strava activities found.</p>';
+            return;
+        }
+
+        // Process and render data
+        renderStravaActivities(activities, container);
+        // showStravaLiveIndicator(activities); // Optional: show live data indicator
+        
+    } catch (error) {
+        console.error("Error initializing Strava data:", error);
+        container.innerHTML = '<div class="error-state"><p>Could not load Strava data. Please try again later.</p></div>';
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
-    const heroBg = document.querySelector('.hero-background');
-    if (heroBg) {
-        window.addEventListener('scroll', () => {
-            const scrolled = window.pageYOffset;
-            heroBg.style.transform = `translateY(${scrolled * 0.5}px)`;
-        });
-    }
-});
+// Renders the fetched Strava activities into the DOM
+function renderStravaActivities(activities, container) {
+    // Sort activities by date, most recent first
+    activities.sort((a, b) => new Date(b.start_date) - new Date(a.start_date));
 
-document.addEventListener('DOMContentLoaded', () => {
-    const newsletterForm = document.querySelector('.newsletter-form');
-    if (newsletterForm) {
-        newsletterForm.addEventListener('submit', function(e) {
-            setTimeout(() => {
-                const confirmation = document.createElement('div');
-                confirmation.textContent = 'Thank you for subscribing!';
-                confirmation.style.background = 'var(--accent-color)';
-                confirmation.style.color = '#000';
-                confirmation.style.padding = '1rem 2rem';
-                confirmation.style.borderRadius = '8px';
-                confirmation.style.marginTop = '1rem';
-                confirmation.style.textAlign = 'center';
-                confirmation.style.fontWeight = 'bold';
-                newsletterForm.parentNode.insertBefore(confirmation, newsletterForm.nextSibling);
-            }, 500);
-        });
-    }
-});
+    // Get the last 5 activities
+    const recentActivities = activities.slice(0, 5);
+    
+    // --- Monthly Stats Calculation ---
+    const monthlyStats = activities.reduce((acc, activity) => {
+        const month = activity.start_date.substring(0, 7); // "YYYY-MM"
+        if (!acc[month]) {
+            acc[month] = { distance: 0, moving_time: 0, elevation_gain: 0, count: 0 };
+        }
+        acc[month].distance += activity.distance;
+        acc[month].moving_time += activity.moving_time;
+        acc[month].elevation_gain += activity.total_elevation_gain;
+        acc[month].count++;
+        return acc;
+    }, {});
+    
+    // --- Generate HTML ---
+    const statsHTML = Object.entries(monthlyStats).map(([month, stats]) => `
+        <div class="stat-card">
+            <h4>${new Date(month + '-02').toLocaleString('default', { month: 'long', year: 'numeric' })}</h4>
+            <p><strong>Activities:</strong> ${stats.count}</p>
+            <p><strong>Distance:</strong> ${(stats.distance / 1000).toFixed(1)} km</p>
+            <p><strong>Time:</strong> ${formatDuration(stats.moving_time)}</p>
+            <p><strong>Elevation:</strong> ${Math.round(stats.elevation_gain)} m</p>
+        </div>
+    `).join('');
 
-// --- Typewriter effect for hero headline ---
+    const timelineHTML = recentActivities.map(activity => {
+        const icon = activity.type.toLowerCase().includes('run') ? '🏃‍♂️' :
+                     activity.type.toLowerCase().includes('ride') ? '🚴‍♂️' :
+                     activity.type.toLowerCase().includes('swim') ? '🏊‍♂️' : '💪';
+        
+        return `
+            <li class="timeline-item">
+                <div class="timeline-icon">${icon}</div>
+                <div class="timeline-content">
+                    <span class="timeline-date">${timeAgo(new Date(activity.start_date))}</span>
+                    <h5>${activity.name}</h5>
+                    <p>
+                        ${(activity.distance / 1000).toFixed(1)}km · 
+                        ${formatDuration(activity.moving_time)}
+                        ${activity.total_elevation_gain ? ` · ⛰️ ${Math.round(activity.total_elevation_gain)}m` : ''}
+                    </p>
+                </div>
+            </li>
+        `;
+    }).join('');
+
+    // --- Update DOM ---
+    container.innerHTML = `
+        <div class="strava-header">
+            <h3>Monthly Snapshot</h3>
+            <a href="https://www.strava.com/athletes/1305716" target="_blank" class="strava-profile-link">
+                View on Strava 
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
+            </a>
+        </div>
+        <div class="stats-grid">
+            ${statsHTML}
+        </div>
+        <h3 class="mt-4">Recent Activities</h3>
+        <ul class="timeline-list">
+            ${timelineHTML}
+        </ul>
+    `;
+    
+    // Re-initialize hover effects for the newly added stat cards
+    initializeProjectCards();
+}
+
+// Function to format duration from seconds to a readable format
+function formatDuration(seconds) {
+    if (isNaN(seconds) || seconds < 0) return '0m';
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    return hours > 0 ? `${hours}h ${minutes}m` : `${minutes}m`;
+}
+
+// --- Training Section Tabs & Content ---
+function initializeActivityTabs() {
+    const tabs = document.querySelectorAll('.training-tabs .tab-button');
+    const contents = document.querySelectorAll('.training-content .tab-pane');
+
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            // Deactivate all tabs and panes
+            tabs.forEach(t => t.classList.remove('active'));
+            contents.forEach(c => c.classList.remove('active'));
+
+            // Activate the clicked tab and corresponding pane
+            tab.classList.add('active');
+            const target = document.getElementById(tab.dataset.tab);
+            if (target) {
+                target.classList.add('active');
+            }
+        });
+    });
+
+    // Set a default active tab if none is set
+    const activeTab = document.querySelector('.training-tabs .tab-button.active');
+    if (!activeTab && tabs.length > 0) {
+        tabs[0].classList.add('active');
+        const defaultContent = document.getElementById(tabs[0].dataset.tab);
+        if (defaultContent) {
+            defaultContent.classList.add('active');
+        }
+    }
+}
+
+
+// --- Daily Notes Feature ---
+// This allows for quick, local-storage-based notes.
+function initializeNotes() {
+    const notesTextarea = document.getElementById('daily-notes-textarea');
+    const lastUpdatedEl = document.getElementById('notes-last-updated');
+    
+    if (!notesTextarea || !lastUpdatedEl) return;
+    
+    // Load saved notes
+    const savedNotes = localStorage.getItem('dailyNotes');
+    if (savedNotes) {
+        notesTextarea.value = savedNotes;
+    }
+    
+    // Update timestamp
+    updateNotesTimestamp();
+
+    // Save notes on input
+    notesTextarea.addEventListener('input', () => {
+        localStorage.setItem('dailyNotes', notesTextarea.value);
+        updateNotesTimestamp();
+    });
+}
+
+// Updates the 'last updated' timestamp for the notes
+function updateNotesTimestamp() {
+    const lastUpdatedEl = document.getElementById('notes-last-updated');
+    if (lastUpdatedEl) {
+        lastUpdatedEl.textContent = `Last saved: ${new Date().toLocaleTimeString()}`;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', initializeNotes);
+
+
+// --- Advanced UI Enhancements ---
+
+// Dynamic typewriter effect for headlines
 function typewriterEffect(element, text, speed = 60) {
-  let i = 0;
-  function type() {
-    if (i <= text.length) {
-      element.textContent = text.substring(0, i);
-      i++;
-      setTimeout(type, speed);
+    let i = 0;
+    element.innerHTML = ""; // Clear existing text
+  
+    function type() {
+      if (i < text.length) {
+        element.innerHTML += text.charAt(i);
+        i++;
+        setTimeout(type, speed);
+      }
     }
-  }
-  type();
+    type();
 }
-document.addEventListener('DOMContentLoaded', () => {
-  const tw = document.getElementById('typewriter');
-  if (tw) typewriterEffect(tw, 'AI Developer & Athlete');
-});
+// Usage Example:
+// const headline = document.querySelector('#hero h1');
+// if (headline) {
+//   const text = headline.textContent;
+//   typewriterEffect(headline, text);
+// }
 
-// --- Nav transparency on scroll ---
-window.addEventListener('scroll', () => {
-  const header = document.querySelector('.header');
-  if (!header) return;
-  if (window.scrollY > 40) {
-    header.classList.add('scrolled');
-  } else {
-    header.classList.remove('scrolled');
-  }
-});
 
-// --- Strava live indicator ---
+// Live indicator for fresh data (e.g., from Strava)
 async function showStravaLiveIndicator(activities) {
-  const indicator = document.getElementById('strava-live-indicator');
-  if (!indicator) return;
-  const today = new Date().toDateString();
-  if (activities && activities.length && new Date(activities[0].start_date).toDateString() === today) {
-    indicator.style.display = 'inline-block';
-  } else {
-    indicator.style.display = 'none';
-  }
-}
-// Patch into displayActivities
-const origDisplayActivities = window.displayActivities;
-window.displayActivities = function(activities) {
-  origDisplayActivities && origDisplayActivities(activities);
-  showStravaLiveIndicator(activities);
-};
+    if (!activities || activities.length === 0) return;
 
-// --- GitHub animated graph and tooltips ---
+    const latestActivityDate = new Date(activities[0].start_date);
+    const now = new Date();
+    const hoursSinceLastActivity = (now - latestActivityDate) / (1000 * 60 * 60);
+
+    if (hoursSinceLastActivity < 24) { // If data is less than 24 hours old
+        const indicator = document.createElement('div');
+        indicator.className = 'live-indicator';
+        indicator.title = `Data updated ${timeAgo(latestActivityDate)}`;
+        
+        const stravaHeader = document.querySelector('.strava-header h3');
+        if (stravaHeader) {
+            stravaHeader.style.position = 'relative';
+            stravaHeader.appendChild(indicator);
+        }
+    }
+}
+
+
+// GitHub contribution graph animation
 function animateGitHubGraph() {
-  const cells = document.querySelectorAll('.activity-github-graph .ContributionCalendar-day');
-  cells.forEach((cell, i) => {
-    setTimeout(() => cell.classList.add('animated-cell'), i * 10);
-    cell.addEventListener('mouseenter', e => {
-      let tooltip = document.createElement('div');
-      tooltip.className = 'github-tooltip';
-      tooltip.textContent = `${cell.getAttribute('data-count') || 0} contributions! Keep it up!`;
-      document.body.appendChild(tooltip);
-      const rect = cell.getBoundingClientRect();
-      tooltip.style.left = rect.left + window.scrollX + 'px';
-      tooltip.style.top = rect.top + window.scrollY - 36 + 'px';
-      setTimeout(() => tooltip.classList.add('active'), 10);
-      cell.addEventListener('mouseleave', () => {
-        tooltip.classList.remove('active');
-        setTimeout(() => tooltip.remove(), 200);
-      }, { once: true });
+    const days = document.querySelectorAll('.github-graph .day');
+    days.forEach((day, i) => {
+        day.style.animation = `fadeIn 0.5s ease-in-out ${i * 0.01}s forwards`;
     });
-  });
 }
-document.addEventListener('DOMContentLoaded', animateGitHubGraph);
+// To be called when the graph section is scrolled into view.
+// You can integrate this with the IntersectionObserver in handleSectionTransitions.
 
-// --- GitHub live commit feed ---
+
+// --- GitHub Commit Feed ---
+// Fetches and displays the latest commits from a specific repository
 async function updateCommitFeed() {
-  const feed = document.getElementById('github-commit-feed');
-  if (!feed) return;
-  try {
-    const res = await fetch('https://api.github.com/users/AllBlazing/events/public');
-    const events = await res.json();
-    const commits = events.filter(e => e.type === 'PushEvent').flatMap(e => e.payload.commits.map(c => ({
-      msg: c.message,
-      repo: e.repo.name,
-      time: new Date(e.created_at).toLocaleString()
-    })));
-    feed.innerHTML = '';
-    commits.slice(0, 5).forEach((c, i) => {
-      const div = document.createElement('div');
-      div.className = 'commit-item';
-      div.style.animationDelay = (i * 0.2) + 's';
-      div.innerHTML = `<strong>${c.repo}</strong>: ${c.msg} <span style="color:#aaa;font-size:0.9em;">(${c.time})</span>`;
-      feed.appendChild(div);
-    });
-  } catch (e) { feed.innerHTML = '<em>Could not load commits</em>'; }
-}
-document.addEventListener('DOMContentLoaded', updateCommitFeed);
+    const feedElement = document.getElementById('github-commit-feed');
+    if (!feedElement) return;
 
-// --- Confetti for streak celebration ---
-function launchConfetti() {
-  const confetti = document.createElement('canvas');
-  confetti.className = 'confetti';
-  document.body.appendChild(confetti);
-  const ctx = confetti.getContext('2d');
-  confetti.width = window.innerWidth;
-  confetti.height = window.innerHeight;
-  const pieces = Array.from({length: 120}, () => ({
-    x: Math.random() * confetti.width,
-    y: Math.random() * -confetti.height,
-    r: Math.random() * 6 + 4,
-    d: Math.random() * 40 + 10,
-    color: `hsl(${Math.random()*360},90%,60%)`,
-    tilt: Math.random() * 10 - 10
-  }));
-  let frame = 0;
-  function draw() {
-    ctx.clearRect(0,0,confetti.width,confetti.height);
-    pieces.forEach(p => {
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI);
-      ctx.fillStyle = p.color;
-      ctx.fill();
-      p.y += Math.cos(frame/10 + p.d) + 2 + p.r/2;
-      p.x += Math.sin(frame/10) * 2;
-      if (p.y > confetti.height) p.y = -10;
-    });
-    frame++;
-    if (frame < 180) requestAnimationFrame(draw);
-    else confetti.remove();
-  }
-  draw();
+    try {
+        // Using a public repo for demonstration
+        const response = await fetch('https://api.github.com/repos/mark-trewren/personalsite-v2/commits');
+        const commits = await response.json();
+        
+        const commitList = commits.slice(0, 5).map(commit => `
+            <li>
+                <a href="${commit.html_url}" target="_blank">${commit.commit.message}</a>
+                <span class="commit-date">${timeAgo(new Date(commit.commit.author.date))}</span>
+            </li>
+        `).join('');
+        
+        feedElement.innerHTML = `<ul>${commitList}</ul>`;
+
+    } catch (error) {
+        console.error("Error fetching GitHub commits:", error);
+        feedElement.innerHTML = '<p>Could not load commits.</p>';
+    }
 }
-// Patch into streak update
-const origFetchGitHubStats = window.fetchGitHubStats;
-window.fetchGitHubStats = async function() {
-  const prevStreak = Number(document.getElementById('github-streak')?.textContent || 0);
-  await origFetchGitHubStats?.();
-  const newStreak = Number(document.getElementById('github-streak')?.textContent || 0);
-  if (newStreak > prevStreak && newStreak > 0) launchConfetti();
-};
+// document.addEventListener('DOMContentLoaded', updateCommitFeed);
+
+// --- Fun & Interactive Elements ---
+
+// Confetti effect on button click
+function launchConfetti() {
+    const canvas = document.createElement('canvas');
+    document.body.appendChild(canvas);
+    canvas.style.position = 'fixed';
+    canvas.style.top = '0';
+    canvas.style.left = '0';
+    canvas.style.width = '100%';
+    canvas.style.height = '100%';
+    canvas.style.pointerEvents = 'none';
+    const ctx = canvas.getContext('2d');
+    let W = window.innerWidth;
+    let H = window.innerHeight;
+    canvas.width = W;
+    canvas.height = H;
+
+    const particles = [];
+    const particleCount = 100;
+    for (let i = 0; i < particleCount; i++) {
+        particles.push({
+            x: W / 2,
+            y: H,
+            r: Math.random() * 6 + 2,
+            d: Math.random() * particleCount,
+            color: `rgba(${Math.floor(Math.random()*255)}, ${Math.floor(Math.random()*255)}, ${Math.floor(Math.random()*255)}, 0.8)`,
+            tilt: Math.floor(Math.random() * 10) - 10,
+            tiltAngle: 0,
+            tiltAngleIncrement: Math.random() * 0.07 + 0.05
+        });
+    }
+
+    function draw() {
+        ctx.clearRect(0, 0, W, H);
+        for (let i = 0; i < particles.length; i++) {
+            const p = particles[i];
+            p.tiltAngle += p.tiltAngleIncrement;
+            p.y -= (Math.cos(p.d) + 3 + p.r / 2) / 2;
+            p.x += Math.sin(p.d);
+            p.tilt = Math.sin(p.tiltAngle - i / 3) * 15;
+
+            ctx.beginPath();
+            ctx.lineWidth = p.r;
+            ctx.strokeStyle = p.color;
+            ctx.moveTo(p.x + p.tilt + p.r, p.y);
+            ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r);
+            ctx.stroke();
+        }
+
+        if (particles.every(p => p.y < -30)) {
+            canvas.remove();
+        } else {
+            requestAnimationFrame(draw);
+        }
+    }
+    draw();
+}
+// Example Usage: Attach to a button
+// document.getElementById('my-button').addEventListener('click', launchConfetti);
 
