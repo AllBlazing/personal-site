@@ -589,6 +589,149 @@
         .stat-content {
             grid-template-columns: 1fr;
         }
+
+        /* Footer Styles - Ensure Perfect Centering */
+        .footer {
+            background: rgba(0, 0, 0, 0.95);
+            padding: var(--spacing-xl) 0;
+            margin-top: var(--spacing-xl);
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .footer .container {
+            max-width: var(--container-max-width);
+            margin: 0 auto;
+            padding: 0 var(--container-padding);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .footer p {
+            margin-bottom: 1rem;
+            text-align: center;
+            width: 100%;
+        }
+
+        .footer .copyright {
+            text-align: center;
+            width: 100%;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .copyright {
+            color: var(--text-secondary);
+            opacity: 0.7;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color var(--transition-base) ease;
+            opacity: 0.7;
+        }
+
+        .footer-links a:hover {
+            color: var(--accent-color);
+            opacity: 1;
+        }
+
+        /* Gallery Image Fixes - Prevent Head Cropping */
+        .gallery-item img {
+            width: 100%;
+            height: 300px;
+            object-fit: contain;
+            object-position: top;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Hero Background Image Fix */
+        .hero-background {
+            background: url('images-for-journey/hyrox berlin running.jpg') center top / cover no-repeat, #000 !important;
+        }
+
+        /* Supplements Grid Layout - Ensure Horizontal Layout */
+        .supplements-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .supplement-category {
+            background: var(--background-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .supplement-category:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+
+        .supplement-category h4 {
+            color: var(--text-primary);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin: 0 0 1.5rem 0;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--border-color);
+            text-align: center;
+        }
+
+        .supplement-category ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .supplement-category li {
+            background: var(--background-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        .supplement-category li:hover {
+            background: var(--background-primary);
+            border-color: var(--accent-color);
+            transform: translateX(4px);
+        }
+
+        .supplement-category li:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Responsive adjustments for supplements */
+        @media (max-width: 768px) {
+            .supplements-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
     </style>
 </head>
 <body>

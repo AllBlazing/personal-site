@@ -381,6 +381,9 @@ function timeAgo(date) {
 
 async function updateTimeline(filter = 'all') {
     const timelineList = document.getElementById('timeline-list');
+    const githubOverview = document.getElementById('github-overview');
+    const stravaOverview = document.getElementById('strava-overview');
+    
     if (!timelineList) return;
     
     timelineList.innerHTML = '<li class="loading">Loading timeline...</li>';
@@ -404,6 +407,10 @@ async function updateTimeline(filter = 'all') {
                 displayStravaStats(stravaEntries);
                 const recentStrava = stravaEntries.slice(0, 5);
                 renderTimeline(recentStrava);
+                
+                // Show Strava overview, hide GitHub
+                if (stravaOverview) stravaOverview.style.display = 'block';
+                if (githubOverview) githubOverview.style.display = 'none';
             } else {
                 const statsContainer = document.getElementById('strava-stats-container');
                 if (statsContainer) statsContainer.innerHTML = '<p class="no-data">No Strava data available.</p>';
@@ -416,19 +423,28 @@ async function updateTimeline(filter = 'all') {
             } else {
                 timelineList.innerHTML = '<li class="timeline-item-empty">No GitHub activity found.</li>';
             }
+            
+            // Show GitHub overview, hide Strava
+            if (githubOverview) githubOverview.style.display = 'block';
+            if (stravaOverview) stravaOverview.style.display = 'none';
         } else {
-            // All tab: combine and show mixed timeline only
+            // All tab: combine and show mixed timeline only (max 5 each)
             const timelineStrava = stravaEntries.slice(0, 5);
             const timelineGitHub = githubEntries.slice(0, 5);
             
-            // Combine for rendering
+            // Combine and sort chronologically
             let allEntries = [...timelineStrava, ...timelineGitHub];
+            allEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
             
             if (allEntries.length > 0) {
                 renderTimeline(allEntries);
             } else {
                 timelineList.innerHTML = '<li class="timeline-item-empty">No recent activity to display.</li>';
             }
+            
+            // Hide both overviews on All tab
+            if (stravaOverview) stravaOverview.style.display = 'none';
+            if (githubOverview) githubOverview.style.display = 'none';
         }
 
     } catch (error) {
@@ -706,7 +722,7 @@ function renderStravaActivities(activities, container) {
         <div class="stats-grid">
             ${statsHTML}
         </div>
-        <h3 class="mt-4">Recent Activities</h3>
+        <h3 class="mt-4">Recent Activities (Last 5)</h3>
         <ul class="timeline-list">
             ${timelineHTML}
         </ul>
