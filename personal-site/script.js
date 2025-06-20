@@ -653,11 +653,27 @@ function renderStravaActivities(activities, container) {
     // --- Generate HTML ---
     const statsHTML = Object.entries(monthlyStats).map(([month, stats]) => `
         <div class="stat-card">
-            <h4>${new Date(month + '-02').toLocaleString('default', { month: 'long', year: 'numeric' })}</h4>
-            <p><strong>Activities:</strong> ${stats.count}</p>
-            <p><strong>Distance:</strong> ${(stats.distance / 1000).toFixed(1)} km</p>
-            <p><strong>Time:</strong> ${formatDuration(stats.moving_time)}</p>
-            <p><strong>Elevation:</strong> ${Math.round(stats.elevation_gain)} m</p>
+            <div class="stat-header">
+                <h4>${new Date(month + '-02').toLocaleString('default', { month: 'long', year: 'numeric' })}</h4>
+            </div>
+            <div class="stat-content">
+                <div class="stat-item">
+                    <span class="stat-label">Activities</span>
+                    <span class="stat-value">${stats.count}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Distance</span>
+                    <span class="stat-value">${(stats.distance / 1000).toFixed(1)} km</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Time</span>
+                    <span class="stat-value">${formatDuration(stats.moving_time)}</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Elevation</span>
+                    <span class="stat-value">${Math.round(stats.elevation_gain)} m</span>
+                </div>
+            </div>
         </div>
     `).join('');
 
@@ -686,10 +702,6 @@ function renderStravaActivities(activities, container) {
     container.innerHTML = `
         <div class="strava-header">
             <h3>Monthly Snapshot</h3>
-            <a href="https://www.strava.com/athletes/1305716" target="_blank" class="strava-profile-link">
-                View on Strava 
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17l9.2-9.2M17 17V7H7"/></svg>
-            </a>
         </div>
         <div class="stats-grid">
             ${statsHTML}
