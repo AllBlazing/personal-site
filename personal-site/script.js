@@ -405,7 +405,14 @@ async function updateTimeline(filter = 'all') {
             // Show Strava monthly stats and only 5 recent activities
             if (stravaEntries.length > 0) {
                 displayStravaStats(stravaEntries);
-                const recentStrava = stravaEntries.slice(0, 5);
+                
+                // Filter for recent activities (last 7 days) and limit to 5
+                const sevenDaysAgo = new Date();
+                sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+                const recentStrava = stravaEntries
+                    .filter(entry => entry.date >= sevenDaysAgo)
+                    .slice(0, 5);
+                
                 renderTimeline(recentStrava);
                 
                 // Show Strava overview, hide GitHub
@@ -417,9 +424,10 @@ async function updateTimeline(filter = 'all') {
                 timelineList.innerHTML = '<li class="timeline-item-empty">No Strava activities found.</li>';
             }
         } else if (filter === 'github') {
-            // GitHub tab shows contribution graph and timeline
+            // GitHub tab shows contribution graph and timeline (limit to 5 entries)
             if (githubEntries.length > 0) {
-                renderTimeline(githubEntries);
+                const recentGitHub = githubEntries.slice(0, 5);
+                renderTimeline(recentGitHub);
             } else {
                 timelineList.innerHTML = '<li class="timeline-item-empty">No GitHub activity found.</li>';
             }
