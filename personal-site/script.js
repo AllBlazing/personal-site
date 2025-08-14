@@ -45,11 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const stravaOverview = document.getElementById('strava-overview');
 
                 if (githubOverview && stravaOverview) {
-                    if (source === 'all') {
-                        // Hide both overviews on All tab - only show timeline
-                        githubOverview.style.display = 'none';
-                        stravaOverview.style.display = 'none';
-                    } else if (source === 'github') {
+                    if (source === 'github') {
                         githubOverview.style.display = 'block';
                         stravaOverview.style.display = 'none';
                     } else if (source === 'strava') {
@@ -62,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     } catch (e) { console.error('Timeline tabs error:', e); }
-    try { if (typeof updateTimeline === 'function') updateTimeline(); } catch (e) { console.error('Timeline update error:', e); }
+    try { if (typeof updateTimeline === 'function') updateTimeline('strava'); } catch (e) { console.error('Timeline update error:', e); }
     try { if (typeof initializeStrava === 'function') initializeStrava(); } catch (e) { console.error('Strava error:', e); }
     try { initializeGitHubGraph(); } catch (e) { console.error('GitHub Graph error:', e); }
     // Other DOMContentLoaded code blocks can be added here as needed
@@ -379,7 +375,7 @@ function timeAgo(date) {
     return "Just now";
 }
 
-async function updateTimeline(filter = 'all') {
+async function updateTimeline(filter = 'strava') {
     const timelineList = document.getElementById('timeline-list');
     const githubOverview = document.getElementById('github-overview');
     const stravaOverview = document.getElementById('strava-overview');
@@ -435,24 +431,6 @@ async function updateTimeline(filter = 'all') {
             // Show GitHub overview, hide Strava
             if (githubOverview) githubOverview.style.display = 'block';
             if (stravaOverview) stravaOverview.style.display = 'none';
-        } else {
-            // All tab: combine and show mixed timeline only (max 5 each)
-            const timelineStrava = stravaEntries.slice(0, 5);
-            const timelineGitHub = githubEntries.slice(0, 5);
-            
-            // Combine and sort chronologically
-            let allEntries = [...timelineStrava, ...timelineGitHub];
-            allEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
-            
-            if (allEntries.length > 0) {
-                renderTimeline(allEntries);
-            } else {
-                timelineList.innerHTML = '<li class="timeline-item-empty">No recent activity to display.</li>';
-            }
-            
-            // Hide both overviews on All tab
-            if (stravaOverview) stravaOverview.style.display = 'none';
-            if (githubOverview) githubOverview.style.display = 'none';
         }
 
     } catch (error) {
