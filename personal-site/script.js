@@ -302,31 +302,36 @@ function displayStravaStats(activities) {
     const statsContainer = document.getElementById('strava-stats-container');
     if (!statsContainer) return;
     
-    statsContainer.innerHTML = Object.entries(monthlyStats).map(([month, stats]) => `
-        <div class="stat-card">
-            <div class="stat-header">
-                <h4>${new Date(month).toLocaleString('default', { month: 'long', year: 'numeric' })}</h4>
-            </div>
-            <div class="stat-content">
-                <div class="stat-item">
-                    <span class="stat-label">Activities</span>
-                    <span class="stat-value">${stats.count}</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Distance</span>
-                    <span class="stat-value">${(stats.distance / 1000).toFixed(1)} km</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Time</span>
-                    <span class="stat-value">${formatDuration(stats.moving_time)}</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Elevation</span>
-                    <span class="stat-value">${Math.round(stats.elevation_gain)} m</span>
-                </div>
-            </div>
+    statsContainer.innerHTML = `
+        <div class="strava-header">
+            <h3>Monthly Snapshot</h3>
         </div>
-    `).join('');
+        ${Object.entries(monthlyStats).map(([month, stats]) => `
+            <div class="stat-card">
+                <div class="stat-header">
+                    <h4>${new Date(month).toLocaleString('default', { month: 'long', year: 'numeric' })}</h4>
+                </div>
+                <div class="stat-content">
+                    <div class="stat-item">
+                        <span class="stat-label">Activities</span>
+                        <span class="stat-value">${stats.count}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Distance</span>
+                        <span class="stat-value">${(stats.distance / 1000).toFixed(1)} km</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Time</span>
+                        <span class="stat-value">${formatDuration(stats.moving_time)}</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Elevation</span>
+                        <span class="stat-value">${Math.round(stats.elevation_gain)} m</span>
+                    </div>
+                </div>
+            </div>
+        `).join('')}
+    `;
 }
 
 function renderTimeline(entries) {
@@ -400,6 +405,9 @@ async function updateTimeline(filter = 'strava') {
         if (filter === 'strava') {
             // Show Strava monthly stats and only 5 recent activities
             if (stravaEntries.length > 0) {
+                // Clear any existing content first
+                timelineList.innerHTML = '';
+                
                 displayStravaStats(stravaEntries);
                 
                 // Filter for recent activities (last 7 days) and limit to 5
@@ -422,6 +430,9 @@ async function updateTimeline(filter = 'strava') {
         } else if (filter === 'github') {
             // GitHub tab shows contribution graph and timeline (limit to 5 entries)
             if (githubEntries.length > 0) {
+                // Clear any existing content first
+                timelineList.innerHTML = '';
+                
                 const recentGitHub = githubEntries.slice(0, 5);
                 renderTimeline(recentGitHub);
             } else {
@@ -621,8 +632,8 @@ async function initializeStrava() {
             return;
         }
 
-        // Process and render data
-        renderStravaActivities(activities, container);
+        // Process and render data - let the main timeline system handle this
+        // renderStravaActivities(activities, container); // Removed to prevent duplication
         // showStravaLiveIndicator(activities); // Optional: show live data indicator
         
     } catch (error) {
@@ -632,91 +643,8 @@ async function initializeStrava() {
 }
 
 // Renders the fetched Strava activities into the DOM
-function renderStravaActivities(activities, container) {
-    // Sort activities by date, most recent first
-    activities.sort((a, b) => new Date(b.start_date) - new Date(a.start_date));
-
-    // Get the last 5 activities
-    const recentActivities = activities.slice(0, 5);
-    
-    // --- Monthly Stats Calculation ---
-    const monthlyStats = activities.reduce((acc, activity) => {
-        const month = activity.start_date.substring(0, 7); // "YYYY-MM"
-        if (!acc[month]) {
-            acc[month] = { distance: 0, moving_time: 0, elevation_gain: 0, count: 0 };
-        }
-        acc[month].distance += activity.distance;
-        acc[month].moving_time += activity.moving_time;
-        acc[month].elevation_gain += activity.total_elevation_gain;
-        acc[month].count++;
-        return acc;
-    }, {});
-    
-    // --- Generate HTML ---
-    const statsHTML = Object.entries(monthlyStats).map(([month, stats]) => `
-        <div class="stat-card">
-            <div class="stat-header">
-                <h4>${new Date(month + '-02').toLocaleString('default', { month: 'long', year: 'numeric' })}</h4>
-            </div>
-            <div class="stat-content">
-                <div class="stat-item">
-                    <span class="stat-label">Activities</span>
-                    <span class="stat-value">${stats.count}</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Distance</span>
-                    <span class="stat-value">${(stats.distance / 1000).toFixed(1)} km</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Time</span>
-                    <span class="stat-value">${formatDuration(stats.moving_time)}</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-label">Elevation</span>
-                    <span class="stat-value">${Math.round(stats.elevation_gain)} m</span>
-                </div>
-            </div>
-        </div>
-    `).join('');
-
-    const timelineHTML = recentActivities.map(activity => {
-        const icon = activity.type.toLowerCase().includes('run') ? '🏃‍♂️' :
-                     activity.type.toLowerCase().includes('ride') ? '🚴‍♂️' :
-                     activity.type.toLowerCase().includes('swim') ? '🏊‍♂️' : '💪';
-        
-        return `
-            <li class="timeline-item">
-                <div class="timeline-icon">${icon}</div>
-                <div class="timeline-content">
-                    <span class="timeline-date">${timeAgo(new Date(activity.start_date))}</span>
-                    <h5>${activity.name}</h5>
-                    <p>
-                        ${(activity.distance / 1000).toFixed(1)}km · 
-                        ${formatDuration(activity.moving_time)}
-                        ${activity.total_elevation_gain ? ` · ⛰️ ${Math.round(activity.total_elevation_gain)}m` : ''}
-                    </p>
-                </div>
-            </li>
-        `;
-    }).join('');
-
-    // --- Update DOM ---
-    container.innerHTML = `
-        <div class="strava-header">
-            <h3>Monthly Snapshot</h3>
-        </div>
-        <div class="stats-grid">
-            ${statsHTML}
-        </div>
-        <h3 class="mt-4">Recent Activities (Last 5)</h3>
-        <ul class="timeline-list">
-            ${timelineHTML}
-        </ul>
-    `;
-    
-    // Re-initialize hover effects for the newly added stat cards
-    initializeProjectCards();
-}
+// REMOVED: This function was causing duplication with the main timeline system
+// The main timeline system now handles all Strava data rendering
 
 // Function to format duration from seconds to a readable format
 function formatDuration(seconds) {
