@@ -58,9 +58,9 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     } catch (e) { console.error('Timeline tabs error:', e); }
-    try { if (typeof updateTimeline === 'function') updateTimeline('strava'); } catch (e) { console.error('Timeline update error:', e); }
-    try { if (typeof initializeStrava === 'function') initializeStrava(); } catch (e) { console.error('Strava error:', e); }
     try { initializeGitHubGraph(); } catch (e) { console.error('GitHub Graph error:', e); }
+    // Initialize timeline directly - it will handle Strava data fetching
+    try { if (typeof updateTimeline === 'function') updateTimeline('strava'); } catch (e) { console.error('Timeline update error:', e); }
     // Other DOMContentLoaded code blocks can be added here as needed
 });
 
@@ -235,14 +235,34 @@ async function fetchStravaTimeline() {
         // On a local server, it will fail, and the timeline will show GitHub data only.
         const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
         if (isLocalhost) {
-            return []; // Return empty array on local dev to prevent errors
+            console.log('Localhost detected, returning sample Strava data for testing');
+            // Return sample data for local testing
+            return [
+                {
+                    type: 'strava',
+                    icon: '🏃‍♂️',
+                    title: 'Sample Run',
+                    desc: '5.0km · 25m',
+                    date: new Date(),
+                    badge: 'Strava',
+                    badgeClass: 'strava',
+                    raw: {
+                        start_date: new Date().toISOString(),
+                        distance: 5000,
+                        moving_time: 1500,
+                        total_elevation_gain: 25
+                    }
+                }
+            ];
         }
 
+        console.log('Fetching Strava data from Netlify function...');
         const response = await fetch('/.netlify/functions/strava');
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
         const activities = await response.json();
+        console.log('Strava API response:', activities?.length, 'activities');
         
         // Map the raw Strava data to the format the timeline renderer expects
         return activities.map(a => ({
@@ -285,10 +305,13 @@ async function fetchGitHubTimeline() {
 }
 
 function displayStravaStats(activities) {
+    console.log('displayStravaStats called with:', activities?.length, 'activities');
+    console.log('Activities structure:', activities);
     if (!activities || activities.length === 0) return;
     
     const monthlyStats = activities.reduce((acc, activity) => {
         const month = activity.raw.start_date.substring(0, 7); // YYYY-MM
+        console.log('Processing activity:', activity.title, 'month:', month, 'raw data:', activity.raw);
         if (!acc[month]) {
             acc[month] = { distance: 0, moving_time: 0, elevation_gain: 0, count: 0 };
         }
@@ -299,8 +322,14 @@ function displayStravaStats(activities) {
         return acc;
     }, {});
     
+    console.log('Calculated monthly stats:', monthlyStats);
+    
     const statsContainer = document.getElementById('strava-stats-container');
-    if (!statsContainer) return;
+    console.log('Looking for strava-stats-container:', !!statsContainer);
+    if (!statsContainer) {
+        console.error('strava-stats-container not found!');
+        return;
+    }
     
     statsContainer.innerHTML = `
         <div class="strava-header">
@@ -381,9 +410,12 @@ function timeAgo(date) {
 }
 
 async function updateTimeline(filter = 'strava') {
+    console.log('updateTimeline called with filter:', filter);
     const timelineList = document.getElementById('timeline-list');
     const githubOverview = document.getElementById('github-overview');
     const stravaOverview = document.getElementById('strava-overview');
+    
+    console.log('Timeline elements found:', { timelineList: !!timelineList, githubOverview: !!githubOverview, stravaOverview: !!stravaOverview });
     
     if (!timelineList) return;
     
@@ -395,7 +427,9 @@ async function updateTimeline(filter = 'strava') {
     try {
         // Fetch all data first
         if (filter === 'all' || filter === 'strava') {
+            console.log('Fetching Strava timeline...');
             stravaEntries = await fetchStravaTimeline();
+            console.log('Strava entries fetched:', stravaEntries.length);
         }
         if (filter === 'all' || filter === 'github') {
             githubEntries = await fetchGitHubTimeline();
@@ -600,7 +634,7 @@ function renderCountdown() {
 async function initializeStrava() {
     // Note: The Strava integration relies on a Netlify Function to securely handle API keys.
     // This function is only available on the deployed Netlify site.
-    // On a local test server, this section will display a fallback message.
+    // On a local test server, it will display a fallback message.
     const container = document.getElementById('strava-overview');
     if (!container) {
         // console.warn("Strava container not found. Skipping initialization.");
@@ -620,21 +654,14 @@ async function initializeStrava() {
             return;
         }
         
-        const response = await fetch('/.netlify/functions/strava');
-        if (!response.ok) {
-            throw new Error(`API call failed with status: ${response.status}`);
+        // Clear the loading state but preserve the existing strava-stats-container
+        const existingStatsContainer = container.querySelector('#strava-stats-container');
+        if (!existingStatsContainer) {
+            container.innerHTML = '<div id="strava-stats-container" class="stats-grid"></div>';
         }
-        const activities = await response.json();
         
-        // Check for empty or invalid data
-        if (!activities || activities.length === 0) {
-            container.innerHTML = '<p class="text-center">No recent Strava activities found.</p>';
-            return;
-        }
-
-        // Process and render data - let the main timeline system handle this
-        // renderStravaActivities(activities, container); // Removed to prevent duplication
-        // showStravaLiveIndicator(activities); // Optional: show live data indicator
+        // The timeline system will handle fetching and displaying the data
+        // when updateTimeline('strava') is called
         
     } catch (error) {
         console.error("Error initializing Strava data:", error);
