@@ -791,9 +791,9 @@
                 <!-- Tabs -->
                 <div class="tabs-container">
                     <div class="tabs-nav">
-                        <button class="tab-button active" data-tab="biomarkers">Metrics</button>
-                        <button class="tab-button" data-tab="schedule">Schedule</button>
-                        <button class="tab-button" data-tab="supplements">Supplements</button>
+                        <button class="tab-button active" data-tab="biomarkers" aria-label="Show training metrics" aria-pressed="true">Metrics</button>
+                        <button class="tab-button" data-tab="schedule" aria-label="Show training schedule" aria-pressed="false">Schedule</button>
+                        <button class="tab-button" data-tab="supplements" aria-label="Show supplements information" aria-pressed="false">Supplements</button>
                     </div>
 
                     <!-- Tab Content -->
@@ -906,8 +906,8 @@
                 </h2>
                 <div class="timeline-container">
                     <div class="timeline-filters">
-                        <button class="timeline-filter-btn active" data-source="strava">Strava</button>
-                        <button class="timeline-filter-btn" data-source="github">GitHub</button>
+                                        <button class="timeline-filter-btn active" data-source="strava" aria-label="Show Strava activities" aria-pressed="true">Strava</button>
+                <button class="timeline-filter-btn" data-source="github" aria-label="Show GitHub commits" aria-pressed="false">GitHub</button>
                     </div>
                     <div id="github-overview" style="display: none;">
                         <h3 class="section-subtitle">GitHub Contributions</h3>
@@ -937,7 +937,7 @@
                 </h2>
                 <p class="section-subtitle">A few snaps from my travels and races.</p>
                 <div class="gallery-container">
-                    <button class="gallery-nav prev" onclick="changeGalleryImage(-1)">‹</button>
+                    <button class="gallery-nav prev" onclick="changeGalleryImage(-1)" aria-label="Previous image">‹</button>
                     <div class="gallery-grid">
                         <div class="gallery-item active">
                             <img class="lazy-image" src="images-for-journey/Amsterdam Marathon, 2019 - breaking sub3.png" data-src="images-for-journey/Amsterdam Marathon, 2019 - breaking sub3.png" alt="Amsterdam Marathon, 2019 - breaking sub3" loading="lazy">
@@ -1020,7 +1020,7 @@
                             <div class="gallery-caption">Getting lost in Guatemala, 2005</div>
                         </div>
                     </div>
-                    <button class="gallery-nav next" onclick="changeGalleryImage(1)">›</button>
+                    <button class="gallery-nav next" onclick="changeGalleryImage(1)" aria-label="Next image">›</button>
                 </div>
             </div>
         </section>

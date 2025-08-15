@@ -67,28 +67,15 @@
 
     /* Standardize hover transitions */
     --hover-transition: 0.3s ease;
-    --hover-bg: rgba(255, 255, 255, 0.05);
 
-    /* Typography */
-    --line-height-base: 1.5;
-    --line-height-heading: 1.2;
-    --paragraph-margin: 1.5rem;
 
-    /* Mobile Breakpoints */
-    --mobile-breakpoint: 768px;
-    --tablet-breakpoint: 1024px;
-    --small-mobile-breakpoint: 480px;
+
+
 
     /* Consistent Margins */
     --section-margin: var(--spacing-xl);
-    --card-margin: var(--spacing-lg);
-    --element-margin: var(--spacing-md);
-    --text-margin: var(--spacing-sm);
 
-    /* New colors */
-    --background-color: #000000;
-    --card-background: rgba(255, 255, 255, 0.05);
-    --card-hover: rgba(255, 255, 255, 0.1);
+
 }
 
 /* --- Reset and Base Styles --- */
